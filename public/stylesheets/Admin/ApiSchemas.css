@@ -1,0 +1,33 @@
+.Schema-Container .row i,.Schema-Container .row .row,.Schema-Container.row{
+    padding: .5rem!important;
+}   
+.Schema-Head.show:hover{
+    background-color: rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+.Schema:not([Edit]) .card-footer, .Schema:not([Edit]) .card-body .btn, .Schema .Hidden {
+    display: none;
+}
+
+.Schema .collapse {
+    margin: 0 1rem 0 2rem;
+}
+
+.Schema-Head {
+    margin-left: .5rem !important;
+    margin-right: .5rem !important;
+}
+.Schema input,.Schema select,.Schema div{
+    background-color: transparent;
+    border: none;
+    color:#bbb;
+}
+.Schema select[disabled]{
+    -webkit-appearance: none;
+    -moz-appearance: none;      
+    appearance: none;
+}
+
+.row.card-header,.row.card-footer{
+    margin: 0!important;
+}

@@ -1,0 +1,16 @@
+#DataBases{
+    min-height: 20rem;
+}
+.DataTable .table{
+    border-collapse: collapse!important;
+}
+.page-link{
+    background-color: transparent!important;
+    color: rgba(169,175,187,.82)!important;
+    border-color: rgba(169,175,187,.82)!important;
+}
+.page-item.active .page-link {
+    background-color: #716aca!important;
+    color: white!important;
+    border-color: #716aca!important;
+}

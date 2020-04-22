@@ -1,0 +1,16 @@
+
+.swal2-popup{
+    background-color: #1b1e21!important;
+}
+.swal2-popup *{
+    color: white!important;
+}
+.swal2-validation-message{
+    background-color: transparent!important;
+}
+.swal2-cancel{
+    background-color: #f25961!important;
+}
+.swal2-timer-progress-bar{
+    background-color: white!important;
+}
