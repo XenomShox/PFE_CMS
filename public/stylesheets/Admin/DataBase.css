@@ -20,3 +20,28 @@
 .selected{
     background-color: rgba(0,0,0,.1);
 }
+.Container{
+    height: 100%;
+    width: calc(100% - 4.7rem);
+    position: fixed;
+    z-index: 200;
+    background-color: rgba(0,0,0,.7);
+    overflow: auto!important;
+}
+@media screen and (max-width: 991px){
+    .Container{
+        width: 100% !important;
+    }
+}
+.sidebar_minimize_hover .Container{
+    transition: width 1s;
+    width: calc(100% - 15rem);
+}
+.Container:not(.Hidden){
+    display: flex;
+}
+.document{
+    margin-top: 1.8rem;
+    margin-bottom: 3rem;
+    overflow: auto!important;
+}
