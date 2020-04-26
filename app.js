@@ -50,13 +50,11 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use(
-    require("express-session")({
+app.use(require("express-session")({
         secret: process.env.SECRET_KEY,
         resave: false,
         saveUninitialized: false,
-    })
-);
+    }));
 
 app.use(passport.initialize());
 app.use(passport.session());

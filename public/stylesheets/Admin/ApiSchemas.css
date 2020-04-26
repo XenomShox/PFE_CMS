@@ -5,11 +5,20 @@
     background-color: rgba(0, 0, 0, 0.1);
     cursor: pointer;
 }
-.Schema:not([Edit]) .card-footer, .Schema:not([Edit]) .card-body .btn, .Schema .Hidden {
+.Schema:not([Edit]) .card-footer, .Schema:not([Edit]) .card-body .btn,.Hidden {
     display: none;
 }
+.Schema:not([Edit]) select,.Schema:not([Edit]) input{
+    pointer-events: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+option{
+    background-color: #202940;
+}
 
-.Schema .collapse {
+.Schema .collapser {
     margin: 0 1rem 0 2rem;
 }
 
@@ -20,12 +29,7 @@
 .Schema input,.Schema select,.Schema div{
     background-color: transparent;
     border: none;
-    color:#bbb;
-}
-.Schema select[disabled]{
-    -webkit-appearance: none;
-    -moz-appearance: none;      
-    appearance: none;
+    color:#ddd;
 }
 
 .row.card-header,.row.card-footer{

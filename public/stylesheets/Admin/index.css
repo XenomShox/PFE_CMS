@@ -5,7 +5,7 @@
 .swal2-popup *{
     color: white!important;
 }
-.swal2-validation-message{
+.swal2-validation-message,.swal2-popup input{
     background-color: transparent!important;
 }
 .swal2-cancel{

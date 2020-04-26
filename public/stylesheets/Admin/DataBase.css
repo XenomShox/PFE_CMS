@@ -14,3 +14,9 @@
     color: white!important;
     border-color: #716aca!important;
 }
+.dataTables_wrapper .row:nth-child(3){
+    margin-top: 1rem;
+}
+.selected{
+    background-color: rgba(0,0,0,.1);
+}

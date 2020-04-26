@@ -26,6 +26,7 @@ router.get('/:Api',function (req, res) {
 
 
 router.post('/:Api',function (req, res) {
+    console.log(req.body);
     Data.AddData(req.params.Api,req.body,(result)=>{
         res.send(result);
     });

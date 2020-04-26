@@ -61,7 +61,7 @@ module.exports = class Models {
             return Models.#models[Name].create(Data,(err,res)=>{
                 if(err){
                     if(err.code===11000)callback({Error:"Duplicated elements : "+Object.keys(err["keyValue"]),Duplicated:err["keyValue"]});
-                    else callback({Error:"Couldn't Save"});
+                    else callback({Error:err});
                 }
                 else callback(res);
             })
