@@ -73,7 +73,8 @@ module.exports = class Models {
             if(err){
                 ErrorHundle(err,callback);
             }
-            else if(res.nModified===0) callback(400,{Error:`Can't find this id ${id}`});
+            else if(res.n===0) callback(404,{Error:`Can't find this id ${id}`});
+            else if(res.nModified===0) callback(400,{Error:'Data Types doesnt follow the Schema of this module'});
             else callback(201, {SUCCESS:`Successfully Updated`});
         });
     }

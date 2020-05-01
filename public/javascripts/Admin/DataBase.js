@@ -23,23 +23,19 @@
                 $this.Inner.addClass("Hidden");
             });
         }
-        saveElement(data){
+        saveElement(data,type=undefined){
             if(typeof data==="object" && data!==null){
                 let Data={};
-                if(data instanceof Array) Data=[];
+                if(type!==undefined) Data=[];
                 data.forEach(el=>{
-                    Data[el.Key]=this.saveElement(el.Value);
+                    Data[el.Key]=this.saveElement(el.Value,el.type);
                 });
                 return Data;
             }
             else return data;
         }
         Save(){
-            let data={};
-            this.Body.data.forEach(el=>{
-                data[el.Key]=this.saveElement(el.Value);
-            })
-            return data;
+            return this.saveElement(this.Body.data);
         }
         DateInput(val){
             let date=new Date(val),
@@ -247,6 +243,10 @@
                     $this.#Buttons.RemoveButton.attr("disabled",true);
                 }
             })
+            $('.sidebar .scroll-wrapper').hover(()=>{setTimeout(()=>{this.#dataTable.draw();},250);})
+            $('.nav-toggle').click(()=>{
+                setTimeout(()=>{this.#dataTable.draw();},250);
+            });
         }
         nestedObjectColumns(SubSchema,columns,name){
             for (let key in SubSchema){
@@ -385,4 +385,4 @@
     }
     $.fn.DataBase=function(ApiUrl){return new DataBaseManager(this,ApiUrl);}
 })();
-var $DataBase = $("#DataBases"),db=$DataBase.DataBase("/Api/");
+$("#DataBases").DataBase("/Api/");
