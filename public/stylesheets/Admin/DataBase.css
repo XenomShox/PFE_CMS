@@ -31,3 +31,10 @@
     margin-bottom: 3rem;
     overflow: auto!important;
 }
+label.col-12{
+    padding: 0;
+}
+.document .card-body .row{
+    margin-left: 0;
+    margin-right: 0;
+}

@@ -26,6 +26,7 @@
         saveElement(data){
             if(typeof data==="object" && data!==null){
                 let Data={};
+                if(data instanceof Array) Data=[];
                 data.forEach(el=>{
                     Data[el.Key]=this.saveElement(el.Value);
                 });
@@ -50,6 +51,24 @@
             if(inputs.InputQuery!==undefined){
                 inputs.InputQuery.val(data[inputs.Key]===undefined?null:inputs.InputQuery.attr('type')!=="date"?data[inputs.Key]:this.DateInput(data[inputs.Key])).trigger("change");
             }
+            else if(inputs.type!==undefined){
+                inputs.Value=[];
+                inputs.SubQuery.children().not(":first-child").remove();
+                if(data[inputs.Key])
+                data[inputs.Key].forEach((el,i)=>{
+                    let x=this.CreateInput(inputs.SubQuery,inputs.Value.length,inputs.type),
+                        DeleteButoon=$(`<button class="btn btn-icon btn-round btn-border btn-danger mr-2 ml-auto"><i class="fa fa-trash"></i></button>`),$this=this;
+                    x.InputQuery.val(el).trigger("change");
+                    x.InputQuery.parent().addClass("row");
+                    x.InputQuery.addClass("col-10").after(DeleteButoon);
+                    inputs.Value.push(x);
+                    DeleteButoon.click(function () {
+                        inputs.Value.splice(inputs.Value.indexOf(x),1);
+                        data[inputs.Key].splice(i,1);
+                        $this.FillInputs(inputs,data);
+                    });
+                });
+            }
             else inputs.Value.forEach(l=>{
                 this.FillInputs(l,data[inputs.Key]===undefined?{}:data[inputs.Key]);
             });
@@ -71,22 +90,46 @@
         CreateInput(Query, key, schemaElement){
             let Input={
                 Key:key,
-                Value:null
-            },SubQuery=$(`<div class="form-group form-group-default"><label for="${key}">${key}</label></div>`);
+                Value:null,
+                SubQuery:$(`<div class="form-group form-group-default"></div>`)
+            },label=$(`<label class="mb-2 d-flex col-12" for="${key}">${key}</label>`);
+            Input.SubQuery.append(label);
             if(schemaElement.type!==undefined){
                 Input.InputQuery=$(this.Input(schemaElement.type,key));
                 Input.InputQuery.change(function () {
                     Input.Value=Input.InputQuery.val();
                 });
-            }else{
+            }
+            else if(schemaElement instanceof Array){
+                Input.Value=[];
+                Input.type={type:schemaElement[0].type};
+                let button=$(`<div class="btn btn-success btn-border ml-auto"><i class="fa fa-plus"></i>add ${Input.Key}</div>`),$this=this;
+                label.append(button);
+                button.click(function () {
+                    let index=Input.Value.findIndex(Object.is.bind(null, undefined));
+                    index=index<0?Input.Value.length:index;
+                    let x=$this.CreateInput(Input.SubQuery,index,schemaElement[0]),
+                        DeleteButoon=$(`<button class="btn btn-icon btn-round btn-border btn-danger mr-2 ml-auto"><i class="fa fa-trash"></i></button>`);
+                    x.InputQuery.parent().addClass("row");
+                    x.InputQuery.addClass("col-10").after(DeleteButoon);
+                    DeleteButoon.click(function () {
+                        Input.Value[Input.Value.indexOf(x)].InputQuery.parent().remove();
+                        delete Input.Value[Input.Value.indexOf(x)];
+                    });
+                    Input.Value[index]=x;
+                    index=Input.Value.findIndex(Object.is.bind(null, undefined));
+                    index=index<0?Input.Value.length:index;
+                })
+            }
+            else{
                 Input.Value=[];
                 for(let Key in schemaElement){
                     if(schemaElement.hasOwnProperty(Key)){
-                        Input.Value.push(this.CreateInput(SubQuery,Key,schemaElement[Key]))
+                        Input.Value.push(this.CreateInput(Input.SubQuery,Key,schemaElement[Key]));
                     }
                 }
             }
-            Query.append(SubQuery.append(Input.InputQuery));
+            Query.append(Input.SubQuery.append(Input.InputQuery));
             return Input;
         }
         show(data,dataUrl){
@@ -133,7 +176,7 @@
         }
         Input(type,key) {
             switch (type) {
-                case "ObjectId":
+                case "ObjectId":return `<input class="form-control" placeholder="ObjectId" type="text" name="${key}">`;
                 case "String": return `<input class="form-control" placeholder="Text" type="text" name="${key}">`;
                 case "Number": return `<input class="form-control" placeholder="Number" type="number" name="${key}">`;
                 case "Date": return `<input class="form-control" placeholder="Date" type="date" name="${key}">`;
@@ -226,8 +269,12 @@
             let columns=[{data:'_id',title:'_id'}],Schema=this.#Schema;
             for(let key in Schema){
                 if(Schema.hasOwnProperty(key)){
-                    if(typeof Schema[key]==="object" && Schema[key] instanceof Array) this.nestedArrayColumns(columns);
-                    if(typeof Schema[key]==="object" && Schema[key].type===undefined) this.nestedObjectColumns(Schema[key],columns,""+key);
+                    if(typeof Schema[key]==="object" && Schema[key] instanceof Array) columns.push({
+                        data:key+"[, ]",
+                        title:key,
+                        defaultContent:""
+                    })
+                    else if(typeof Schema[key]==="object" && Schema[key].type===undefined) this.nestedObjectColumns(Schema[key],columns,""+key);
                     else columns.push({
                         data:key,
                         title:key,
@@ -315,6 +362,7 @@
                 this.#Container.removeClass("is-loading is-loading-secondary is-loading-lg");
             })
             .catch((reason) => {
+                console.log(reason);
                 Swal.fire({
                     title:'Something is Wrong with the DataBase',
                     text:reason.responseJSON!==undefined?reason.responseJSON.Error:"Time out we got no response",

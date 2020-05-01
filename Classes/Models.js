@@ -1,4 +1,16 @@
 const mongoose = require('mongoose');
+
+function ErrorHundle(err,callback) {
+    if(err.code===11000) callback(409,{Error:"Duplicated elements : "+Object.keys(err["keyValue"]),Duplicated:err["keyValue"]});
+    else if(err.errors!==undefined){
+        let merr=[];
+        for(let key in err.errors) if(err.errors.hasOwnProperty(key)) merr.push(err.errors[key].message);
+        callback(500,{Error:merr});
+    }else{
+        callback(500,{Error:err.message});
+    }
+}
+
 module.exports = class Models {
     static #models = {};
     static LoadModels(iSchemas) {
@@ -41,12 +53,7 @@ module.exports = class Models {
         if(Models.#models[Name]===undefined) callback(404,{Error:`${Name}: database collection doesn't Exist`});
         else Models.#models[Name].create(Data,(err,res)=>{
             if(err){
-                if(err.code===11000)callback(409,{Error:"Duplicated elements : "+Object.keys(err["keyValue"]),Duplicated:err["keyValue"]});
-                else{
-                    let merr=[];
-                    for(let key in err.errors) if(err.errors.hasOwnProperty(key))merr.push(err.errors[key].message);
-                    callback(500,{Error:merr});
-                }
+                ErrorHundle(err,callback);
             }
             else callback(201, {SUCCESS:`Successfully created`,'_id':res['_id']});
         });
@@ -64,8 +71,7 @@ module.exports = class Models {
         else if(Models.#models[Name]===undefined) callback(404,{Error:`${Name}: database collection doesn't Exist`});
         else Models.#models[Name].updateOne({'_id':id},Data,(err,res)=>{
             if(err){
-                if(err.code===11000)callback(409,{Error:"Duplicated elements : "+Object.keys(err["keyValue"]),Duplicated:err["keyValue"]});
-                else callback(500,{Error:err});
+                ErrorHundle(err,callback);
             }
             else if(res.nModified===0) callback(400,{Error:`Can't find this id ${id}`});
             else callback(201, {SUCCESS:`Successfully Updated`});

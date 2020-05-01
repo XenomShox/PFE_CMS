@@ -3,6 +3,7 @@
         #schemaManager;
         #Skeleton;
         #index;
+        Name;
         constructor(schemaManager,data,index) {
             this.#index=index;
             this.#schemaManager=schemaManager;
@@ -12,7 +13,8 @@
             return this.#Skeleton.Query;
         }
         CreateSkeleton(data){
-                let Header=this.CreateHeader(data.Name),
+            this.Name=data.Name;
+            let Header=this.CreateHeader(data.Name),
                 Body=this.CreateBody(data.Schema),
                 Footer=this.CreateFooter();
             this.#Skeleton={
@@ -90,8 +92,12 @@
             Element={
                 Query:$(`<div class="Schema-Container"></div>`).append($('<div class="row Schema-Head"></div>').append(SchemaHead).append(AddButton).append(RemoveButton)),
                 Parent:Parent, Key:Key, Type:"Group", AddButton:AddButton, RemoveButton:RemoveButton, Elements:[], CollapserQuery:$('<div class="collapser"></div>'),Options:[]
-            },$this=this,notGroup=schemaElement.hasOwnProperty("type");
+            },$this=this,array=schemaElement instanceof Array,notGroup=schemaElement.hasOwnProperty("type") || array;
             if(notGroup){
+                if(array){
+                    schemaElement=schemaElement[0];
+                    schemaElement.type='['+schemaElement.type+']';
+                }
                 Element.Type=schemaElement.type;
                 Element.Options=this.#schemaManager.GetOptions(schemaElement.type);
                 for(let key in schemaElement){
@@ -163,9 +169,10 @@
         CreateTypeSelect(Type) {
             let Select='<select class="col" name="Type">';
             this.#schemaManager.Mtypes.forEach(el=>{
-               Select+=`<option value="${el}" ${el===Type?"selected":""}>${el}</option>`;
+               Select+=`<option value="${el}" ${el===Type?"selected":""}>${el}</option>
+                    <option value="[${el}]" ${("["+el+"]")===Type?"selected":""}>[${el}]</option>`;
             });
-            return Select+"</select>";
+            return Select+`<option value="Group" ${Type==="Group"?"selected":""}>Group</option></select>`;
         }
         CreateOption(Key,Value,Parent) {
             let Options=$(`<select class="col" name="option"><option value="${Key}" selected>${Key}</option></select>`),
@@ -202,6 +209,7 @@
                 });
             })
             Values.change(function () {Element.Type=Values.val();});
+            Values.change();
             return Element;
         }
         Option(options,key) {
@@ -220,9 +228,8 @@
                 case "String":return `<input class="col" type="text" value="${Value===null?"":Value}" name="Value">`;
                 case "Date":return `<input class="col" type="date" value="${Value===null?"2020-01-01":Value}" name="Value">`;
                 case "Select": let options='<select class="col" name="Value">';
-                    console.log();
                     this.#schemaManager.SchemaNames.forEach(el=>{
-                        if(this.#Skeleton.Header.Name!==el) options+= `<option value=${el} >${el}</option>`;
+                        if(this.Name!==el) options+= `<option value=${el} selected>${el}</option>`;
                     });
                     return options+'</select>';
             }
@@ -233,14 +240,14 @@
             Elements.forEach(el=>{
                 if(el.Type==="Group") schema[el.Key]=this.SchemaTreeSave(el.Elements);
                 else{
-                    schema[el.Key]={type:el.Type};
+                    schema[el.Key]={};
                     el.Elements.forEach(l=>{
-                        console.log(l.Key)
-                        console.log(l.Type);
-                        schema[el.Key][l.Key]=l.Type;
-                    });
+                        schema[el.Key][l.Key]=l.Type;});
+                    if(el.Type[0]==="[") schema[el.Key]=[{...schema[el.Key],type:el.Type.substr(1,el.Type.length-2)}];
+                    else schema[el.Key].type=el.Type;
                 }
             });
+            console.log(schema);
             return schema;
         }
         Save(){
@@ -267,7 +274,7 @@
             {min:"Date",max:"Date"},
             {ref:"Select"}
         ];
-        Mtypes=["String","Number","Date","ObjectId","Boolean","Group"];
+        Mtypes=["String","Number","Date","ObjectId","Boolean"];
         constructor(Container,DataUrl,AddButton){
             this.#Container=Container;
             this.#DataUrl=DataUrl;
@@ -319,10 +326,12 @@
             });
         }
         GetOptions(type){
+            if(type[0]==='[') type=type.substr(1,type.length-2);
             let elms=this.Types[this.Mtypes.indexOf(type)];
             return [...((elms!==undefined && elms !==null)?Object.keys(elms):[]),...Object.keys(this.Default)];
         }
         GetOptionType(type,option){
+            if(type[0]==='[') type=type.substr(1,type.length-2);
             if(this.Default[option]!==undefined) return this.Default[option];
             else try{return this.Types[this.Mtypes.indexOf(type)][option];}catch (e) { return undefined}
         }
