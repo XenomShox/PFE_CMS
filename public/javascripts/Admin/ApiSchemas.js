@@ -220,8 +220,9 @@
                 case "String":return `<input class="col" type="text" value="${Value===null?"":Value}" name="Value">`;
                 case "Date":return `<input class="col" type="date" value="${Value===null?"2020-01-01":Value}" name="Value">`;
                 case "Select": let options='<select class="col" name="Value">';
+                    console.log();
                     this.#schemaManager.SchemaNames.forEach(el=>{
-                       options+= `<option value=${el} >${el}</option>`;
+                        if(this.#Skeleton.Header.Name!==el) options+= `<option value=${el} >${el}</option>`;
                     });
                     return options+'</select>';
             }
@@ -318,7 +319,8 @@
             });
         }
         GetOptions(type){
-            return [...Object.keys(this.Types[this.Mtypes.indexOf(type)]),...Object.keys(this.Default)];
+            let elms=this.Types[this.Mtypes.indexOf(type)];
+            return [...((elms!==undefined && elms !==null)?Object.keys(elms):[]),...Object.keys(this.Default)];
         }
         GetOptionType(type,option){
             if(this.Default[option]!==undefined) return this.Default[option];
@@ -326,16 +328,12 @@
         }
         async FetchData(){
             let $this=this;
-            await $.ajax(this.#DataUrl, {
-                dataType: 'json', // type of response data
-                timeout: 500,     // timeout milliseconds
-                success: function (data) {   // success callback function
-                    $this.#Data = data;
-                }
-            }).catch(reason => {
+            await $.ajax(this.#DataUrl, {dataType: 'json',timeout: 3000})
+            .then(data => {return $this.#Data = data;})
+            .catch(reason => {
                 Swal.fire({
                     title:'Something is Wrong with the DataBase',
-                    text:'Try again later',
+                    text:reason.responseJSON!==undefined?reason.responseJSON.Error:"Time out we got no response",
                     icon:"error",
                     showConfirmButton:true
                 })
@@ -355,27 +353,14 @@
                 confirmButtonText: 'Save',
                 confirmButtonColor: '#31ce36',
                 showLoaderOnConfirm: true,
-                showClass: {
-                    popup: 'animated fadeInDown faster'
-                },
-                hideClass: {
-                    popup: 'animated fadeOutUp faster'
-                },
+                showClass: {popup: 'animated fadeInDown faster'},
+                hideClass: {popup: 'animated fadeOutUp faster'},
                 preConfirm: () => {
-                    let request;
-                    if (!this.Schemas[index].old) request = $.ajax(this.#DataUrl, {
-                        dataType: 'json', // type of response data
-                        timeout: 500,     // timeout milliseconds
-                        type: 'POST',
-                        data: {Name: data.Name, Schema: data.Schema}
-                    });
-                    else request = $.ajax(this.#DataUrl, {
-                        dataType: 'json', // type of response data
-                        timeout: 500,     // timeout milliseconds
-                        type: 'PUT',
-                        data: {Name: this.#Data[index].Name, NewName: data.Name, Schema: data.Schema}
-                    });
-                    return request.done((res, status, jqXHR) => {
+                    return $.ajax(this.#DataUrl, {
+                        dataType: 'json',timeout: 3000,type: !this.Schemas[index].old?'POST':'PUT',
+                        data: {...(!this.Schemas[index].old?{Name: data.Name}:{Name: this.#Data[index].Name, NewName: data.Name}), Schema: data.Schema}
+                    })
+                    .done((res, status, jqXHR) => {
                         if (jqXHR.status === 201) {
                             $this.#Data[index] = data;
                             $this.Schemas[index].old=true;
@@ -386,14 +371,13 @@
                             title: "Saved",
                             hideClass: {popup: 'animated fadeOutUp faster'}
                         });
-                    }).catch(reason => {
+                    })
+                    .catch(reason => {
                         Swal.insertQueueStep({
                             icon: 'error',
                             title: "Error: " + reason.status,
-                            hideClass: {
-                                popup: 'animated fadeOutUp faster'
-                            },
-                            text: reason.responseJSON.Error
+                            hideClass: {popup: 'animated fadeOutUp faster'},
+                            text: reason.responseJSON!==undefined?reason.responseJSON.Error:"Time out we got no response"
                         });
                     });
                 }
@@ -404,11 +388,8 @@
             this.SchemaNames.push(data.Name);
             this.Schemas[i]={Schema:new Schema(this,data,i),old:f};
             this.Schemas[i].Container=$('<div class="col-12 col-lg-6"></div>').append(this.Schemas[i].Schema.Skeleton);
-            if(f)this.#Container.append(this.Schemas[i].Container);
-            else {this.#Container.prepend(this.Schemas[i].Container);}
-            /*this.#Schemas.forEach(el=>{
-                el.Schema.NewSchemaEvent();
-            });*/
+            if(f) this.#Container.append(this.Schemas[i].Container);
+            else this.#Container.prepend(this.Schemas[i].Container);
         }
         DeleteSchema(i) {
             let $this = this, Name = this.#Data[i].Name,deleted=()=>{
@@ -416,9 +397,7 @@
                 delete $this.Schemas[i].Schema;
                 delete $this.Schemas[i];
                 const index = $this.SchemaNames.indexOf(Name);
-                if (index > -1) {
-                    $this.SchemaNames.splice(index, 1);
-                }
+                if (index > -1) { $this.SchemaNames.splice(index, 1);}
                 Swal.insertQueueStep({
                     title: `${Name} Schema has been Deleted`,
                     icon: "success",
@@ -432,12 +411,8 @@
                 showCancelButton: true,
                 confirmButtonText: 'Delete',
                 confirmButtonColor: 'rgba(162,4,32,0.95)',
-                showClass: {
-                    popup: 'animated fadeInDown faster'
-                },
-                hideClass: {
-                    popup: 'animated fadeOutUp faster'
-                },
+                showClass: {popup: 'animated fadeInDown faster'},
+                hideClass: {popup: 'animated fadeOutUp faster'},
                 preConfirm:()=>{
                     if(!this.Schemas[i].old) deleted();
                     else return Swal.insertQueueStep({
@@ -445,25 +420,21 @@
                         text:"Enter your password to confirm Deleting",
                         input:"password",
                         showCancelButton: true,
+                        hideClass: {popup: 'animated fadeOutUp faster'},
                         confirmButtonText: 'Delete',
                         confirmButtonColor: 'rgba(162,4,32,0.95)',
                         showLoaderOnConfirm: true,
                         preConfirm:(password)=>{
                             return $.ajax(this.#DataUrl, {
-                                dataType: 'json', // type of response data
-                                timeout: 2000,
-                                type: 'DELETE',
-                                data: {Name: this.#Data[i].Name, password: password},
-                                success: function () {
-                                    deleted();
-                                }
-                            }).catch(reason => {
+                                dataType: 'json',timeout: 3000,type: 'DELETE',
+                                data: {Name: this.#Data[i].Name, password: password },
+                                success: function () { deleted(); }
+                            })
+                            .catch(reason => {
                                 Swal.insertQueueStep({
                                     title: `Error ${reason.status}`,
-                                    text: reason.responseJSON.Error,
-                                    hideClass: {
-                                        popup: 'animated fadeOutUp faster'
-                                    },
+                                    text: reason.responseJSON!==undefined?reason.responseJSON.Error:"Time Out we got No response",
+                                    hideClass: {popup: 'animated fadeOutUp faster'},
                                     icon: "error"
                                 });
                             });

@@ -1,5 +1,5 @@
 let router = require('express').Router(),
-    Schemas=require('../Classes/Schemas');
+    Schemas=require('../Classes/ApiManager').Schemas;
 
 router.get('/',function (req, res) {
     if (req.body.Name !== undefined)

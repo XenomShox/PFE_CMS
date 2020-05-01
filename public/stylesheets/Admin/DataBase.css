@@ -1,9 +1,5 @@
-#DataBases{
-    min-height: 20rem;
-}
-.DataTable .table{
-    border-collapse: collapse!important;
-}
+#DataBases{min-height: 20rem;}
+.DataTable .table{border-collapse: collapse!important;}
 .page-link{
     background-color: transparent!important;
     color: rgba(169,175,187,.82)!important;
@@ -14,12 +10,8 @@
     color: white!important;
     border-color: #716aca!important;
 }
-.dataTables_wrapper .row:nth-child(3){
-    margin-top: 1rem;
-}
-.selected{
-    background-color: rgba(0,0,0,.1);
-}
+.dataTables_wrapper .row:nth-child(3){margin-top: 1rem;}
+.selected{background-color: rgba(0,0,0,.1);}
 .Container{
     height: 100%;
     width: calc(100% - 4.7rem);
@@ -28,18 +20,12 @@
     background-color: rgba(0,0,0,.7);
     overflow: auto!important;
 }
-@media screen and (max-width: 991px){
-    .Container{
-        width: 100% !important;
-    }
-}
-.sidebar_minimize_hover .Container{
+@media screen and (max-width: 991px){.Container{width: 100% !important;}}
+.sidebar_minimize_hover .Container,.wrapper:not(.sidebar_minimize) .Container{
     transition: width 1s;
     width: calc(100% - 15rem);
 }
-.Container:not(.Hidden){
-    display: flex;
-}
+.Container:not(.Hidden){display: flex;}
 .document{
     margin-top: 1.8rem;
     margin-bottom: 3rem;

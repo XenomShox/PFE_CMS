@@ -17,8 +17,6 @@ module.exports = class Schemas {
         await Schemas.#SchemaModel.init();
         Schemas.#ApiManager=ApiManager;
     }
-
-    //Get methods
     static  async GetAllSchemas(callback){
         await Schemas.#SchemaModel.find({},{Name:1,Schema:1,_id: 0 },(err,result)=>{
             if (err) callback(500, {Error: err});
@@ -36,8 +34,6 @@ module.exports = class Schemas {
                 callback(500, {Error: err});
         });
     }
-
-    //Add methods
     static AddASchema(Name,iSchema,callback){
         try {
             Schemas.#ApiManager.Models.AddModel(Name, iSchema);
@@ -52,8 +48,6 @@ module.exports = class Schemas {
             else callback(500, {Error: e});
         }
     }
-
-    //Delete methods
     static DeleteASchema(Name,callback){
         Schemas.#SchemaModel.deleteOne({Name:Name},(err,result)=> {
             if (err) callback(500, {Error: err})
@@ -64,8 +58,6 @@ module.exports = class Schemas {
             }
         });
     }
-
-    //update methods
     static UpdateASchema(Name, NewName, iSchema, callback) {
         try {
             let Schema = new mongoose.Schema(iSchema);

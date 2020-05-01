@@ -1,15 +1,7 @@
 let router = require('express').Router(),
-    Data=require('../Classes/Models');
-
-
-
+    Data= require('../Classes/ApiManager').Models;
 
 router.use("/", require("./Schemas"));
-/* GET Api page. */
-router.get('/',function (req, res) {
-    res.send(Data.models);
-});
-
 /*------------------------------Data----------------------------*/
 router.get('/:Api',function (req, res) {
     Data.GetData(req.params.Api,{
@@ -17,29 +9,26 @@ router.get('/:Api',function (req, res) {
         select:req.body.select,
         limit:req.body.limit,
         skip:req.body.skip,
-        Sort:req.body.Sort,
-        Count:req.body.Count
-    },(result)=>{
-        res.send(result);
+        sort:req.body.sort,
+        count:req.body.count
+    },(status,result)=>{
+        res.status(status).send(result);
     });
 });
-
-
 router.post('/:Api',function (req, res) {
-    console.log(req.body);
-    Data.AddData(req.params.Api,req.body,(result)=>{
-        res.send(result);
+    Data.AddData(req.params.Api,req.body,(status,result)=>{
+        res.status(status).send(result);
     });
 });
 router.delete('/:Api',function (req, res) {
-    console.log(req.body);
-    res.send(req.body);
-    //delete ":Api"and then redirect to /Schema
+    Data.DeleteData(req.params.Api,req.body["_id"],(status,result)=>{
+        res.status(status).send(result);
+    });
 });
 router.put('/:Api',function (req, res) {
-    console.log(req.body);
-    res.send("dead "+req.params.Api);
-    //verify if the Schema for mongoose
-    //Update ":Api"and then redirect to /Schema
+    let {"_id":id,...data}=req.body;
+    Data.UpdateData(req.params.Api,id,data,(status,result)=>{
+        res.status(status).send(result);
+    });
 });
 module.exports = router;

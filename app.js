@@ -6,14 +6,13 @@ const createError = require("http-errors"),
     cookieParser = require("cookie-parser"),
     bodyParser = require("body-parser"),
     logger = require("morgan"),
-    mongoose = require("mongoose");
+    mongoose = require("mongoose"),
+    FileManager= require("./Classes/FileManager");
 
 // Middlewares - to Test -
 const { isLoggedIn } = require("./middlewares/middleware");
-
 // Models
 const User = require("./models/user");
-
 // Passport
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
@@ -77,7 +76,6 @@ app.use(function (req, res, next) {
 
     next();
 });
-
 app.use(function (req, res, next) {
     res.locals.currentUser = req.user;
     next();

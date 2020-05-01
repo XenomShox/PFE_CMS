@@ -3,31 +3,28 @@
         static Container;
         Inner;
         Body;
+        SaveButton;
         constructor(Name,Schema) {
             this.Body={Query:$(`<div class="card-body px-5"></div>`),};
-            let QuiteButton=$(`<button class="ml-auto mr-2 btn btn-border btn-danger btn-icon"><i class="fa fa-window-close"></i></button>`),
-                SaveButton=$(`<button class="ml-auto mr-2 btn btn-success btn-border">Save Data</button>`),
-                $this=this;
-            this.Inner=$(`<div class="document col-9 mx-auto"></div>`)
-                .append($(`<div class="card"></div>`)
-                    .append($(`<div class="card-header row"><h3 class="ml-2 card-title">${Name}</h3></div>`)
-                        .append(QuiteButton))
+            let $this=this;
+            this.SaveButton=$(`<button class="ml-auto mr-2 btn btn-success btn-border">Save Data</button>`);
+            this.QuiteButton=$(`<button class="ml-auto mr-2 btn btn-border btn-danger btn-icon"><i class="fa fa-window-close"></i></button>`);
+            this.Inner=$(`<div class="document Hidden col-9 col-md-7 mx-auto"></div>`)
+                    .append($(`<div class="card"></div>`)
+                        .append($(`<div class="card-header row"><h3 class="ml-2 card-title">${Name}</h3></div>`)
+                        .append(this.QuiteButton))
                     .append(this.Body.Query)
                     .append($(`<div class="card-footer row"></div>`)
-                        .append(SaveButton)));
-            $this.Inner.addClass("Hidden");
+                        .append(this.SaveButton)));
             DataDocument.Container.append(this.Inner);
             this.CreateBody(Schema);
-            SaveButton.click(function () {
-                $this.Save();
-            })
-            QuiteButton.click(function () {
+            this.QuiteButton.click(function () {
                 DataDocument.Container.addClass("Hidden");
                 $this.Inner.addClass("Hidden");
             });
         }
         saveElement(data){
-            if(typeof data==="object"){
+            if(typeof data==="object" && data!==null){
                 let Data={};
                 data.forEach(el=>{
                     Data[el.Key]=this.saveElement(el.Value);
@@ -41,25 +38,27 @@
             this.Body.data.forEach(el=>{
                 data[el.Key]=this.saveElement(el.Value);
             })
-            console.log(data);
+            return data;
+        }
+        DateInput(val){
+            let date=new Date(val),
+                month=("0" + (date.getMonth() + 1)).slice(-2),
+                day= ("0" + date.getDate()).slice(-2);
+                return `${date.getFullYear()}-${month}-${day}`;
         }
         FillInputs(inputs,data){
-            if(inputs.InputQuery!==undefined)
-                inputs.InputQuery.val(data[inputs.Key]);
+            if(inputs.InputQuery!==undefined){
+                inputs.InputQuery.val(data[inputs.Key]===undefined?null:inputs.InputQuery.attr('type')!=="date"?data[inputs.Key]:this.DateInput(data[inputs.Key])).trigger("change");
+            }
             else inputs.Value.forEach(l=>{
-                this.FillInputs(l,data[inputs.Key]);
+                this.FillInputs(l,data[inputs.Key]===undefined?{}:data[inputs.Key]);
             });
         }
         FillBody(data){
-            //console.log(this.Body.data);
+            this.Body["_id"]=data["_id"];
             this.Body.data.forEach(el=>{
-                if(el.InputQuery!==undefined)
-                    el.InputQuery.val(data[el.Key]);
-                else el.Value.forEach(l=>{
-                    this.FillInputs(l,data[el.Key]);
-                })
-            })
-           // ToDo:-Fill Object
+                this.FillInputs(el,data);
+            });
         }
         CreateBody(Schema){
             this.Body.data=[];
@@ -78,7 +77,7 @@
                 Input.InputQuery=$(this.Input(schemaElement.type,key));
                 Input.InputQuery.change(function () {
                     Input.Value=Input.InputQuery.val();
-                })
+                });
             }else{
                 Input.Value=[];
                 for(let Key in schemaElement){
@@ -90,14 +89,47 @@
             Query.append(SubQuery.append(Input.InputQuery));
             return Input;
         }
-        show(){
+        show(data,dataUrl){
+            this.FillBody(data);
             this.Inner.removeClass("Hidden");
             DataDocument.Container.removeClass("Hidden");
-            /*if(data===null){
-                this.Inner.find("input,select").each((i,el)=>{
-                   $(el).val(null);
-                });
-            }*/
+            let $this=this;
+            return  new Promise(function (resolve,reject) {
+                $this.SaveButton.click(()=>{resolve($this.Save())});
+                $this.QuiteButton.click(()=>{reject()});
+            })
+            .then((data)=>{
+                data["_id"]=$this.Body["_id"];
+                return Swal.queue([{
+                    title: `Saving new Data`,
+                    text: 'Are you sure about this operation ?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Save',
+                    confirmButtonColor: '#31ce36',
+                    showLoaderOnConfirm: true,
+                    showClass: {popup: 'animated fadeInDown faster'},
+                    hideClass: {popup: 'animated fadeOutUp faster'},
+                    preConfirm: () => {
+                        return $.ajax(dataUrl,{dataType: 'json',timeout: 3000,type: data["_id"]!==undefined?'PUT':'POST',data: data})
+                        .then(response=>{
+                            Swal.insertQueueStep({icon: 'success',title: "Saved",hideClass: {popup: 'animated fadeOutUp faster'}});
+                            if(data["_id"]===undefined) data['_id']=response['_id'];
+                            return data;
+                        })
+                        .catch(reason =>{
+                            Swal.insertQueueStep({
+                                icon: 'error',title: "Error: " + reason.status,hideClass: {popup: 'animated fadeOutUp faster'},
+                                text: reason.responseJSON!==undefined?reason.responseJSON.Error:"Time out we got no response"
+                            });
+                        })
+                    }
+                }])
+            })
+            .finally(()=>{
+                this.Inner.addClass("Hidden");
+                DataDocument.Container.addClass("Hidden");
+            });
         }
         Input(type,key) {
             switch (type) {
@@ -118,6 +150,9 @@
         #Name;
         #DataDocument;
         #Buttons;
+        get dataTable(){
+            return this.#dataTable;
+        }
         constructor(dataUrl,Name,Schema,Container) {
             this.#Container=Container;
             this.#Schema=Schema;
@@ -141,8 +176,11 @@
                 $this.AddRow();
             });
             EditButton.click(function () {
-                $this.Edit($this.#dataTable.rows(".selected"));
-            })
+                $this.Edit($this.#dataTable,$this.#dataTable.rows(".selected").indexes());
+            });
+            RemoveButton.click(function () {
+                $this.Remove($this.#dataTable,$this.#dataTable.rows(".selected").indexes());
+            });
             this.#Buttons={
                 AddButton:AddButton,
                 EditButton:EditButton,
@@ -152,21 +190,16 @@
         CreateTable(columns){
             let $this=this;
             this.#dataTable=this.#Table.DataTable({
-                ajax:{
-                    url: this.#DataUrl,
-                    dataSrc: ''
-                },
-                lengthMenu:[5,10,15,20,50],
-                columns:columns,
-                scrollX: true,
-                pageLength:5
+                ajax:{url: this.#DataUrl,dataSrc: 'result'},
+                lengthMenu:[5,10,15,20,50],columns:columns,scrollX: true,bAutoWidth:false,pageLength:5
             });
             this.#Table.on("click","tr",function () {
                 $(this).toggleClass("selected");
                 if($this.#Table.has(".selected").length>0){
                     $this.#Buttons.EditButton.removeAttr("disabled");
                     $this.#Buttons.RemoveButton.removeAttr("disabled");
-                }else {
+                }
+                else {
                     $this.#Buttons.EditButton.attr("disabled",true);
                     $this.#Buttons.RemoveButton.attr("disabled",true);
                 }
@@ -205,18 +238,64 @@
             return columns;
         }
         AddRow(){
-            this.#DataDocument.show();
+            this.#DataDocument.FillBody({});
+            this.#DataDocument.show({},this.#DataUrl).then((data)=>{
+                data=data.value[0];
+                if(true!==data)this.#dataTable.row.add(data).draw();
+            }).catch(()=>{});
         }
-        AddData(data){
-
-        }
-        Edit(row){
-            let rowData=row.data();
-            console.log(rowData);
-            for(let i=0 ;i< rowData.length;i++){
-                this.#DataDocument.FillBody(rowData[i]);
-                this.#DataDocument.show();
+        async Edit(table,indexes){
+            for(let i=0;i<indexes.length;i++){
+                let row= table.row(indexes[i]);
+                await this.#DataDocument.show(row.data(),this.#DataUrl).then(data=>{
+                    data=data.value[0];
+                    if(true!==data) row.data(data);
+                }).catch(()=>{});
             }
+        }
+        Remove(dataTable, indexes) {
+            let removelist=[],list='';
+            for(let i=0;i<indexes.length;i++){
+                let row=dataTable.row(indexes[i]),id=dataTable.row(indexes[i]).data()["_id"];
+                list+=id+", ";
+                removelist.push({row,id});
+            }
+            Swal.queue([{
+                title: 'Deleting Data',
+                text: `deleting data: ${list}`,
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: 'Delete',
+                confirmButtonColor: 'rgba(162,4,32,0.95)',
+                showClass: {popup: 'animated fadeInDown faster'},
+                hideClass: {popup: 'animated fadeOutUp faster'},
+                showLoaderOnConfirm: true,
+                preConfirm: async ()=>{
+                    let b=true;
+                    for(let i=0;i< removelist.length;i++){
+                        await $.ajax(this.#DataUrl,{dataType: 'json',timeout: 3000,type: 'DELETE',data:{"_id":removelist[i].id}})
+                        .catch(reason => {
+                            b=false;
+                            $(removelist[i].row.node()).removeClass('selected');
+                            removelist.splice(i,1);
+                            i--;
+                            Swal.insertQueueStep({
+                                title: `Error data id:${removelist[i].id}`,
+                                text: reason.responseJSON!==undefined?reason.responseJSON.Error:"Time Out we got No response",
+                                hideClass: {popup: 'animated fadeOutUp faster'},
+                                icon: "error"
+                            });
+                        })
+                    }
+                    dataTable.rows('.selected').remove().draw();
+                    Swal.insertQueueStep({
+                        title: 'Success',
+                        text: (b?'All':removelist.length>0?'An error Happened but Some of the':'Error Happened None of the') +' Selected Data has been deleted',
+                        hideClass: {popup: 'animated fadeOutUp faster'},
+                        icon: "success"
+                    });
+                }
+            }]);
         }
     }
     class DataBaseManager{
@@ -224,6 +303,9 @@
         #ApiUrl;
         #DataTables;
         document;
+        get DataTables(){
+            return this.#DataTables;
+        }
         constructor(Container,ApiUrl) {
             this.#Container=Container;
             this.#ApiUrl=ApiUrl;
@@ -231,23 +313,18 @@
                 $('.content').prepend(DataDocument.Container=$("<div class='Hidden Container'></div>"));
                 this.CreateDataTables(data);
                 this.#Container.removeClass("is-loading is-loading-secondary is-loading-lg");
-
             })
             .catch((reason) => {
                 Swal.fire({
                     title:'Something is Wrong with the DataBase',
-                    text:'Try again later',
+                    text:reason.responseJSON!==undefined?reason.responseJSON.Error:"Time out we got no response",
                     icon:"error",
                     showConfirmButton:true
                 });
-                console.log(reason);
             });
         }
         async FetchData() {
-            return $.ajax(this.#ApiUrl, {
-                dataType: 'json', // type of response data
-                timeout: 500,     // timeout milliseconds
-            });
+            return $.ajax(this.#ApiUrl, {dataType: 'json',timeout: 3000});
         }
         CreateDataTables(data) {
             this.#DataTables=[];
