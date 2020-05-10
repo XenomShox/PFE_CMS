@@ -1,18 +1,22 @@
 const fs=require('fs'),
     path = require('path');
-function StatsOfFile(name=""){
-   fs.stat(path.join(__dirname, "../files/"+name),(err,res)=>{
-      if(!err) return res;
-   })
-}
-function StatsOfFiles(name=""){
+
+function WalkFiles(name=""){
    fs.readdir(path.join(__dirname, "../files"+name),(err,res)=>{
-      if(err) return null;//console.log(err);
-      else res.forEach(el=>{StatsOfFiles(name+el)})
+      if(err) console.log(err);
+      else res.forEach(el=>{
+         let temp=name+"/"+el;
+         console.log(temp);
+         fs.stat(path.join(__dirname, "../files"+temp),(err,res)=>{
+            if(err)console.log(err);
+            else if(res.isDirectory()) WalkFiles(temp)
+            else console.log(res);
+         });
+      })
    });
-   console.log(StatsOfFile(name));
+   //console.log(StatsOfFile(name));
 }
-StatsOfFiles();
+WalkFiles();
 module.exports = class FileManager {
     /*----------------Attributes------------*/
 
