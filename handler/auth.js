@@ -13,13 +13,12 @@ exports.createUser = function (req, res) {
     console.log(req.body);
     let { password, ...body } = req.body;
 
-    User.register(new User({ ...body }), password, (err, user) => {
+    User.register(new User({ ...body }), password, (err) => {
         if (err) {
-            console.log(err);
-            return res.render("LogIn");
+            return res.render("LogIn",{Error:err});
         }
         passport.authenticate("local")(req, res, () => {
-            res.redirect("/secret");
+            res.redirect("/Admin");
         });
     });
 };

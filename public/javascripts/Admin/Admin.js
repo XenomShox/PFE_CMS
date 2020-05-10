@@ -11,11 +11,9 @@ $.getMultiScripts = function(arr) {
     var _arr = $.map(arr, function(scr) {
         return $.getScript( scr );
     });
-
     _arr.push($.Deferred(function( deferred ){
         $( deferred.resolve );
     }));
-
     return $.when.apply($, _arr);
 };
 function clickHash(url){
@@ -30,7 +28,6 @@ function clickHash(url){
             if(loading) $.getScript( loading );
         });
         else if(loading) $.getScript( loading );
-
     });
 }
 $('a[loading-Link]').each((index,elem)=>{
