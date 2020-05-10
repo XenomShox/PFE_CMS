@@ -20,6 +20,10 @@ let userSchema = new mongoose.Schema({
         unique: true,
         required: true,
     },
+    role: {
+        type: String,
+        enum: ['user', 'admin']
+    },
     password: {
         type: String,
     },
@@ -38,7 +42,7 @@ userSchema.pre("save", async function (next) {
         if (this.isNew && !this.profileImage)
             this.profileImage =
                 "https://www.sackettwaconia.com/wp-content/uploads/default-profile.png";
-
+        if (this.isNew && (!this.role || this.role === 'admin')) this.role = 'user';
         return next();
     } catch (err) {
         return next(err);
