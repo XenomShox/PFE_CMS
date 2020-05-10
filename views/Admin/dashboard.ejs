@@ -1,19 +1,35 @@
-<div class="content" plugin-scripts="/Files/javascripts/Assets/plugin/chart.js/chart.min.js,/Files/javascripts/Assets/plugin/chart-circle/circles.min.js,/Files/javascripts/Assets/plugin/jqvmap/jquery.vmap.min.js,/Files/javascripts/Assets/plugin/jqvmap/maps/jquery.vmap.world.js,/Files/javascripts/Assets/plugin/jquery.sparkline/jquery.sparkline.min.js" loading-script="/Files/javascripts/Admin/dashboard.js">
+<div
+    class="content"
+    plugin-scripts="/Files/javascripts/Assets/plugin/chart.js/chart.min.js,/Files/javascripts/Assets/plugin/chart-circle/circles.min.js,/Files/javascripts/Assets/plugin/jqvmap/jquery.vmap.min.js,/Files/javascripts/Assets/plugin/jqvmap/maps/jquery.vmap.world.js,/Files/javascripts/Assets/plugin/jquery.sparkline/jquery.sparkline.min.js"
+    loading-script="/Files/javascripts/Admin/dashboard.js"
+>
     <div class="panel-header bg-primary-gradient">
         <div class="page-inner py-5">
-            <h2 class="text-white pb-2">Welcome back,<span class="UserName fw-bold"> ADMIN</span></h2>
-            <h5 class="text-white op-7 mb-2 quote">Yesterday I was clever, so I wanted to change the world. Today I am wise, so I am changing myself.</h5>
+            <h2 class="text-white pb-2">
+                Welcome back,<span
+                    style="text-transform: uppercase;"
+                    class="UserName fw-bold"
+                >
+                    <%= currentUser.username %></span
+                >
+            </h2>
+            <h5 class="text-white op-7 mb-2 quote">
+                Yesterday I was clever, so I wanted to change the world. Today I
+                am wise, so I am changing myself.
+            </h5>
         </div>
     </div>
     <div class="page-inner mt--5">
         <div class="row row-card-no-pd mt--2">
             <div class="col-sm-6 col-md-3">
                 <div class="card card-stats card-round">
-                    <div class="card-body ">
+                    <div class="card-body">
                         <div class="row">
                             <div class="col-5">
                                 <div class="icon-big text-center">
-                                    <i class="flaticon-medical text-warning"></i>
+                                    <i
+                                        class="flaticon-medical text-warning"
+                                    ></i>
                                 </div>
                             </div>
                             <div class="col-7 col-stats">
@@ -28,7 +44,7 @@
             </div>
             <div class="col-sm-6 col-md-3">
                 <div class="card card-stats card-round">
-                    <div class="card-body ">
+                    <div class="card-body">
                         <div class="row">
                             <div class="col-5">
                                 <div class="icon-big text-center">
@@ -70,7 +86,9 @@
                         <div class="row">
                             <div class="col-5">
                                 <div class="icon-big text-center">
-                                    <i class="flaticon-database text-primary"></i>
+                                    <i
+                                        class="flaticon-database text-primary"
+                                    ></i>
                                 </div>
                             </div>
                             <div class="col-7 col-stats">
@@ -91,13 +109,19 @@
                         <div class="card-head-row">
                             <div class="card-title">User Statistics</div>
                             <div class="card-tools">
-                                <a href="#" class="btn btn-info btn-border btn-round btn-sm mr-2">
+                                <a
+                                    href="#"
+                                    class="btn btn-info btn-border btn-round btn-sm mr-2"
+                                >
                                     <span class="btn-label">
                                         <i class="fa fa-pencil"></i>
                                     </span>
                                     Export
                                 </a>
-                                <a href="#" class="btn btn-info btn-border btn-round btn-sm">
+                                <a
+                                    href="#"
+                                    class="btn btn-info btn-border btn-round btn-sm"
+                                >
                                     <span class="btn-label">
                                         <i class="fa fa-print"></i>
                                     </span>
@@ -107,7 +131,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="chart-container" style="min-height: 375px">
+                        <div class="chart-container" style="min-height: 375px;">
                             <canvas id="statisticsChart"></canvas>
                         </div>
                         <div id="myChartLegend"></div>
@@ -134,8 +158,48 @@
                     <div class="card-body">
                         <h4 class="mb-1 fw-bold">Tasks Progress</h4>
                         <div id="task-complete" class="chart-circle mt-4 mb-3">
-                            <div class="circles-wrp" style="position: relative; display: inline-block;">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><path fill="transparent" stroke="#36a3f7" stroke-width="5" d="M 49.99032552282448 2.500000985215891 A 47.5 47.5 0 1 1 49.9340234529416 2.5000458200722235 Z" class="circles-maxValueStroke"></path><path fill="transparent" stroke="#fff" stroke-width="5" d="M 49.99032552282448 2.500000985215891 A 47.5 47.5 0 1 1 4.81379135029583 35.355664990673006 " class="circles-valueStroke"></path></svg><div class="circles-text" style="position: absolute; top: 0; left: 0; text-align: center; width: 100%; font-size: 35px; height: 100px; line-height: 100px;">80%</div>
+                            <div
+                                class="circles-wrp"
+                                style="
+                                    position: relative;
+                                    display: inline-block;
+                                "
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="100"
+                                    height="100"
+                                >
+                                    <path
+                                        fill="transparent"
+                                        stroke="#36a3f7"
+                                        stroke-width="5"
+                                        d="M 49.99032552282448 2.500000985215891 A 47.5 47.5 0 1 1 49.9340234529416 2.5000458200722235 Z"
+                                        class="circles-maxValueStroke"
+                                    ></path>
+                                    <path
+                                        fill="transparent"
+                                        stroke="#fff"
+                                        stroke-width="5"
+                                        d="M 49.99032552282448 2.500000985215891 A 47.5 47.5 0 1 1 4.81379135029583 35.355664990673006 "
+                                        class="circles-valueStroke"
+                                    ></path>
+                                </svg>
+                                <div
+                                    class="circles-text"
+                                    style="
+                                        position: absolute;
+                                        top: 0;
+                                        left: 0;
+                                        text-align: center;
+                                        width: 100%;
+                                        font-size: 35px;
+                                        height: 100px;
+                                        line-height: 100px;
+                                    "
+                                >
+                                    80%
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -146,7 +210,9 @@
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-body pb-0">
-                        <div class="h1 fw-bold float-right text-primary">+5%</div>
+                        <div class="h1 fw-bold float-right text-primary">
+                            +5%
+                        </div>
                         <h2 class="mb-2">17</h2>
                         <p class="text-muted">FaceBook</p>
                         <div class="pull-in sparkline-fix">
@@ -158,7 +224,9 @@
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-body pb-0">
-                        <div class="h1 fw-bold float-right text-danger">-3%</div>
+                        <div class="h1 fw-bold float-right text-danger">
+                            -3%
+                        </div>
                         <h2 class="mb-2">27</h2>
                         <p class="text-muted">Twitter</p>
                         <div class="pull-in sparkline-fix">
@@ -170,7 +238,9 @@
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-body pb-0">
-                        <div class="h1 fw-bold float-right text-warning">+7%</div>
+                        <div class="h1 fw-bold float-right text-warning">
+                            +7%
+                        </div>
                         <h2 class="mb-2">213</h2>
                         <p class="text-muted">Instagram</p>
                         <div class="pull-in sparkline-fix">
@@ -187,104 +257,137 @@
                         <div class="card-head-row">
                             <h4 class="card-title">Users Geolocation</h4>
                             <div class="card-tools">
-                                <button class="btn btn-icon btn-link btn-primary btn-xs"><span class="fa fa-angle-down"></span></button>
-                                <button class="btn btn-icon btn-link btn-primary btn-xs btn-refresh-card"><span class="fa fa-sync-alt"></span></button>
-                                <button class="btn btn-icon btn-link btn-primary btn-xs"><span class="fa fa-times"></span></button>
+                                <button
+                                    class="btn btn-icon btn-link btn-primary btn-xs"
+                                >
+                                    <span class="fa fa-angle-down"></span>
+                                </button>
+                                <button
+                                    class="btn btn-icon btn-link btn-primary btn-xs btn-refresh-card"
+                                >
+                                    <span class="fa fa-sync-alt"></span>
+                                </button>
+                                <button
+                                    class="btn btn-icon btn-link btn-primary btn-xs"
+                                >
+                                    <span class="fa fa-times"></span>
+                                </button>
                             </div>
                         </div>
                         <p class="card-category">
-                            Map of the distribution of users around the world</p>
+                            Map of the distribution of users around the world
+                        </p>
                     </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="table-responsive table-hover table-sales">
+                                <div
+                                    class="table-responsive table-hover table-sales"
+                                >
                                     <table class="table">
                                         <tbody>
-                                        <tr>
-                                            <td>
-                                                <div class="flag">
-                                                    <img src="/Files/images/Assets/flags/id.png" alt="indonesia">
-                                                </div>
-                                            </td>
-                                            <td>Indonesia</td>
-                                            <td class="text-right">
-                                                2.320
-                                            </td>
-                                            <td class="text-right">
-                                                42.18%
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="flag">
-                                                    <img src="/Files/images/Assets/flags/us.png" alt="united states">
-                                                </div>
-                                            </td>
-                                            <td>USA</td>
-                                            <td class="text-right">
-                                                240
-                                            </td>
-                                            <td class="text-right">
-                                                4.36%
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="flag">
-                                                    <img src="/Files/images/Assets/flags/au.png" alt="australia">
-                                                </div>
-                                            </td>
-                                            <td>Australia</td>
-                                            <td class="text-right">
-                                                119
-                                            </td>
-                                            <td class="text-right">
-                                                2.16%
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="flag">
-                                                    <img src="/Files/images/Assets/flags/ru.png" alt="russia">
-                                                </div>
-                                            </td>
-                                            <td>Russia</td>
-                                            <td class="text-right">
-                                                1.081
-                                            </td>
-                                            <td class="text-right">
-                                                19.65%
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="flag">
-                                                    <img src="/Files/images/Assets/flags/cn.png" alt="china">
-                                                </div>
-                                            </td>
-                                            <td>China</td>
-                                            <td class="text-right">
-                                                1.100
-                                            </td>
-                                            <td class="text-right">
-                                                20%
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="flag">
-                                                    <img src="/Files/images/Assets/flags/br.png" alt="brazil">
-                                                </div>
-                                            </td>
-                                            <td>Brasil</td>
-                                            <td class="text-right">
-                                                640
-                                            </td>
-                                            <td class="text-right">
-                                                11.63%
-                                            </td>
-                                        </tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="flag">
+                                                        <img
+                                                            src="/Files/images/Assets/flags/id.png"
+                                                            alt="indonesia"
+                                                        />
+                                                    </div>
+                                                </td>
+                                                <td>Indonesia</td>
+                                                <td class="text-right">
+                                                    2.320
+                                                </td>
+                                                <td class="text-right">
+                                                    42.18%
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="flag">
+                                                        <img
+                                                            src="/Files/images/Assets/flags/us.png"
+                                                            alt="united states"
+                                                        />
+                                                    </div>
+                                                </td>
+                                                <td>USA</td>
+                                                <td class="text-right">
+                                                    240
+                                                </td>
+                                                <td class="text-right">
+                                                    4.36%
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="flag">
+                                                        <img
+                                                            src="/Files/images/Assets/flags/au.png"
+                                                            alt="australia"
+                                                        />
+                                                    </div>
+                                                </td>
+                                                <td>Australia</td>
+                                                <td class="text-right">
+                                                    119
+                                                </td>
+                                                <td class="text-right">
+                                                    2.16%
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="flag">
+                                                        <img
+                                                            src="/Files/images/Assets/flags/ru.png"
+                                                            alt="russia"
+                                                        />
+                                                    </div>
+                                                </td>
+                                                <td>Russia</td>
+                                                <td class="text-right">
+                                                    1.081
+                                                </td>
+                                                <td class="text-right">
+                                                    19.65%
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="flag">
+                                                        <img
+                                                            src="/Files/images/Assets/flags/cn.png"
+                                                            alt="china"
+                                                        />
+                                                    </div>
+                                                </td>
+                                                <td>China</td>
+                                                <td class="text-right">
+                                                    1.100
+                                                </td>
+                                                <td class="text-right">
+                                                    20%
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="flag">
+                                                        <img
+                                                            src="/Files/images/Assets/flags/br.png"
+                                                            alt="brazil"
+                                                        />
+                                                    </div>
+                                                </td>
+                                                <td>Brasil</td>
+                                                <td class="text-right">
+                                                    640
+                                                </td>
+                                                <td class="text-right">
+                                                    11.63%
+                                                </td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -309,27 +412,49 @@
                         <ol class="activity-feed">
                             <li class="feed-item feed-item-secondary">
                                 <time class="date" datetime="9-25">Sep 25</time>
-                                <span class="text">Responded to need <a href="#">"Volunteer opportunity"</a></span>
+                                <span class="text"
+                                    >Responded to need
+                                    <a href="#"
+                                        >"Volunteer opportunity"</a
+                                    ></span
+                                >
                             </li>
                             <li class="feed-item feed-item-success">
                                 <time class="date" datetime="9-24">Sep 24</time>
-                                <span class="text">Added an interest <a href="#">"Volunteer Activities"</a></span>
+                                <span class="text"
+                                    >Added an interest
+                                    <a href="#">"Volunteer Activities"</a></span
+                                >
                             </li>
                             <li class="feed-item feed-item-info">
                                 <time class="date" datetime="9-23">Sep 23</time>
-                                <span class="text">Joined the group <a href="#">"Boardsmanship Forum"</a></span>
+                                <span class="text"
+                                    >Joined the group
+                                    <a href="#">"Boardsmanship Forum"</a></span
+                                >
                             </li>
                             <li class="feed-item feed-item-warning">
                                 <time class="date" datetime="9-21">Sep 21</time>
-                                <span class="text">Responded to need <a href="#">"In-Kind Opportunity"</a></span>
+                                <span class="text"
+                                    >Responded to need
+                                    <a href="#">"In-Kind Opportunity"</a></span
+                                >
                             </li>
                             <li class="feed-item feed-item-danger">
                                 <time class="date" datetime="9-18">Sep 18</time>
-                                <span class="text">Created need <a href="#">"Volunteer Opportunity"</a></span>
+                                <span class="text"
+                                    >Created need
+                                    <a href="#"
+                                        >"Volunteer Opportunity"</a
+                                    ></span
+                                >
                             </li>
                             <li class="feed-item">
                                 <time class="date" datetime="9-17">Sep 17</time>
-                                <span class="text">Attending the event <a href="#">"Some New Event"</a></span>
+                                <span class="text"
+                                    >Attending the event
+                                    <a href="#">"Some New Event"</a></span
+                                >
                             </li>
                         </ol>
                     </div>
@@ -341,15 +466,43 @@
                         <div class="card-head-row">
                             <div class="card-title">Support Tickets</div>
                             <div class="card-tools">
-                                <ul class="nav nav-pills nav-secondary nav-pills-no-bd nav-sm" id="pills-tab" role="tablist">
+                                <ul
+                                    class="nav nav-pills nav-secondary nav-pills-no-bd nav-sm"
+                                    id="pills-tab"
+                                    role="tablist"
+                                >
                                     <li class="nav-item">
-                                        <a class="nav-link" id="pills-today" data-toggle="pill" href="#pills-today" role="tab" aria-selected="true">Today</a>
+                                        <a
+                                            class="nav-link"
+                                            id="pills-today"
+                                            data-toggle="pill"
+                                            href="#pills-today"
+                                            role="tab"
+                                            aria-selected="true"
+                                            >Today</a
+                                        >
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link active" id="pills-week" data-toggle="pill" href="#pills-week" role="tab" aria-selected="false">Week</a>
+                                        <a
+                                            class="nav-link active"
+                                            id="pills-week"
+                                            data-toggle="pill"
+                                            href="#pills-week"
+                                            role="tab"
+                                            aria-selected="false"
+                                            >Week</a
+                                        >
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" id="pills-month" data-toggle="pill" href="#pills-month" role="tab" aria-selected="false">Month</a>
+                                        <a
+                                            class="nav-link"
+                                            id="pills-month"
+                                            data-toggle="pill"
+                                            href="#pills-month"
+                                            role="tab"
+                                            aria-selected="false"
+                                            >Month</a
+                                        >
                                     </li>
                                 </ul>
                             </div>
@@ -358,11 +511,22 @@
                     <div class="card-body">
                         <div class="d-flex">
                             <div class="avatar avatar-online">
-                                <span class="avatar-title rounded-circle border border-white bg-info">J</span>
+                                <span
+                                    class="avatar-title rounded-circle border border-white bg-info"
+                                    >J</span
+                                >
                             </div>
                             <div class="flex-1 ml-3 pt-1">
-                                <h6 class="text-uppercase fw-bold mb-1">Joko Subianto <span class="text-warning pl-3">pending</span></h6>
-                                <span class="text-muted">I am facing some trouble with my viewport. When i start my</span>
+                                <h6 class="text-uppercase fw-bold mb-1">
+                                    Joko Subianto
+                                    <span class="text-warning pl-3"
+                                        >pending</span
+                                    >
+                                </h6>
+                                <span class="text-muted"
+                                    >I am facing some trouble with my viewport.
+                                    When i start my</span
+                                >
                             </div>
                             <div class="float-right pt-1">
                                 <small class="text-muted">8:40 PM</small>
@@ -371,11 +535,20 @@
                         <div class="separator-dashed"></div>
                         <div class="d-flex">
                             <div class="avatar avatar-offline">
-                                <span class="avatar-title rounded-circle border border-white bg-secondary">P</span>
+                                <span
+                                    class="avatar-title rounded-circle border border-white bg-secondary"
+                                    >P</span
+                                >
                             </div>
                             <div class="flex-1 ml-3 pt-1">
-                                <h6 class="text-uppercase fw-bold mb-1">Prabowo Widodo <span class="text-success pl-3">open</span></h6>
-                                <span class="text-muted">I have some query regarding the license issue.</span>
+                                <h6 class="text-uppercase fw-bold mb-1">
+                                    Prabowo Widodo
+                                    <span class="text-success pl-3">open</span>
+                                </h6>
+                                <span class="text-muted"
+                                    >I have some query regarding the license
+                                    issue.</span
+                                >
                             </div>
                             <div class="float-right pt-1">
                                 <small class="text-muted">1 Day Ago</small>
@@ -384,11 +557,20 @@
                         <div class="separator-dashed"></div>
                         <div class="d-flex">
                             <div class="avatar avatar-away">
-                                <span class="avatar-title rounded-circle border border-white bg-danger">L</span>
+                                <span
+                                    class="avatar-title rounded-circle border border-white bg-danger"
+                                    >L</span
+                                >
                             </div>
                             <div class="flex-1 ml-3 pt-1">
-                                <h6 class="text-uppercase fw-bold mb-1">Lee Chong Wei <span class="text-muted pl-3">closed</span></h6>
-                                <span class="text-muted">Is there any update plan for RTL version near future?</span>
+                                <h6 class="text-uppercase fw-bold mb-1">
+                                    Lee Chong Wei
+                                    <span class="text-muted pl-3">closed</span>
+                                </h6>
+                                <span class="text-muted"
+                                    >Is there any update plan for RTL version
+                                    near future?</span
+                                >
                             </div>
                             <div class="float-right pt-1">
                                 <small class="text-muted">2 Days Ago</small>
@@ -397,11 +579,20 @@
                         <div class="separator-dashed"></div>
                         <div class="d-flex">
                             <div class="avatar avatar-offline">
-                                <span class="avatar-title rounded-circle border border-white bg-secondary">P</span>
+                                <span
+                                    class="avatar-title rounded-circle border border-white bg-secondary"
+                                    >P</span
+                                >
                             </div>
                             <div class="flex-1 ml-3 pt-1">
-                                <h6 class="text-uppercase fw-bold mb-1">Peter Parker <span class="text-success pl-3">open</span></h6>
-                                <span class="text-muted">I have some query regarding the license issue.</span>
+                                <h6 class="text-uppercase fw-bold mb-1">
+                                    Peter Parker
+                                    <span class="text-success pl-3">open</span>
+                                </h6>
+                                <span class="text-muted"
+                                    >I have some query regarding the license
+                                    issue.</span
+                                >
                             </div>
                             <div class="float-right pt-1">
                                 <small class="text-muted">2 Day Ago</small>
@@ -410,11 +601,20 @@
                         <div class="separator-dashed"></div>
                         <div class="d-flex">
                             <div class="avatar avatar-away">
-                                <span class="avatar-title rounded-circle border border-white bg-danger">L</span>
+                                <span
+                                    class="avatar-title rounded-circle border border-white bg-danger"
+                                    >L</span
+                                >
                             </div>
                             <div class="flex-1 ml-3 pt-1">
-                                <h6 class="text-uppercase fw-bold mb-1">Logan Paul <span class="text-muted pl-3">closed</span></h6>
-                                <span class="text-muted">Is there any update plan for RTL version near future?</span>
+                                <h6 class="text-uppercase fw-bold mb-1">
+                                    Logan Paul
+                                    <span class="text-muted pl-3">closed</span>
+                                </h6>
+                                <span class="text-muted"
+                                    >Is there any update plan for RTL version
+                                    near future?</span
+                                >
                             </div>
                             <div class="float-right pt-1">
                                 <small class="text-muted">2 Days Ago</small>

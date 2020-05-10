@@ -16,7 +16,7 @@ router
     .get(renderLogin)
     .post(
         passport.authenticate("local", {
-            successRedirect: "/secret",
+            successRedirect: "/Admin",
             failureRedirect: "/auth/login",
         })
     );
