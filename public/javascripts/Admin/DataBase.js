@@ -9,7 +9,7 @@
             let $this=this;
             this.SaveButton=$(`<button class="ml-auto mr-2 btn btn-success btn-border">Save Data</button>`);
             this.QuiteButton=$(`<button class="ml-auto mr-2 btn btn-border btn-danger btn-icon"><i class="fa fa-window-close"></i></button>`);
-            this.Inner=$(`<div class="document Hidden col-9 col-md-7 mx-auto"></div>`)
+            this.Inner=$(`<div class="document col-9 col-md-7 mx-auto"></div>`)
                     .append($(`<div class="card"></div>`)
                         .append($(`<div class="card-header row"><h3 class="ml-2 card-title">${Name}</h3></div>`)
                         .append(this.QuiteButton))
@@ -17,10 +17,12 @@
                     .append($(`<div class="card-footer row"></div>`)
                         .append(this.SaveButton)));
             DataDocument.Container.append(this.Inner);
+            this.Inner.hide();
             this.CreateBody(Schema);
             this.QuiteButton.click(function () {
-                DataDocument.Container.addClass("Hidden");
-                $this.Inner.addClass("Hidden");
+                $this.Inner.fadeOut(2000,()=>{
+                    DataDocument.Container.hide("Hidden");
+                });
             });
         }
         saveElement(data,type=undefined){
@@ -130,8 +132,8 @@
         }
         show(data,dataUrl){
             this.FillBody(data);
-            this.Inner.removeClass("Hidden");
-            DataDocument.Container.removeClass("Hidden");
+            DataDocument.Container.show();
+            this.Inner.show();
             let $this=this;
             return  new Promise(function (resolve,reject) {
                 $this.SaveButton.click(()=>{resolve($this.Save())});

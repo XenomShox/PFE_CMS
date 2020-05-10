@@ -27,7 +27,7 @@
         }
         CreateHeader(Name) {
             let $this=this,
-                NameQuery=$(`<input pattern="[A-Za-z_]+" onblur="this.checkValidity();" type="text" name ="Name" value="${Name}" disabled class="card-title">`),
+                NameQuery=$(`<input pattern="[A-Za-z_]+" onblur="this.checkValidity();" type="text" name ="Name" value="${Name}" class="card-title">`),
                 EditButton=$('<button class="ml-auto btn btn-icon btn-success btn-border"><i class="fas fa-edit"></i></button>'),
                 DeleteButton=$('<button class="ml-2 btn btn-icon btn-danger btn-border"><i class="fas fa-trash"></i></button>'),
                 Header={

@@ -17,8 +17,8 @@ module.exports = class Schemas {
         await Schemas.#SchemaModel.init();
         Schemas.#ApiManager=ApiManager;
     }
-    static  async GetAllSchemas(callback){
-        await Schemas.#SchemaModel.find({},{Name:1,Schema:1,_id: 0 },(err,result)=>{
+    static GetAllSchemas(callback){
+        return Schemas.#SchemaModel.find({},{Name:1,Schema:1,_id: 0 },(err,result)=>{
             if (err) callback(500, {Error: err});
             else callback(200, result);
         });
