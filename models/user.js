@@ -22,7 +22,7 @@ let userSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        enum: ['user', 'admin']
+        enum: ["user", "admin"],
     },
     password: {
         type: String,
@@ -30,6 +30,11 @@ let userSchema = new mongoose.Schema({
     birthday: {
         type: Date,
         required: true,
+    },
+    banned: {
+        isBanned: Boolean,
+        dateOfBan: Date,
+        duration: Number,
     },
     phone: String,
     profileImage: {
@@ -39,15 +44,53 @@ let userSchema = new mongoose.Schema({
 
 userSchema.pre("save", async function (next) {
     try {
-        if (this.isNew && !this.profileImage)
-            this.profileImage =
-                "https://www.sackettwaconia.com/wp-content/uploads/default-profile.png";
-        if (this.isNew && (!this.role || this.role === 'admin')) this.role = 'user';
+        if (this.isNew) {
+            if (!this.profileImage)
+                this.profileImage =
+                    "https://www.sackettwaconia.com/wp-content/uploads/default-profile.png";
+
+            if (!this.role || this.role === "admin") this.role = "user";
+
+            this.banned.isBanned = false;
+            this.banned.dateOfBan = undefined;
+            this.banned.duration = undefined;
+        }
+
+        if (this.isNew && (!this.role || this.role === "admin"))
+            this.role = "user";
+
         return next();
     } catch (err) {
         return next(err);
     }
 });
+
+userSchema.methods.getIsBanned = function () {
+    return this.banned.isBanned;
+};
+
+userSchema.methods.setBan = function (days) {
+    if (!this.banned.isBanned) {
+        this.banned.isBanned = true;
+        this.banned.dateOfBan = new Date();
+        this.banned.duration = days;
+    } else {
+        console.log("user already banned");
+    }
+};
+
+userSchema.methods.unbanUser = function () {
+    this.banned.isBanned = false;
+    this.banned.dateOfBan = undefined;
+    this.banned.duration = undefined;
+};
+
+userSchema.methods.banExpired = function () {
+    let now = new Date();
+    let diffInDays =
+        (now.getTime() - this.banned.dateOfBan.getTime()) / (1000 * 3600 * 24);
+    return diffInDays >= this.banned.duration;
+};
 
 userSchema.plugin(passportLocalMongoose);
 

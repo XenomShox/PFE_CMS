@@ -3,11 +3,16 @@ const passport = require("passport");
 
 // Helpers
 const {
-    renderSignup,
     createUser,
     renderLogin,
+    getUsers,
     logout,
-} = require("../handler/auth");
+
+    banUser,
+    unbanUser,
+} = require("../handler/user");
+
+router.get("/", getUsers);
 
 router.post("/signup", createUser);
 
@@ -17,10 +22,13 @@ router
     .post(
         passport.authenticate("local", {
             successRedirect: "/Admin",
-            failureRedirect: "/auth/login",
+            failureRedirect: "/user/login",
         })
     );
 
 router.route("/logout").get(logout);
+
+router.route("/ban/:user_id").put(banUser);
+// router.route('/unban/:user_id').put(unbanUser)
 
 module.exports = router;

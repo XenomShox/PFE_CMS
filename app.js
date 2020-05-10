@@ -16,12 +16,13 @@ const User = require("./models/user");
 // Passport
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
+const { customLocalStrat } = require("./handler/strategy");
 
 const indexRouter = require("./routes/index"),
     ApiRouter = require("./routes/Api"),
     FilesRouter = require("./routes/Files"),
     AdminRouter = require("./routes/Admin"),
-    authRoutes = require("./routes/auth"),
+    authRoutes = require("./routes/user"),
     app = express();
 
 //mongoose Debug
@@ -68,7 +69,7 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
-passport.use(new LocalStrategy(User.authenticate()));
+passport.use(new LocalStrategy(customLocalStrat));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
@@ -104,7 +105,7 @@ app.get("/secret", isLoggedIn, (req, res) => {
     console.log(req.user);
     res.render("secret");
 });
-app.use("/auth", authRoutes);
+app.use("/user", authRoutes);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

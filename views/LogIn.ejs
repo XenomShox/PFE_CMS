@@ -17,6 +17,7 @@
                 }
             });
         </script>
+        <script src="/Files/javascripts/Assets/plugin/sweetalert2/dist/sweetalert2.all.min.js"></script>
 
         <!-- CSS Files -->
         <link rel="stylesheet" href="/Files/stylesheets/Assets/bootstrap.min.css">
@@ -61,7 +62,7 @@
             <div class="container container-login animated fadeIn">
                 <h3 class="text-center">Sign In To Admin</h3>
                 <!-- <div class="login-form d-flex flex-column"> -->
-                    <form class="login-form d-flex flex-column" action="/auth/login" method="POST">
+                    <form class="login-form d-flex flex-column" action="/user/login" method="POST">
                         <div class="form-group form-floating-label">
                             <input id="username" name="username" type="text" value="" class="form-control input-border-bottom" required>
                             <label for="username" class="placeholder">Username</label>
@@ -95,7 +96,7 @@
             <div class="container container-signup animated fadeIn">
                 <h3 class="text-center">Sign Up</h3>
                 <!-- <div class="login-form"> -->
-                    <form class="login-form" action="/auth/signup" method="POST">
+                    <form class="login-form" action="/user/signup" method="POST">
                         <div class="form-group form-floating-label">
                             <input  id="username" name="username" type="text" class="form-control input-border-bottom" required>
                             <label for="username" class="placeholder">Username</label>
