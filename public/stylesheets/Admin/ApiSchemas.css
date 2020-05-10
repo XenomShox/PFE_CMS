@@ -31,7 +31,3 @@ option{
     border: none;
     color:#ddd;
 }
-
-.row.card-header,.row.card-footer{
-    margin: 0!important;
-}

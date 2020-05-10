@@ -6,20 +6,20 @@ const createError = require("http-errors"),
     cookieParser = require("cookie-parser"),
     bodyParser = require("body-parser"),
     logger = require("morgan"),
-    mongoose = require("mongoose");
+    mongoose = require("mongoose"),
+    FileManager= require("./Classes/FileManager");
 
 // Middlewares - to Test -
 const { isLoggedIn } = require("./middlewares/middleware");
-
 // Models
 const User = require("./models/user");
-
 // Passport
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 
 const indexRouter = require("./routes/index"),
     ApiRouter = require("./routes/Api"),
+    FilesRouter = require("./routes/Files"),
     AdminRouter = require("./routes/Admin"),
     authRoutes = require("./routes/auth"),
     app = express();
@@ -43,31 +43,41 @@ mongoose.set("debug", function (coll, method, query, doc) {
     );
 });
 // lunch the apiManager
-require("./Classes/ApiManager").StartDataBase();
+require("./Classes/ApiManager").StartApiManager(
+    mongoose.connect(process.env.MONGODB_URI, {
+        useNewUrlParser: true,
+        useCreateIndex: true,
+        useUnifiedTopology: true,
+        dbName: "ApiTest",
+    })
+);
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
-app.use(express.static(path.join(__dirname, "public")));
-
+//Files Routes
+app.use("/Files",express.static(path.join(__dirname, "public")));
+app.use("/Files", FilesRouter);
+// serialization of password and user
 app.use(require("express-session")({
         secret: process.env.SECRET_KEY,
         resave: false,
         saveUninitialized: false,
     }));
-
 app.use(passport.initialize());
 app.use(passport.session());
-
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 //app.use(subdomain('Api', ApiRouter));
+//request parsing and cookies
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
+//debug for development
 app.use(logger("dev"));
+//Ip @ middleware
 app.use(function (req, res, next) {
     if (req.connection.remoteAddress.substr(0, 7) === "::ffff:")
         req.MyIp = "IPv4: " + req.connection.remoteAddress.substr(7);
@@ -77,7 +87,6 @@ app.use(function (req, res, next) {
 
     next();
 });
-
 app.use(function (req, res, next) {
     res.locals.currentUser = req.user;
     next();

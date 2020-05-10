@@ -3,6 +3,7 @@
         #schemaManager;
         #Skeleton;
         #index;
+        Name;
         constructor(schemaManager,data,index) {
             this.#index=index;
             this.#schemaManager=schemaManager;
@@ -12,7 +13,8 @@
             return this.#Skeleton.Query;
         }
         CreateSkeleton(data){
-                let Header=this.CreateHeader(data.Name),
+            this.Name=data.Name;
+            let Header=this.CreateHeader(data.Name),
                 Body=this.CreateBody(data.Schema),
                 Footer=this.CreateFooter();
             this.#Skeleton={
@@ -25,7 +27,7 @@
         }
         CreateHeader(Name) {
             let $this=this,
-                NameQuery=$(`<input pattern="[A-Za-z_]+" onblur="this.checkValidity();" type="text" name ="Name" value="${Name}" disabled class="card-title">`),
+                NameQuery=$(`<input pattern="[A-Za-z_]+" onblur="this.checkValidity();" type="text" name ="Name" value="${Name}" class="card-title">`),
                 EditButton=$('<button class="ml-auto btn btn-icon btn-success btn-border"><i class="fas fa-edit"></i></button>'),
                 DeleteButton=$('<button class="ml-2 btn btn-icon btn-danger btn-border"><i class="fas fa-trash"></i></button>'),
                 Header={
@@ -90,8 +92,12 @@
             Element={
                 Query:$(`<div class="Schema-Container"></div>`).append($('<div class="row Schema-Head"></div>').append(SchemaHead).append(AddButton).append(RemoveButton)),
                 Parent:Parent, Key:Key, Type:"Group", AddButton:AddButton, RemoveButton:RemoveButton, Elements:[], CollapserQuery:$('<div class="collapser"></div>'),Options:[]
-            },$this=this,notGroup=schemaElement.hasOwnProperty("type");
+            },$this=this,array=schemaElement instanceof Array,notGroup=schemaElement.hasOwnProperty("type") || array;
             if(notGroup){
+                if(array){
+                    schemaElement=schemaElement[0];
+                    schemaElement.type='['+schemaElement.type+']';
+                }
                 Element.Type=schemaElement.type;
                 Element.Options=this.#schemaManager.GetOptions(schemaElement.type);
                 for(let key in schemaElement){
@@ -163,9 +169,10 @@
         CreateTypeSelect(Type) {
             let Select='<select class="col" name="Type">';
             this.#schemaManager.Mtypes.forEach(el=>{
-               Select+=`<option value="${el}" ${el===Type?"selected":""}>${el}</option>`;
+               Select+=`<option value="${el}" ${el===Type?"selected":""}>${el}</option>
+                    <option value="[${el}]" ${("["+el+"]")===Type?"selected":""}>[${el}]</option>`;
             });
-            return Select+"</select>";
+            return Select+`<option value="Group" ${Type==="Group"?"selected":""}>Group</option></select>`;
         }
         CreateOption(Key,Value,Parent) {
             let Options=$(`<select class="col" name="option"><option value="${Key}" selected>${Key}</option></select>`),
@@ -202,6 +209,7 @@
                 });
             })
             Values.change(function () {Element.Type=Values.val();});
+            Values.change();
             return Element;
         }
         Option(options,key) {
@@ -221,7 +229,7 @@
                 case "Date":return `<input class="col" type="date" value="${Value===null?"2020-01-01":Value}" name="Value">`;
                 case "Select": let options='<select class="col" name="Value">';
                     this.#schemaManager.SchemaNames.forEach(el=>{
-                       options+= `<option value=${el} >${el}</option>`;
+                        if(this.Name!==el) options+= `<option value=${el} selected>${el}</option>`;
                     });
                     return options+'</select>';
             }
@@ -232,14 +240,14 @@
             Elements.forEach(el=>{
                 if(el.Type==="Group") schema[el.Key]=this.SchemaTreeSave(el.Elements);
                 else{
-                    schema[el.Key]={type:el.Type};
+                    schema[el.Key]={};
                     el.Elements.forEach(l=>{
-                        console.log(l.Key)
-                        console.log(l.Type);
-                        schema[el.Key][l.Key]=l.Type;
-                    });
+                        schema[el.Key][l.Key]=l.Type;});
+                    if(el.Type[0]==="[") schema[el.Key]=[{...schema[el.Key],type:el.Type.substr(1,el.Type.length-2)}];
+                    else schema[el.Key].type=el.Type;
                 }
             });
+            console.log(schema);
             return schema;
         }
         Save(){
@@ -266,7 +274,7 @@
             {min:"Date",max:"Date"},
             {ref:"Select"}
         ];
-        Mtypes=["String","Number","Date","ObjectId","Boolean","Group"];
+        Mtypes=["String","Number","Date","ObjectId","Boolean"];
         constructor(Container,DataUrl,AddButton){
             this.#Container=Container;
             this.#DataUrl=DataUrl;
@@ -318,24 +326,23 @@
             });
         }
         GetOptions(type){
-            return [...Object.keys(this.Types[this.Mtypes.indexOf(type)]),...Object.keys(this.Default)];
+            if(type[0]==='[') type=type.substr(1,type.length-2);
+            let elms=this.Types[this.Mtypes.indexOf(type)];
+            return [...((elms!==undefined && elms !==null)?Object.keys(elms):[]),...Object.keys(this.Default)];
         }
         GetOptionType(type,option){
+            if(type[0]==='[') type=type.substr(1,type.length-2);
             if(this.Default[option]!==undefined) return this.Default[option];
             else try{return this.Types[this.Mtypes.indexOf(type)][option];}catch (e) { return undefined}
         }
         async FetchData(){
             let $this=this;
-            await $.ajax(this.#DataUrl, {
-                dataType: 'json', // type of response data
-                timeout: 500,     // timeout milliseconds
-                success: function (data) {   // success callback function
-                    $this.#Data = data;
-                }
-            }).catch(reason => {
+            await $.ajax(this.#DataUrl, {dataType: 'json',timeout: 3000})
+            .then(data => {return $this.#Data = data;})
+            .catch(reason => {
                 Swal.fire({
                     title:'Something is Wrong with the DataBase',
-                    text:'Try again later',
+                    text:reason.responseJSON!==undefined?reason.responseJSON.Error:"Time out we got no response",
                     icon:"error",
                     showConfirmButton:true
                 })
@@ -355,27 +362,14 @@
                 confirmButtonText: 'Save',
                 confirmButtonColor: '#31ce36',
                 showLoaderOnConfirm: true,
-                showClass: {
-                    popup: 'animated fadeInDown faster'
-                },
-                hideClass: {
-                    popup: 'animated fadeOutUp faster'
-                },
+                showClass: {popup: 'animated fadeInDown faster'},
+                hideClass: {popup: 'animated fadeOutUp faster'},
                 preConfirm: () => {
-                    let request;
-                    if (!this.Schemas[index].old) request = $.ajax(this.#DataUrl, {
-                        dataType: 'json', // type of response data
-                        timeout: 500,     // timeout milliseconds
-                        type: 'POST',
-                        data: {Name: data.Name, Schema: data.Schema}
-                    });
-                    else request = $.ajax(this.#DataUrl, {
-                        dataType: 'json', // type of response data
-                        timeout: 500,     // timeout milliseconds
-                        type: 'PUT',
-                        data: {Name: this.#Data[index].Name, NewName: data.Name, Schema: data.Schema}
-                    });
-                    return request.done((res, status, jqXHR) => {
+                    return $.ajax(this.#DataUrl, {
+                        dataType: 'json',timeout: 3000,type: !this.Schemas[index].old?'POST':'PUT',
+                        data: {...(!this.Schemas[index].old?{Name: data.Name}:{Name: this.#Data[index].Name, NewName: data.Name}), Schema: data.Schema}
+                    })
+                    .done((res, status, jqXHR) => {
                         if (jqXHR.status === 201) {
                             $this.#Data[index] = data;
                             $this.Schemas[index].old=true;
@@ -386,14 +380,13 @@
                             title: "Saved",
                             hideClass: {popup: 'animated fadeOutUp faster'}
                         });
-                    }).catch(reason => {
+                    })
+                    .catch(reason => {
                         Swal.insertQueueStep({
                             icon: 'error',
                             title: "Error: " + reason.status,
-                            hideClass: {
-                                popup: 'animated fadeOutUp faster'
-                            },
-                            text: reason.responseJSON.Error
+                            hideClass: {popup: 'animated fadeOutUp faster'},
+                            text: reason.responseJSON!==undefined?reason.responseJSON.Error:"Time out we got no response"
                         });
                     });
                 }
@@ -404,11 +397,8 @@
             this.SchemaNames.push(data.Name);
             this.Schemas[i]={Schema:new Schema(this,data,i),old:f};
             this.Schemas[i].Container=$('<div class="col-12 col-lg-6"></div>').append(this.Schemas[i].Schema.Skeleton);
-            if(f)this.#Container.append(this.Schemas[i].Container);
-            else {this.#Container.prepend(this.Schemas[i].Container);}
-            /*this.#Schemas.forEach(el=>{
-                el.Schema.NewSchemaEvent();
-            });*/
+            if(f) this.#Container.append(this.Schemas[i].Container);
+            else this.#Container.prepend(this.Schemas[i].Container);
         }
         DeleteSchema(i) {
             let $this = this, Name = this.#Data[i].Name,deleted=()=>{
@@ -416,9 +406,7 @@
                 delete $this.Schemas[i].Schema;
                 delete $this.Schemas[i];
                 const index = $this.SchemaNames.indexOf(Name);
-                if (index > -1) {
-                    $this.SchemaNames.splice(index, 1);
-                }
+                if (index > -1) { $this.SchemaNames.splice(index, 1);}
                 Swal.insertQueueStep({
                     title: `${Name} Schema has been Deleted`,
                     icon: "success",
@@ -432,12 +420,8 @@
                 showCancelButton: true,
                 confirmButtonText: 'Delete',
                 confirmButtonColor: 'rgba(162,4,32,0.95)',
-                showClass: {
-                    popup: 'animated fadeInDown faster'
-                },
-                hideClass: {
-                    popup: 'animated fadeOutUp faster'
-                },
+                showClass: {popup: 'animated fadeInDown faster'},
+                hideClass: {popup: 'animated fadeOutUp faster'},
                 preConfirm:()=>{
                     if(!this.Schemas[i].old) deleted();
                     else return Swal.insertQueueStep({
@@ -445,25 +429,21 @@
                         text:"Enter your password to confirm Deleting",
                         input:"password",
                         showCancelButton: true,
+                        hideClass: {popup: 'animated fadeOutUp faster'},
                         confirmButtonText: 'Delete',
                         confirmButtonColor: 'rgba(162,4,32,0.95)',
                         showLoaderOnConfirm: true,
                         preConfirm:(password)=>{
                             return $.ajax(this.#DataUrl, {
-                                dataType: 'json', // type of response data
-                                timeout: 2000,
-                                type: 'DELETE',
-                                data: {Name: this.#Data[i].Name, password: password},
-                                success: function () {
-                                    deleted();
-                                }
-                            }).catch(reason => {
+                                dataType: 'json',timeout: 3000,type: 'DELETE',
+                                data: {Name: this.#Data[i].Name, password: password },
+                                success: function () { deleted(); }
+                            })
+                            .catch(reason => {
                                 Swal.insertQueueStep({
                                     title: `Error ${reason.status}`,
-                                    text: reason.responseJSON.Error,
-                                    hideClass: {
-                                        popup: 'animated fadeOutUp faster'
-                                    },
+                                    text: reason.responseJSON!==undefined?reason.responseJSON.Error:"Time Out we got No response",
+                                    hideClass: {popup: 'animated fadeOutUp faster'},
                                     icon: "error"
                                 });
                             });

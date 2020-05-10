@@ -1,45 +1,68 @@
 let router = require('express').Router(),
-    Data=require('../Classes/Models');
-
-
-
-
-router.use("/", require("./Schemas"));
-/* GET Api page. */
-router.get('/',function (req, res) {
-    res.send(Data.models);
+    ApiManager= require('../Classes/ApiManager');
+/*------------------------------Schema----------------------------*/
+router.route('/')
+    .get((req, res) => {
+        if (req.body.Name !== undefined) ApiManager.Schemas.GetASchema(req.body.Name, (status, result) => {
+            res.status(status).send(result);
+        });
+        else ApiManager.Schemas.GetAllSchemas((status, result) => {
+            res.status(status).send(result);
+        });
+    })
+    .post((req,res)=> {
+        if (req.body.Name !== undefined) {
+            if(!(/^[1-9A-Za-z_]+$/.test(req.body.Name))) res.status(401).send({Error:'Invalid Schema Name it must follow this regEX : "^[1-9A-Za-z]+$"'});
+            else if (req.body.Schema !== undefined) ApiManager.Schemas.AddASchema(req.body.Name, req.body.Schema, (status, result) => {
+                res.status(status).send(result);
+            });
+            else res.status(406).send({Error: "there is no Schema parameter in the body. we can't create an empty Schema"});
+        } else
+            res.status(406).send({Error: "Can't Create a Schema without a Name"});
+    })
+    .put((req,res)=> {
+        if (req.body.Name !== undefined) {
+            if(!(/^[1-9A-Za-z_]+$/.test(req.body.NewName))) res.status(401).send({Error:'Invalid Schema Name it must follow this regEX : "^[1-9A-Za-z]+$"'});
+            else if (req.body.Schema !== undefined) ApiManager.Schemas.UpdateASchema(req.body.Name, req.body.NewName, req.body.Schema, (status, result) => {
+                res.status(status).send(result);
+            });
+            else res.status(406).send({Error: "there is no Schema parameter in the body. we can't update with an empty Schema"});
+        } else res.status(406).send({Error: "Can't Update a Schema without a Name"});
+    })
+    .delete((req,res)=>{
+    if (req.body.Name !== undefined) ApiManager.Schemas.DeleteASchema(req.body.Name, (status, result) => {
+        res.status(status).send(result);
+    });
+    else res.status(406).send({Error: "Can't Delete a Schema without a Name"});
 });
-
 /*------------------------------Data----------------------------*/
-router.get('/:Api',function (req, res) {
-    Data.GetData(req.params.Api,{
-        find:req.body.find,
-        select:req.body.select,
-        limit:req.body.limit,
-        skip:req.body.skip,
-        Sort:req.body.Sort,
-        Count:req.body.Count
-    },(result)=>{
-        res.send(result);
+router.route('/:Api')
+    .get( (req, res) => {
+        ApiManager.Models.GetData(req.params.Api,{
+            find:req.body.find,
+            select:req.body.select,
+            limit:req.body.limit,
+            skip:req.body.skip,
+            sort:req.body.sort,
+            count:req.body.count
+        },(status,result)=>{
+            res.status(status).send(result);
+        });
+    })
+    .post( (req, res) =>  {
+        ApiManager.Models.AddData(req.params.Api,req.body,(status,result)=>{
+            res.status(status).send(result);
+        });
+    })
+    .delete( (req, res) =>  {
+        ApiManager.Models.DeleteData(req.params.Api,req.body["_id"],(status,result)=>{
+            res.status(status).send(result);
+        });
+    })
+    .put( (req, res) => {
+        let {"_id":id,...data}=req.body;
+        ApiManager.Models.UpdateData(req.params.Api,id,data,(status,result)=>{
+            res.status(status).send(result);
+        });
     });
-});
-
-
-router.post('/:Api',function (req, res) {
-    console.log(req.body);
-    Data.AddData(req.params.Api,req.body,(result)=>{
-        res.send(result);
-    });
-});
-router.delete('/:Api',function (req, res) {
-    console.log(req.body);
-    res.send(req.body);
-    //delete ":Api"and then redirect to /Schema
-});
-router.put('/:Api',function (req, res) {
-    console.log(req.body);
-    res.send("dead "+req.params.Api);
-    //verify if the Schema for mongoose
-    //Update ":Api"and then redirect to /Schema
-});
 module.exports = router;

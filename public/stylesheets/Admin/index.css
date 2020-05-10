@@ -1,6 +1,8 @@
-
+.Hidden{
+    display: none;
+}
 .swal2-popup{
-    background-color: #1b1e21!important;
+    background-color: #1a2035!important;
 }
 .swal2-popup *{
     color: white!important;
@@ -13,4 +15,7 @@
 }
 .swal2-timer-progress-bar{
     background-color: white!important;
+}
+.row.card-header,.row.card-footer{
+    margin: 0!important;
 }
