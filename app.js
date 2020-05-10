@@ -6,8 +6,7 @@ const createError = require("http-errors"),
     cookieParser = require("cookie-parser"),
     bodyParser = require("body-parser"),
     logger = require("morgan"),
-    mongoose = require("mongoose"),
-    FileManager = require("./Classes/FileManager");
+    mongoose = require("mongoose");
 
 // Middlewares - to Test -
 const { isLoggedIn } = require("./middlewares/middleware");
@@ -57,8 +56,8 @@ require("./Classes/ApiManager").StartApiManager(
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 //Files Routes
-app.use("/Files", express.static(path.join(__dirname, "public")));
-app.use("/Files", FilesRouter);
+app.use("/files", express.static(path.join(__dirname, "public")));
+app.use("/files", FilesRouter);
 // serialization of password and user
 app.use(
     require("express-session")({

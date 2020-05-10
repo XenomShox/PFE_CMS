@@ -1,12 +1,12 @@
 let router = require('express').Router(),
     FilesManager= require('../Classes/FileManager');
-router.route('/')
+router.route('/*')
     .get((req,res)=>{
-       console.log(req);
-       res.send(req.baseUrl);
+        FilesManager.GetFolder(req.url,(status,result)=>{
+           res.status(status).send(result);
+        });
     })
     .post((req,res)=>{
-        console.log(req.buffer)
         res.send("res");
     })
 module.exports = router;
