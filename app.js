@@ -9,13 +9,13 @@ const createError = require("http-errors"),
     mongoose = require("mongoose");
 
 // Middlewares - to Test -
-const { isLoggedIn } = require("./middlewares/middleware");
+const { isLoggedIn, isAdmin } = require("./middlewares/middleware");
 // Models
 const User = require("./models/user");
 // Passport
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
-const { customLocalStrat } = require("./handler/strategy");
+const { stratV2 } = require("./handler/strategy");
 
 const indexRouter = require("./routes/index"),
     ApiRouter = require("./routes/Api"),
@@ -26,22 +26,22 @@ const indexRouter = require("./routes/index"),
 
 //mongoose Debug
 mongoose.set("debug", true);
-mongoose.set("debug", function (coll, method, query, doc) {
-    console.log(
-        "%s" +
-            coll +
-            "%s %s" +
-            method +
-            "%s query: " +
-            JSON.stringify(query) +
-            " doc:" +
-            JSON.stringify(doc),
-        "\x1b[44m",
-        "\x1b[0m",
-        "\x1b[42m",
-        "\x1b[0m"
-    );
-});
+// mongoose.set("debug", function (coll, method, query, doc) {
+//     console.log(
+//         "%s" +
+//             coll +
+//             "%s %s" +
+//             method +
+//             "%s query: " +
+//             JSON.stringify(query) +
+//             " doc:" +
+//             JSON.stringify(doc),
+//         "\x1b[44m",
+//         "\x1b[0m",
+//         "\x1b[42m",
+//         "\x1b[0m"
+//     );
+// });
 // lunch the apiManager
 require("./Classes/ApiManager").StartApiManager(
     mongoose.connect(process.env.MONGODB_URI, {
@@ -68,7 +68,10 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
-passport.use(new LocalStrategy(customLocalStrat));
+
+// passport.use(new LocalStrategy(customLocalStrat));
+passport.use(new LocalStrategy(stratV2));
+
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
@@ -96,14 +99,9 @@ app.use(function (req, res, next) {
 
 // Routes
 app.use("/Api", ApiRouter);
-app.use("/Admin", isLoggedIn, AdminRouter);
+app.use("/Admin", isLoggedIn, /*isAdmin, */ AdminRouter);
 app.use("/", indexRouter);
 
-// Auth Routes
-app.get("/secret", isLoggedIn, (req, res) => {
-    console.log(req.user);
-    res.render("secret");
-});
 app.use("/user", authRoutes);
 
 // catch 404 and forward to error handler

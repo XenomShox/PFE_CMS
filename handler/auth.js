@@ -1,10 +1,6 @@
 const User = require("../models/user");
 const passport = require("passport");
 
-// exports.renderSignup = function (req, res) {
-//     res.render("signup");
-// };
-
 exports.renderLogin = function (req, res) {
     res.render("LogIn");
 };
@@ -15,7 +11,7 @@ exports.createUser = function (req, res) {
 
     User.register(new User({ ...body }), password, (err) => {
         if (err) {
-            return res.render("LogIn",{Error:err});
+            return res.render("LogIn", { Error: err });
         }
         passport.authenticate("local")(req, res, () => {
             res.redirect("/Admin");
