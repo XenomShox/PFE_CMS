@@ -99,11 +99,7 @@ app.use("/Api", ApiRouter);
 app.use("/Admin", isLoggedIn, AdminRouter);
 app.use("/", indexRouter);
 
-// Auth Routes
-app.get("/secret", isLoggedIn, (req, res) => {
-    console.log(req.user);
-    res.render("secret");
-});
+
 app.use("/user", authRoutes);
 
 // catch 404 and forward to error handler

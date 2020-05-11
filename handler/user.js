@@ -12,7 +12,6 @@ exports.renderLogin = function (req, res) {
 exports.getUsers = async function (req, res, next) {
     try {
         let users = await User.find({});
-        console.log(users);
 
         res.send(users);
     } catch (err) {
