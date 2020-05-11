@@ -5,7 +5,6 @@ exports.renderLogin = function (req, res) {
     res.render("LogIn");
 };
 
-<<<<<<< HEAD
 exports.getUsers = async function (req, res, next) {
     try {
         let users = await User.find({});
@@ -16,8 +15,6 @@ exports.getUsers = async function (req, res, next) {
     }
 };
 
-=======
->>>>>>> b5133de3e974d762b1e726110f1d8637b5e312f8
 exports.createUser = function (req, res) {
     console.log(req.body);
     let { password, ...body } = req.body;

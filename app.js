@@ -107,11 +107,6 @@ app.use(function (req, res, next) {
 app.use("/Api", ApiRouter);
 app.use("/Admin", isLoggedIn, AdminRouter);
 app.use("/", indexRouter);
-
-<<<<<<< HEAD
-
-=======
->>>>>>> b5133de3e974d762b1e726110f1d8637b5e312f8
 app.use("/user", authRoutes);
 
 // catch 404 and forward to error handler
