@@ -6,16 +6,19 @@ const createError = require("http-errors"),
     cookieParser = require("cookie-parser"),
     bodyParser = require("body-parser"),
     logger = require("morgan"),
+    flash = require("connect-flash"),
     mongoose = require("mongoose");
 
 // Middlewares - to Test -
-const { isLoggedIn } = require("./middlewares/middleware");
+const { isLoggedIn, isAdmin } = require("./middlewares/middleware");
+
 // Models
 const User = require("./models/user");
+
 // Passport
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
-const { customLocalStrat } = require("./handler/strategy");
+const { stratV2 } = require("./handler/strategy");
 
 const indexRouter = require("./routes/index"),
     ApiRouter = require("./routes/Api"),
@@ -26,22 +29,22 @@ const indexRouter = require("./routes/index"),
 
 //mongoose Debug
 mongoose.set("debug", true);
-mongoose.set("debug", function (coll, method, query, doc) {
-    console.log(
-        "%s" +
-            coll +
-            "%s %s" +
-            method +
-            "%s query: " +
-            JSON.stringify(query) +
-            " doc:" +
-            JSON.stringify(doc),
-        "\x1b[44m",
-        "\x1b[0m",
-        "\x1b[42m",
-        "\x1b[0m"
-    );
-});
+// mongoose.set("debug", function (coll, method, query, doc) {
+//     console.log(
+//         "%s" +
+//             coll +
+//             "%s %s" +
+//             method +
+//             "%s query: " +
+//             JSON.stringify(query) +
+//             " doc:" +
+//             JSON.stringify(doc),
+//         "\x1b[44m",
+//         "\x1b[0m",
+//         "\x1b[42m",
+//         "\x1b[0m"
+//     );
+// });
 // lunch the apiManager
 require("./Classes/ApiManager").StartApiManager(
     mongoose.connect(process.env.MONGODB_URI, {
@@ -68,7 +71,10 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
-passport.use(new LocalStrategy(customLocalStrat));
+
+// passport.use(new LocalStrategy(customLocalStrat));
+passport.use(new LocalStrategy(stratV2));
+
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
@@ -77,6 +83,7 @@ passport.deserializeUser(User.deserializeUser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(flash());
 //debug for development
 app.use(logger("dev"));
 //Ip @ middleware
@@ -91,6 +98,8 @@ app.use(function (req, res, next) {
 });
 app.use(function (req, res, next) {
     res.locals.currentUser = req.user;
+    res.locals.error = req.flash("error");
+    res.locals.success = req.flash("success");
     next();
 });
 
@@ -99,7 +108,10 @@ app.use("/Api", ApiRouter);
 app.use("/Admin", isLoggedIn, AdminRouter);
 app.use("/", indexRouter);
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> b5133de3e974d762b1e726110f1d8637b5e312f8
 app.use("/user", authRoutes);
 
 // catch 404 and forward to error handler
