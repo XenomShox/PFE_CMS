@@ -60,6 +60,14 @@
     <body data-background-color="dark">
         <div class="wrapper wrapper-login">
             <div class="container container-login animated fadeIn">
+                <div class="container">
+                    <% if(error && error.length > 0) { %>
+                        <div class="alert alert-danger text-center" role="alert"><%= error %></div>
+                    <% } %>
+                    <% if(success && success.length > 0) { %>
+                        <div class="alert alert-success text-center" role="alert"><%= success %></div>
+                    <% } %>
+                </div>
                 <h3 class="text-center">Sign In To Admin</h3>
                 <!-- <div class="login-form d-flex flex-column"> -->
                     <form class="login-form d-flex flex-column" action="/user/login" method="POST">

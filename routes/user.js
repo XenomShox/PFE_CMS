@@ -23,6 +23,7 @@ router
         passport.authenticate("local", {
             successRedirect: "/Admin",
             failureRedirect: "/user/login",
+            failureFlash: true,
         })
     );
 

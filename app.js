@@ -6,12 +6,15 @@ const createError = require("http-errors"),
     cookieParser = require("cookie-parser"),
     bodyParser = require("body-parser"),
     logger = require("morgan"),
+    flash = require("connect-flash"),
     mongoose = require("mongoose");
 
 // Middlewares - to Test -
 const { isLoggedIn, isAdmin } = require("./middlewares/middleware");
+
 // Models
 const User = require("./models/user");
+
 // Passport
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
@@ -80,6 +83,7 @@ passport.deserializeUser(User.deserializeUser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(flash());
 //debug for development
 app.use(logger("dev"));
 //Ip @ middleware
@@ -94,12 +98,14 @@ app.use(function (req, res, next) {
 });
 app.use(function (req, res, next) {
     res.locals.currentUser = req.user;
+    res.locals.error = req.flash("error");
+    res.locals.success = req.flash("success");
     next();
 });
 
 // Routes
 app.use("/Api", ApiRouter);
-app.use("/Admin", isLoggedIn, /*isAdmin, */ AdminRouter);
+app.use("/Admin", isLoggedIn, AdminRouter);
 app.use("/", indexRouter);
 
 app.use("/user", authRoutes);

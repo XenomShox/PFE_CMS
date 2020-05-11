@@ -1,23 +1,8 @@
 const User = require("../models/user");
 const passport = require("passport");
 
-// exports.renderSignup = function (req, res) {
-//     res.render("signup");
-// };
-
 exports.renderLogin = function (req, res) {
     res.render("LogIn");
-};
-
-exports.getUsers = async function (req, res, next) {
-    try {
-        let users = await User.find({});
-        console.log(users);
-
-        res.send(users);
-    } catch (err) {
-        next(err);
-    }
 };
 
 exports.createUser = function (req, res) {
@@ -37,7 +22,19 @@ exports.createUser = function (req, res) {
 
 exports.logout = function (req, res) {
     req.logout();
+    req.flash("success", "Logged you out!");
     res.redirect("/user/login");
+};
+
+exports.getUsers = async function (req, res, next) {
+    try {
+        let users = await User.find({});
+        console.log(users);
+
+        res.send(users);
+    } catch (err) {
+        next(err);
+    }
 };
 
 // PUT - /user/ban/:user_id/:days

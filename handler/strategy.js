@@ -47,8 +47,10 @@ exports.stratV2 = async function (username, password, done) {
         // console.log(user);
 
         if (!user) {
-            console.log("incorrect username or password");
-            return done(null, false);
+            // console.log("incorrect username or password");
+            return done(null, false, {
+                message: "Incorrect username or password",
+            });
         }
 
         if (userDoc.getIsBanned()) {
@@ -56,14 +58,20 @@ exports.stratV2 = async function (username, password, done) {
                 userDoc.unbanUser();
                 await userDoc.save();
             } else {
-                console.log(
-                    `${
+                // console.log(
+                //     `${
+                //         userDoc.username
+                //     } is banned from ${userDoc.banned.dateOfBan.getFullYear()}-${userDoc.banned.dateOfBan.getMonth()}-${userDoc.banned.dateOfBan.getDate()} for ${
+                //         userDoc.banned.duration
+                //     } days`
+                // );
+                return done(null, false, {
+                    message: `${
                         userDoc.username
                     } is banned from ${userDoc.banned.dateOfBan.getFullYear()}-${userDoc.banned.dateOfBan.getMonth()}-${userDoc.banned.dateOfBan.getDate()} for ${
                         userDoc.banned.duration
-                    } days`
-                );
-                return done(null, false);
+                    } days`,
+                });
             }
         }
         return done(null, user);
