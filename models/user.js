@@ -80,9 +80,13 @@ userSchema.methods.setBan = function (days) {
 };
 
 userSchema.methods.unbanUser = function () {
-    this.banned.isBanned = false;
-    this.banned.dateOfBan = undefined;
-    this.banned.duration = undefined;
+    if (this.banned.isBanned) {
+        this.banned.isBanned = false;
+        this.banned.dateOfBan = undefined;
+        this.banned.duration = undefined;
+    } else {
+        console.log("user already not banned");
+    }
 };
 
 userSchema.methods.banExpired = function () {
