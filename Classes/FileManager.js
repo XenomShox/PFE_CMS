@@ -34,7 +34,6 @@ module.exports = class FileManager {
       });
    }
    static async GetFileStats(Path,file){
-      if(Path==="/")Path="";
       return new Promise((resolve,reject)=> {
          fs.stat(path.join(__dirname, FileManager.Path + Path + '/' + file), async function (err,res) {
             if(err) reject(err);
@@ -65,5 +64,28 @@ module.exports = class FileManager {
       }).catch(reason => {
          console.log(reason);
       })
+   }
+   static GetFilesTree(Path="",callback){
+      let result={};
+      fs.readdir(path.join(__dirname, FileManager.Path + Path),(err,list)=>{
+         if(err) return callback(500, {err});
+         let pending=list.length;
+         if(!pending) return callback(200,result);
+         list.forEach(file=>{
+            fs.stat(path.join(__dirname, FileManager.Path + Path+"/"+file), function(err, stat) {
+               if (stat && stat.isDirectory()) {
+                  FileManager.GetFilesTree(Path+"/"+file, function(status, res) {
+                     result[file]={type: "folder",children:res};
+                     if (!--pending) callback(200, result);
+                  });
+               } else {
+                  let type=file.match(/[\.]([^\.]+$)/);
+                  result[file]={type:type?type[1]:"unknown"}
+                  if (!--pending) callback(200, result);
+               }
+            });
+         });
+      });
+
    }
 }

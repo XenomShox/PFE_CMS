@@ -2,8 +2,9 @@ let router = require('express').Router(),
     FilesManager= require('../Classes/FileManager');
 router.route('/*')
     .get((req,res)=>{
-        FilesManager.GetFolder(req.url,(status,result)=>{
-           res.status(status).send(result);
+        let callback=req.body.treeView?FilesManager.GetFilesTree:FilesManager.GetFolder;
+        callback(req.url==="/"?"":req.url,(status,result)=>{
+            res.status(status).send(result);
         });
     })
     .post((req,res)=>{

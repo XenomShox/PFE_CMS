@@ -3,6 +3,7 @@ let router = require('express').Router(),
 /*------------------------------Schema----------------------------*/
 router.route('/')
     .get((req, res) => {
+        console.log(req.body)
         if (req.body.Name !== undefined) ApiManager.Schemas.GetASchema(req.body.Name, (status, result) => {
             res.status(status).send(result);
         });
