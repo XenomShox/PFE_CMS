@@ -10,7 +10,12 @@ const {
 
     banUser,
     unbanUser,
+
+    profile,
 } = require("../handler/user");
+
+// Middlewares
+const { isLoggedIn } = require("../middlewares/middleware");
 
 router.get("/", getUsers);
 
@@ -30,6 +35,7 @@ router
 router.route("/logout").get(logout);
 
 router.route("/ban/:user_id").put(banUser);
-// router.route('/unban/:user_id').put(unbanUser)
+router.route("/unban/:user_id").put(unbanUser);
+router.route("/profile").get(isLoggedIn, profile);
 
 module.exports = router;

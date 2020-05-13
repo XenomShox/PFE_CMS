@@ -54,17 +54,24 @@ exports.banUser = async function (req, res, next) {
         let user = await User.findById(req.params.user_id);
         user.setBan(days);
         await user.save();
-        res.redirect("/admin");
+        res.status(200).json(user.banned);
     } catch (err) {
-        next(err);
+        res.status(500).json({ err });
     }
 };
 
 // PUT - /user/unban/:user_id
 exports.unbanUser = async function (req, res, next) {
     try {
-        let user = await User.findById(req.body.user_id);
+        let user = await User.findById(req.params.user_id);
+        user.unbanUser();
+        await user.save();
+        res.status(200).json(user.banned);
     } catch (err) {
-        next(err);
+        res.status(500).json({ err });
     }
+};
+
+exports.profile = function (req, res, next) {
+    res.render("Admin/userProfile");
 };
