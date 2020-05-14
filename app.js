@@ -64,6 +64,7 @@ app.use("/files", express.static(path.join(__dirname, "files")));
 //request parsing and cookies
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(logger("dev"));
 app.use("/files", FilesRouter);
 // serialization of password and user
 app.use(require("express-session")({
@@ -83,7 +84,6 @@ passport.deserializeUser(User.deserializeUser());
 app.use(cookieParser());
 app.use(flash());
 //debug for development
-app.use(logger("dev"));
 //Ip @ middleware
 app.use(function (req, res, next) {
     if (req.connection.remoteAddress.substr(0, 7) === "::ffff:")

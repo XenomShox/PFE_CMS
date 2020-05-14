@@ -1,5 +1,5 @@
 <div class="content"
-     plugin-scripts=""
+     plugin-scripts="/Files/javascripts/Assets/plugin/datatables/datatables.min.js"
      loading-script="/Files/javascripts/Admin/FilesManager.js">
     <div class="page-inner row py-5 bg-secondary-gradient">
         <div class="ml-5 text-white pb-2">
@@ -7,75 +7,71 @@
             <p>You can manage your website files from here.</p>
         </div>
     </div>
+    <div id="Error" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Error in the server</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <i class="fas fa-exclamation-circle fa-7x text-danger mx-auto"></i>
+                    <p>Something wrong in the server please refresh if you think this folder should exist!</p>
+                </div>
+            </div>
+        </div>
+    </div>
     <div id="FilesManager" class="row col-11 mx-auto mt--4">
         <div class="card col-12 mx-auto">
             <div class="card-header navbar navbar-expand-md">
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#FilesDropdown" aria-controls="FilesDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"><i class="fas fa-ellipsis-v" style="color: white;"></i></span>
+                <button class="navbar-toggler text-white" type="button" data-toggle="collapse" data-target="#FilesDropdown" aria-controls="FilesDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"><i class="fas fa-ellipsis-v mt-1" style="color: white;"></i></span>Options
                 </button>
                 <div class="collapse navbar-collapse" id="FilesDropdown">
                     <ul class="navbar-nav not-selected-nav">
-                        <li class="nav-item"><a href="#FilesManager" class="nav-link"><i class="fa fa-folder"></i>New Folder</a></li>
-                        <li class="nav-item"><a href="#FilesManager" class="nav-link"><i class="fa fa-upload"></i>Upload</a></li>
+                        <li class="nav-item"><a id="NewFolder" href="#FilesManager" class="nav-link"><i class="fa fa-folder"></i>New Folder</a></li>
+                        <li class="nav-item"><a id="Upload" href="#FilesManager" class="nav-link"><i class="fa fa-upload"></i>Upload</a></li>
                         <li class="nav-item dropdown">
-                            <a href="#" class="nav-link" id="Sort-by" data-toggle="dropdown"><i class="fas fa-sort-amount-up"></i>Sort by</a>
+                            <a href="#" class="nav-link" id="Sort-by" data-toggle="dropdown"><i class="fas fa-sort-amount-up"></i>Sort by : <span>Name</span></a>
                             <div class="dropdown-menu" aria-labelledby="Sort-by">
                                 <a class="dropdown-item" href="#FilesManager">Name</a>
                                 <a class="dropdown-item" href="#FilesManager">Size</a>
                                 <a class="dropdown-item" href="#FilesManager">Modified</a>
                             </div>
                         </li>
-                        <li class="nav-item"><a href="#FilesManager" class="nav-link"><i class="fa fa-redo"></i>Refresh</a></li>
+                        <li class="nav-item"><a id="Refresh" href="#FilesManager" class="nav-link"><i class="fa fa-redo"></i>Refresh</a></li>
                     </ul>
                     <ul class="navbar-nav selected-nav">
-                        <li class="nav-item"><a class="nav-link" href="#FilesManager"><i class="fa fa-cut"></i>Cut</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#FilesManager"><i class="fa fa-copy"></i>Copy</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#FilesManager"><i class="fa fa-trash"></i>Delete</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#FilesManager"><i class="fas fa-file-download"></i>Download</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#FilesManager"><i class="fas fa-edit"></i>Rename</a></li>
+                        <li class="nav-item"><a id="Cut" class="nav-link" href="#FilesManager"><i class="fa fa-cut"></i>Cut</a></li>
+                        <li class="nav-item"><a id="Copy" class="nav-link" href="#FilesManager"><i class="fa fa-copy"></i>Copy</a></li>
+                        <li class="nav-item"><a id="Remove" class="nav-link" href="#FilesManager"><i class="fa fa-trash"></i>Delete</a></li>
+                        <li class="nav-item"><a id="Download" class="nav-link" href="#FilesManager"><i class="fas fa-file-download"></i>Download</a></li>
+                        <li class="nav-item"><a id="Rename" class="nav-link" href="#FilesManager"><i class="fas fa-edit"></i>Rename</a></li>
                     </ul>
                     <ul class="navbar-nav ml-auto">
-                        <li class="nav-item selected-item"><a class="nav-link" href="#FilesManager"><span id="selectedNumber"></span> item selected<i class="fas fa-times"></i></a></li>
+                        <li class="nav-item selected-item"><a id="SelectList" class="nav-link" href="#FilesManager"><span></span> item selected<i class="fas fa-times"></i></a></li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link " id="layout" href="#" data-toggle="dropdown" ><i class="fas fa-th"></i></a>
+                            <a class="nav-link " id="layout" href="#" data-toggle="dropdown" ><i class="fas fa-th-list"></i></a>
                             <div class="dropdown-menu" aria-labelledby="layout">
-                                <a class="dropdown-item nav-link" href="#FilesManager"><i class="fas fa-th"></i></a>
-                                <a class="dropdown-item nav-link" href="#FilesManager"><i class="fas fa-th-large"></i></a>
-                                <a class="dropdown-item nav-link" href="#FilesManager"><i class="fas fa-th-list"></i></a>
+                                <a class="dropdown-item active" href="#FilesManager"><i class="fas fa-th-list"></i>list</a>
+                                <a class="dropdown-item" href="#FilesManager"><i class="fas fa-th"></i>Medium icons</a>
+                                <a class="dropdown-item" href="#FilesManager"><i class="fas fa-th-large"></i>Large icons</a>
                             </div>
                         </li>
-                        <li class="nav-item"><a href="#FilesManager" class="nav-link"><i class="fas fa-info-circle"></i></a></li>
+                        <li class="nav-item"><a id="Info" href="#FilesManager" class="nav-link"><i class="fas fa-info-circle"></i></a></li>
                     </ul>
                 </div>
             </div>
             <div class="card-body row">
-                <ul class="view col-3" id="TreeView">
-                    <a class="link" href="#" data-toggle="collapse" data-target="#Files" aria-controls="Files" aria-expanded="false" >
-                        <li class="item active"><i class="fas fa-chevron-right fa-xs"></i><i class="fas fa-folder"></i>Files</li>
-                    </a>
-                    <ul class="collapse" id="Files">
-                        <a class="link" href="#"><li class="item"><i class="fas fa-folder"></i>web</li></a>
-                        <a class="link" href="#"><li class="item"><i class="fas fa-folder"></i>images</li></a>
-                        <a class="link" href="#"><li class="item"><i class="fas fa-folder"></i>videos</li></a>
-                        <a class="link" href="#"><li class="item" data-toggle="collapse" data-target="#Files-Audios" aria-controls="Files-Audios" aria-expanded="false"><i class="fas fa-chevron-right fa-xs"></i><i class="fas fa-folder"></i>Audios</li></a>
-                        <ul class="collapse" id="Files-Audios" >
-                            <a class="link" href="#"><li class="item"><i class="fas fa-file-audio"></i>21 guns.mp3</li></a>
-                        </ul>
-                    </ul>
-                </ul>
-                <div class="col-9" id="view">
-                    <div class="nav-view">
+                <ul class="view col-3" id="TreeView"></ul>
+                <div class="col-9 row" id="view">
+                    <div class="nav-view col-12">
                         <ul class="breadcrumbs">
-                            <li class="nav-item">
-                                <a href="#"><i class="flaticon-home"></i>Files</a>
-                            </li>
-                            <li class="separator">
-                                <i class="flaticon-right-arrow"></i>
-                            </li>
                         </ul>
                     </div>
-                    <div class="content-view row">
-                        <div class="file-item"></div>
+                    <div class="content-view List">
                     </div>
                 </div>
             </div>
