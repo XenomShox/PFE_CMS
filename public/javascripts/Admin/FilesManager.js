@@ -11,6 +11,7 @@ console.clear();
         #Sort;
         #SortD;
         #Response;
+        #SelectedList;
         constructor(Container,url,rootName) {
             this.#Url=url;
             this.#RootName=rootName;
@@ -19,6 +20,7 @@ console.clear();
             this.#ContentView=this.#Container.find(".content-view");
             this.#Sort="Name";
             this.#SortD=1;
+            this.#SelectedList=[];
             this.#Response={query:$("#Response"),title:$('#Response .modal-title'),icon:$('#Response .fa-exclamation-circle'),text:$('#Response .modal-body p')};
             this.OpenFolder("").then(()=>{
                 this.ConfigureButtons();
@@ -76,7 +78,7 @@ console.clear();
                             input=formGroup.find("input").val("New Folder");
                         formGroup.find("input").nextAll().remove();
                         NewFolder.find(".modal-body p").html('Path : ' +$this.#CurrentPath);
-                        NewFolder.find(".modal-body button").click(function (e) {
+                        NewFolder.find(".modal-body button").unbind().click(function (e) {
                             let FolderName=input.val();
                             if(FolderName.match(/^[^%]+$/)){
                                 NewFolder.modal('hide');
@@ -93,7 +95,6 @@ console.clear();
                                 formGroup.addClass("has-error");
                                 if(formGroup.has("small").length===0)formGroup.append($("<small class=\"form-text text-muted\">Please don't use % in the folder Name.</small>"));
                             }
-                            return false;
                         })
                     }).modal('show');
                 }),
@@ -137,7 +138,10 @@ console.clear();
                     $(this).addClass("active");
 
                 }),
-                Info : $('#Info')
+                Info : $('#Info').click(()=>{
+                   if($this.#SelectedList.length>0);//selected files info
+                   else ;//Folder info
+                })
             }
         }
         CreateView(Path) {
