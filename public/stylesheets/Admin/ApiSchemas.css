@@ -1,27 +1,14 @@
-.Schema-Container .row i,.Schema-Container .row .row,.Schema-Container.row{
-    padding: .5rem!important;
-}   
-.Schema-Head.show:hover{
-    background-color: rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-}
-.Schema:not([Edit]) .card-footer, .Schema:not([Edit]) .card-body .btn,.Hidden {
-    display: none;
-}
+.Schema-Container .row i,.Schema-Container .row .row,.Schema-Container.row{padding: .4rem!important;}
+.Schema-Head.show:hover{ background-color: rgba(0, 0, 0, 0.1);cursor: pointer;}
+.Schema:not([Edit]) .card-footer, .Schema:not([Edit]) .card-body .btn,.Hidden {display: none;}
 .Schema:not([Edit]) select,.Schema:not([Edit]) input{
     pointer-events: none;
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
 }
-option{
-    background-color: #202940;
-}
-
-.Schema .collapser {
-    margin: 0 1rem 0 2rem;
-}
-
+option{ background-color: #202940;}
+.Schema .collapser {margin: 0 1rem 0 2rem;}
 .Schema-Head {
     margin-left: .5rem !important;
     margin-right: .5rem !important;

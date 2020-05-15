@@ -6,13 +6,14 @@ router.get('/', function (req, res ) {
     res.render("Admin/index",{url:"/Admin/dashboard"});
 });
 router.get('/:Admin',function(req,res){
+    let Admin=require('url').parse(req.params.Admin).pathname;
     if(req.query.f!==undefined)
-        res.render("Admin/"+req.params.Admin,(err,html)=>{
-            if(err) res.render("Admin/error",{pageName:req.params.Admin,path:require('url').parse(req.originalUrl).pathname});
+        res.render("Admin/"+Admin,(err,html)=>{
+            if(err) res.render("Admin/error",{pageName:req.params.Admin,path:Admin});
             else res.send(html);
         });
     else
-        res.render("Admin/index",{url:"/Admin/"+req.params.Admin});
+        res.render("Admin/index",{url:"/Admin/"+Admin});
 });
 router.get('*',function (req,res) {
     res.render("Admin/error",{pageName:req.params.Admin,path:require('url').parse(req.originalUrl).pathname});
