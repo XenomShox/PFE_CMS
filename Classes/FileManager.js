@@ -100,20 +100,29 @@ module.exports = class FileManager {
    }
    static GetFilesTree(Path="",callback){
       let result={};
-      fs.readdir(path.join(__dirname, FileManager.Path + Path),(err,list)=>{
+      fs.readdir(path.join(__dirname, FileManager.Path + Path),{withFileTypes :true},(err,list)=>{
          if(err) return callback(500, {err});
          let pending=list.length;
          if(!pending) return callback(200,result);
          list.forEach(file=>{
-            fs.stat(path.join(__dirname, FileManager.Path + Path+"/"+file), function(err, stat) {
-               if (stat && stat.isDirectory()) FileManager.GetFilesTree(Path+"/"+file, function(status, res) {
-                     result[file]=res;
-                     if (!--pending) callback(200, result);
-                  });
-               else if (!--pending) callback(200, result);
+            if (file.isDirectory()) FileManager.GetFilesTree(Path+"/"+file.name, function(status, res) {
+               result[file.name]=res;
+               if (!--pending) callback(200, result);
             });
+            else if (!--pending) callback(200, result);
          });
       });
-
+   }
+   static NewFolder(Path,FolderName,callback){
+      fs.mkdir(path.join(__dirname,FileManager.Path+Path+"/"+FolderName),err=>{
+         if(err) return callback(500,"Couldn't Create Folder");
+         return callback(201,"Folder Created successfully");
+      })
+   }
+   static DeleteFolder(pathname, DeleteFolder, callback) {
+      fs.rmdir(path.join(__dirname,FileManager.Path+pathname+"/"+DeleteFolder),{recursive :true},err=>{
+         if(err) return callback(500,"Couldn't Create Folder");
+         return callback(200,"Folder Created successfully");
+      })
    }
 }

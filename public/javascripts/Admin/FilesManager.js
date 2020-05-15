@@ -10,6 +10,7 @@ console.clear();
         #isList;
         #Sort;
         #SortD;
+        #Response;
         constructor(Container,url,rootName) {
             this.#Url=url;
             this.#RootName=rootName;
@@ -18,6 +19,7 @@ console.clear();
             this.#ContentView=this.#Container.find(".content-view");
             this.#Sort="Name";
             this.#SortD=1;
+            this.#Response={query:$("#Response"),title:$('#Response .modal-title'),icon:$('#Response .fa-exclamation-circle'),text:$('#Response .modal-body p')};
             this.OpenFolder("").then(()=>{
                 this.ConfigureButtons();
             });
@@ -42,14 +44,17 @@ console.clear();
             }));
             return appendList;
         }
+        Respond(title,text,Error){
+            this.#Response.title.html(title);
+            this.#Response.text.html(text);
+            if(Error) this.#Response.icon.addClass("fa-exclamation-circle text-danger").removeClass("fa-check-circle text-success");
+            else this.#Response.icon.addClass("fa-check-circle text-success").removeClass("fa-exclamation-circle text-danger");
+            this.#Response.query.modal('show');
+        }
         async FetchData(path="",treeView){
             return $.ajax(this.#Url+path,{dataType: 'json',timeout: 2000,type: 'GET',data:{"treeView":treeView}})
                 .catch(reason => {
-                    $("#Error").on("show.bs.modal",(e)=>{console.log(e)}).modal({
-                        keyboard: false
-                    });
-                    console.error(reason);
-
+                    this.Respond("Error in the server",reason.responseText,true);
                     return null;
                 });
         }
@@ -64,19 +69,44 @@ console.clear();
         ConfigureButtons() {
             let $this=this;
             this.#Buttons={
-                NewFolder : $('#NewFolder').click(function () {
-                    console.log($this.#CurrentPath);
+                NewFolder : $('#NewFolder.nav-link').click(function () {
+                    let NewFolder=$('#NewFolder.modal');
+                    NewFolder.on("show.bs.modal",function(){
+                        let formGroup=NewFolder.find(".modal-body .form-group").removeClass("has-error"),
+                            input=formGroup.find("input").val("New Folder");
+                        formGroup.find("input").nextAll().remove();
+                        NewFolder.find(".modal-body p").html('Path : ' +$this.#CurrentPath);
+                        NewFolder.find(".modal-body button").click(function (e) {
+                            let FolderName=input.val();
+                            if(FolderName.match(/^[^%]+$/)){
+                                NewFolder.modal('hide');
+                                $.ajax($this.#Url+$this.#CurrentPath,{timeout: 2000,type: 'POST',data:{NewFolder:FolderName}})
+                                .then((data)=>{
+                                    $this.Respond("New Folder",data);
+                                    $this.OpenFolder();
+                                })
+                                .catch(reason => {
+                                    $this.Respond("Error in the server",reason.responseText,true);
+                                });
+                            }
+                            else{
+                                formGroup.addClass("has-error");
+                                if(formGroup.has("small").length===0)formGroup.append($("<small class=\"form-text text-muted\">Please don't use % in the folder Name.</small>"));
+                            }
+                            return false;
+                        })
+                    }).modal('show');
                 }),
                 Upload : $('#Upload'),
-                Refresh : $('#Refresh').click(()=>{ $this.OpenFolder($this.#CurrentPath);}),
+                Refresh : $('#Refresh').click(()=>{ $this.OpenFolder();}),
                 "Sort-by" : $('#Sort-by').next().find(".dropdown-item").click(function(){
                     $('#Sort-by span').html($this.#Sort=$(this).html());
-                    $this.OpenFolder($this.#CurrentPath);
+                    $this.OpenFolder();
                 }),
                 "Sort-by-D" : $('#Sort-by i').click(function(){
                     $this.#SortD*=-1;
                     $(this).toggleClass("fa-sort-amount-up fa-sort-amount-down");
-                    $this.OpenFolder($this.#CurrentPath);
+                    $this.OpenFolder();
                     return false;
                 }),
                 Cut : $('#Cut'),
@@ -85,7 +115,28 @@ console.clear();
                 Download : $('#Download'),
                 Rename : $('#Rename'),
                 SelectList : $('#SelectList'),
-                layout : $('#layout'),
+                layout : $('#layout').next().find(".dropdown-item").click(function(){
+                    let layout=$(this).clone().children().remove().end().text();
+                    if(layout==="List"){
+                        $this.#ContentView.removeClass("Large").addClass("List");
+                        $('#layout').find("i").removeClass("fa-th-large fa-th").addClass('fa-th-list').parent().next().find('.active').removeClass('active');
+                        $this.#isList=true;
+                        $this.OpenFolder();
+                    }else{
+                        if(layout==="Medium icons") {
+                            $this.#ContentView.removeClass("Large List");
+                            $('#layout').find("i").removeClass("fa-th-list fa-th-large").addClass('fa-th').parent().next().find('.active').removeClass('active');
+                        }
+                        else {
+                            $this.#ContentView.removeClass("List").addClass("Large");
+                            $('#layout').find("i").removeClass("fa-th-list fa-th").addClass('fa-th-large').parent().next().find('.active').removeClass('active');
+                        }
+                        if($this.#isList===true){$this.#isList=false;$this.OpenFolder();}
+                    }
+
+                    $(this).addClass("active");
+
+                }),
                 Info : $('#Info')
             }
         }
@@ -133,7 +184,8 @@ console.clear();
                                     else $this.OpenFile(Path+"/"+el.name);
                                 }))
                             });
-                        else if (data instanceof Array) this.#ContentView.append($(`<h3 class="m-auto">This folder is Empty</h3>`));
+                        else if (data instanceof Array) this.#ContentView.append($(`<h3 class="m-auto">This folder is Empty.</h3>`));
+                        else this.#ContentView.append($(`<h3 class="m-auto">This folder doesn't Exist<./h3>`));
                     })
                     .then(()=> this.#ContentView.removeClass("is-loading"))
             }
@@ -151,12 +203,12 @@ console.clear();
                 });
             });
         }
-        OpenFolder(Path="Name") {
+        OpenFolder(Path=this.#CurrentPath) {
             return this.FetchData("",true).then(tree=>{
                 this.#CurrentPath=Path;
                 this.#Container.find("#TreeView").empty().append(this.CreateTreeView("",this.#RootName,tree));
                 this.CreateView(Path);
-            })
+            });
         }
         OpenFile(Path) {
             console.log(Path);

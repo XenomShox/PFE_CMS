@@ -8,7 +8,7 @@
 .modal-content{background-color: #202940;color: white;}
 .modal-body{display: flex;flex-direction: column;}
 .modal-body p,.modal-title{font-size: 1.4em;}
-.modal-body p{
+#Response .modal-body p{
     text-align: center;
     margin-top: 1em;
 }
@@ -39,6 +39,7 @@ ul.view ,.content-view ul{ list-style: none; padding: 0;}
 .item.active{ background-color: rgba(187,187,187,.1); }
 .item:hover{ color: #bbb; cursor: pointer}
 .dropdown-item:hover{background-color: #bbb;}
+.dropdown-item{font-size: 1em;}
 .dropdown-item.active, .dropdown-item:active{background-color: #666;}
 .link{ color: white!important; text-decoration: none!important; }
 .selected-nav,.selected-item,.selected .not-selected-nav{ display: none!important; }
