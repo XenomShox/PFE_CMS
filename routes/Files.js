@@ -23,7 +23,7 @@ router.route('/*')
     })
     .post(function (req,res,next) {
         req.on('close', function (err){
-            fs.unlink(req.FilePath + req.FileName,function (err) {
+            if(!req.file) fs.unlink(req.FilePath + req.FileName,function (err) {
                 if(err) return console.log(err);
                 console.log(req.FileName+" Aborted");
             });
