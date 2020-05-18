@@ -1,6 +1,6 @@
 #FilesManager .dropdown-menu{ min-width: auto!important; }
-.nav-link:not(:hover):not(.dropdown-item):not(:focus){ color: white!important; }
-.nav-link{
+.nav-link:not(:hover):not(.dropdown-item):not(:focus),.UploadList .btn{ color: white!important; }
+.nav-link,.UploadList .card-header btn{
     display: flex!important;
     align-items: baseline;
     transition: color .4s ease-in-out,background-color .4s ease-in-out;
@@ -19,7 +19,7 @@
 #view{align-content: start;}
 .d-none + .fa-folder {margin-left: 2.1em!important;}
 #TreeView{ border-right: .1em solid rgba(181,181,181,.1)!important; margin: 0; overflow: auto}
-i.fa-chevron-right,i.fa-chevron-down{
+i.fa-chevron-right,i.fa-chevron-down,i.fa-chevron-up{
     border: 1px solid transparent;
     padding: .2em .4em;
     border-radius: 50%;
@@ -27,7 +27,7 @@ i.fa-chevron-right,i.fa-chevron-down{
     height: 1.5em;
 }
 i.fa-chevron-down{padding: .2em;}
-i.fa-chevron-right:hover,i.fa-chevron-down:hover{border-color: rgba(187,187,187,.1);}
+i.fa-chevron-right:hover,i.fa-chevron-down:hover,i.fa-chevron-up:hover{border-color: rgba(187,187,187,.1);}
 ul.view ,.content-view ul{ list-style: none; padding: 0;}
 .view ul{list-style: none; padding-left: 1em;}
 .item{
@@ -145,3 +145,51 @@ ul.view ,.content-view ul{ list-style: none; padding: 0;}
     display: flex;
     align-items: center;
 }
+.UploadList{
+    position: fixed;
+    bottom: 0;
+    z-index: 1;
+    right: 0;
+    padding: 0;
+    border: 1px solid white;
+    border-bottom-left-radius:0;
+    border-bottom-right-radius:0;
+    transition: transform 1s ease-in-out,opacity 1s ease-in-out;
+}
+.UploadList.hidden{transform: translateY(120%); opacity: 0;}
+.UploadList .card-body{ padding: 0; overflow: hidden;}
+.UploadList .card-header{padding: 0.7em 1em!important;}
+.UploadList .card-title{align-content: center;}
+.UploadList .card-title span{margin-left: .5em;}
+.UploadList i{padding: .25em!important;}
+.UploadList .btn:hover{ color: #666!important;background-color: white!important;}
+.UploadList .Upload-file{
+    padding: 0 1em 0 0;
+    position: relative;
+    align-content: center;
+    display:flex;
+    height: 3.5em;
+    border-bottom: .1em solid rgba(187,187,187,.1);
+    overflow: hidden;
+}
+.UploadList .Upload-file .check:hover,.UploadList .Upload-file .check.isProgressing{background-color: #0d8010; color: white!important; transition: width .2s linear}
+.UploadList .Upload-file .check{
+    display: flex; transition: background-color .5s ease-in-out,color .5s ease-in-out; position: absolute;
+    height: 3.5em;
+    top:0; left: 1px;
+}
+
+.UploadList .Upload-file .check.isProgressing i,.UploadList .Upload-file .check.done:hover i,
+.UploadList .Upload-file .check:not(.isProgressing) h4,
+.UploadList .Upload-file .check.isProgressing:not(:hover) .minute,
+.UploadList .Upload-file .check.isProgressing:hover .percentage{display: none;}
+.UploadList .Upload-file .check.error:hover{background-color: #a01d24}
+.UploadList .Upload-file .check.done:hover .minute{display: block}
+
+
+.UploadList .Upload-file h4{
+    margin: auto .5em auto 4em;
+    z-index: 2;
+    color: white;
+}
+.UploadList .Upload-file .btn:hover{color: white;}

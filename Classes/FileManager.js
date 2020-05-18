@@ -72,7 +72,12 @@ module.exports = class FileManager {
    static async GetFileStats(Path,file){
       return new Promise((resolve,reject)=> {
          fs.stat(path.join(__dirname, FileManager.Path + Path + '/' + file), async function (err,res) {
-            if(err) reject(err);
+            if(err) resolve({
+               url: Path + '/' + file,
+               name: file,
+               type:{type:'Corapted',icon:'fas fa-file-medical-alt'},
+               size: 0
+            });
             else {
                if(res.isDirectory()) resolve({
                      url: Path + '/' + file,

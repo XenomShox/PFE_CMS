@@ -12,6 +12,7 @@ console.clear();
         #SortD;
         #Response;
         #SelectedList;
+        #ajax;
         constructor(Container,url,rootName) {
             this.#Url=url;
             this.#RootName=rootName;
@@ -21,6 +22,7 @@ console.clear();
             this.#Sort="Name";
             this.#SortD=1;
             this.#SelectedList=[];
+            this.#ajax=[];
             this.#Response={query:$("#Response"),title:$('#Response .modal-title'),icon:$('#Response .fa-exclamation-circle'),text:$('#Response .modal-body p')};
             this.OpenFolder("").then(()=>{
                 this.ConfigureButtons();
@@ -98,7 +100,66 @@ console.clear();
                         })
                     }).modal('show');
                 }),
-                Upload : $('#Upload'),
+                UploadInput: $(`#Upload input`).change(function (e) {
+                        let val=$(this).prop('files');
+                        if(val){
+                            for (let i=0; i<val.length ;i++){
+                                let file=val[i],index=-1;
+                                $('.UploadList .card-body').append($(`<div class="Upload-file">
+                                    <h4>${file.name}</h4>
+                                </div>`).prepend($(`<div class="check"><i class="fa fa-upload mx-3 my-auto"></i><h4 class="mx-3 my-auto percentage">0%</h4><h4 class="mx-3 my-auto minute">0m</h4></div>`).click(function () {
+                                    let el=$(this).unbind().addClass("isProgressing"),
+                                    data=new FormData();
+                                    data.append("file",file);
+                                    function fetchthis() {
+                                        let start=new Date();
+                                        index=$this.#ajax.push($.ajax({
+                                            type:"POST",
+                                            url:$this.#Url+$this.#CurrentPath,
+                                            data:data,
+                                            cache: false,
+                                            contentType: false,
+                                            processData: false,
+                                            xhr:function () {
+                                                var xhr=new XMLHttpRequest(),last=new Date(),lastLoaded=0;
+                                                xhr.upload.addEventListener("progress",function (evt) {
+                                                    if(evt.lengthComputable) {
+                                                        let per=((evt.loaded / evt.total)*100).toFixed(1)+"%",
+                                                        speed=((evt.total-evt.loaded)/((evt.loaded-lastLoaded)/(new Date()-last))/1000);
+                                                        speed=speed>60?(speed/60).toFixed(0)+"Min":speed.toFixed(0)+"S";
+                                                        last=new Date();
+                                                        lastLoaded=evt.loaded;
+                                                        el.css("width",per).find(".percentage").html(per).next().html(speed);
+                                                    }
+                                                },false);
+                                                return xhr;
+                                            }
+                                        }))-1;
+                                        $this.#ajax[index].then(data=>{
+                                            $this.OpenFolder();
+                                            el.removeClass("isProgressing").addClass("done").css("width","100%").delay(2000).css("width","")
+                                                .find("i").removeClass("fa-upload").addClass("fa-check");
+                                            el.find(".minute").html(((new Date()-start)/1000).toFixed(0)+"s");
+                                        })
+                                            .catch(reason => {
+                                                el.removeClass("isProgressing").addClass("error").unbind().click(()=> {fetchthis();})
+                                                    .css("width","").find("i").removeClass("fa fa-upload").addClass("fas fa-exclamation")
+                                            });
+                                    }
+                                    fetchthis();
+                                })).append($(`<button class="btn btn-icon btn-border ml-auto my-auto"><i class="fa fa-times"></i></button>`).click(function () {
+                                    if(index!==-1)$this.#ajax[index].abort();
+                                    $(this).parent().remove();
+                                })));
+                            }
+                        }
+                        else{
+                            console.log("no file has been selected");
+                        }
+                    }).click(function (e) {
+                        e.stopPropagation();
+                    }),
+                Upload : $('#Upload').click( ()=>{ $(`#Upload input`).trigger("click");}),
                 Refresh : $('#Refresh').click(()=>{ $this.OpenFolder();}),
                 "Sort-by" : $('#Sort-by').next().find(".dropdown-item").click(function(){
                     $('#Sort-by span').html($this.#Sort=$(this).html());

@@ -52,7 +52,8 @@
                 <div class="collapse navbar-collapse" id="FilesDropdown">
                     <ul class="navbar-nav not-selected-nav">
                         <li class="nav-item"><a id="NewFolder" href="#" class="nav-link"><i class="fa fa-folder"></i>New Folder</a></li>
-                        <li class="nav-item"><a id="Upload" href="#" class="nav-link"><i class="fa fa-upload"></i>Upload</a></li>
+                        <li class="nav-item">
+                            <a id="Upload" href="#" class="nav-link"><i class="fa fa-upload"></i>Upload<input name="UploadFile" hidden="hidden" type="file" multiple></a></li>
                         <li class="nav-item dropdown">
                             <a href="#" class="nav-link" id="Sort-by" data-toggle="dropdown"><i class="fas fa-sort-amount-up"></i>Sort by : <span>Name</span></a>
                             <div class="dropdown-menu" aria-labelledby="Sort-by">
@@ -95,6 +96,15 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="ml-auto mr-5 card UploadList col-lg-3 col-md-4 col-sm-5 col-6">
+        <div class="card-header row">
+            <h2 class="card-title row"><i class="my-auto fas fa-chevron-down fa-xs mr-4"></i>Uploading<span> 1 files</span> </h2>
+            <button class="btn btn-icon btn-border ml-auto"><i class="fa fa-times"></i></button>
+        </div>
+        <div class="card-body">
+
         </div>
     </div>
     <link rel="stylesheet" href="/Files/stylesheets/Admin/FilesManager.css">
