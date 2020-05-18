@@ -28,7 +28,7 @@ router.route('/*')
         else{
             req.on('close', function (err){
                 if(!req.file) fs.unlink(req.FilePath + req.FileName,function (err) {
-                    if(err) return res.status(406).send("Bad Request");
+                    if(err) return res.end("Bad Request");
                     console.log(req.FileName+" Aborted");
                 });
             });
