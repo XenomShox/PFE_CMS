@@ -22,18 +22,20 @@ router.route('/*')
         });
     })
     .post(function (req,res,next) {
-        req.on('close', function (err){
-            if(!req.file) fs.unlink(req.FilePath + req.FileName,function (err) {
-                if(err) return console.log(err);
-                console.log(req.FileName+" Aborted");
-            });
-        });
-        next();
-    },upload.single("file"),(req,res)=>{
         if(req.body.NewFolder) FilesManager.NewFolder(require('url').parse(req.url).pathname,req.body.NewFolder,(status,result)=>{
             res.status(status).send(result);
         });
-        else if(req.file){res.status(200).send("Good Request");console.log(req.file)}
+        else{
+            req.on('close', function (err){
+                if(!req.file) fs.unlink(req.FilePath + req.FileName,function (err) {
+                    if(err) return res.status(406).send("Bad Request");
+                    console.log(req.FileName+" Aborted");
+                });
+            });
+            next();
+        }
+    },upload.single("file"),(req,res)=>{
+        if(req.file) res.status(200).send("Good Request");
         else res.status(406).send("Bad Request");
     })
     .delete((req,res)=>{
