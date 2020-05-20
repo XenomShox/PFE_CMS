@@ -1,20 +1,20 @@
 let router = require('express').Router(),
-    fs=require("fs"),
     FilesManager= require('../Classes/FileManager'),
     multer=require("multer"),
     storage = multer.diskStorage({
         destination: function (req, file, cb) {
-            req.FilePath="./files"+decodeURI(require('url').parse(req.url).pathname);
+            req.FilePath="./files"+req.URL;
             cb(null,req.FilePath);
-        },filename: function (req, file, cb) {
-            if(req.body.randomName) return cb(null, file.fieldname+Date.now() + '-' + Math.round(Math.random() * 1E9));
-            req.FileName=file.originalname;
-            cb(null, file.originalname);
+        },
+        filename: function (req, file, cb) {
+            if(req.body.randomName) req.FileName=file.fieldname+Date.now() + '-' + Math.round(Math.random() * 1E9);
+            else req.FileName=file.originalname;
+            cb(null, req.FileName);
         }
     }),
     upload=multer({storage: storage});
 router.route('/*')
-    .all(function (req,res,next) {
+    .all((req,res,next)=>{
         req.URL=decodeURI(require('url').parse(req.url).pathname);
         next();
     })
@@ -35,7 +35,8 @@ router.route('/*')
             });
             next();
         }
-    },upload.single("file"),
+    },
+        upload.single("file"),
         (req,res)=>{
         if(req.file) res.status(200).send("Good Request");
         else res.status(406).send("Bad Request");

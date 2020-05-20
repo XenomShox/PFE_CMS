@@ -22,7 +22,7 @@
 #FilesManager i{margin: auto .4em;}
 #view{align-content: start;}
 .d-none + .fa-folder {margin-left: 2.1em!important;}
-#TreeView{ border-right: .1em solid rgba(181,181,181,.1)!important; margin: 0; overflow: auto}
+#TreeView{ border-right: .1em solid rgba(181,181,181,.1)!important; margin: 0; overflow: auto;}
 i.fa-chevron-right,i.fa-chevron-down,i.fa-chevron-up{
     border: 1px solid transparent;
     padding: .2em .4em;
@@ -153,7 +153,7 @@ ul.view ,.content-view ul{ list-style: none; padding: 0;}
 @media (max-width: 768px) {
     #view{margin: .5em auto!important;}
     #FilesManager .card-body{
-        flex-wrap: wrap-reverse;
+        flex-wrap: nowrap;
     }
     .file-item{
         flex: 0 0 20%;
@@ -178,12 +178,8 @@ ul.view ,.content-view ul{ list-style: none; padding: 0;}
         margin: .5em 5%;
     }
 }
-.table tr * { padding: .5em!important; height: auto!important; }
-.table th:first-child{
-    width: 2em;
-    display: flex;
-    align-items: center;
-}
+.dataTables_wrapper{padding-top: 1em}
+.table.table-hover tr.selected{background-color: rgba(0,0,0,.075);}
 .UploadList{
     position: fixed;
     bottom: 0;

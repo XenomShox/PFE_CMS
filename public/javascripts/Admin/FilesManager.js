@@ -105,14 +105,6 @@ console.clear();
                     return null;
                 });
         }
-        CreateList(Container,path){
-            Container.empty();
-            let table=$(`<table class="table table-hover"></table>`),
-            dataTable=table.dataTable({
-                data:data
-            })
-            Container.append()
-        }
         UploadNumber(){
             let children =this.#UploadList.body.children().length;
             if(children===0) this.#UploadList.span.html("done");
@@ -276,7 +268,7 @@ console.clear();
                 }),
                 Info : $('.Info').click(()=>{$this.Info();}),
                 Download : $('.Download').click(function(){
-                    this.href=document.location.origin+"/Files"+$this.#SelectedList[0].Url;
+                    this.href=document.location.origin+$this.#Url+"/"+$this.#SelectedList[0].Url;
                     return true;
                 })
             }
@@ -401,6 +393,7 @@ console.clear();
                 .modal();
         }
         UpdateSelected() {
+            console.log(this.#SelectedList);
             if (this.#SelectedList.length === 0) this.#Container.removeClass("selected");
             else {
                 if(this.#SelectedList.length === 1){
@@ -418,99 +411,18 @@ console.clear();
             this.#ContentView.empty().addClass("is-loading");
             this.CreateNavBar();
             let $this=this;
-            if(this.#isList) this.CreateList();
-            else{
-                this.FetchData(Path,false)
-                    .then(data=>{
-                        this.#Folder.data=data;
-                        if(data && data.files instanceof Array && data.files.length>0){
-                            this.UpdateSelected()
-                            data.files.sort(function (a,b) {
-                                if((a.Type.type==="folder" && b.Type.type==="folder")||(a.Type.type!=="folder" && b.Type.type!=="folder")){
-                                    if($this.#Sort==="Name") {
-                                        if (a.Name > b.Name) return 1*$this.#SortD;
-                                        else return -1*$this.#SortD;
-                                    }
-                                    else if($this.#Sort==="Size"){
-                                        if(a.Size > b.Size) return 1*$this.#SortD;
-                                        else if(a.Size < b.Size) return -1*$this.#SortD;
-                                        else{
-                                            if (a.Name > b.Name) return 1*$this.#SortD;
-                                            else return -1*$this.#SortD;
-                                        }
-                                    }
-                                    else if($this.#Sort==="Modified"){
-                                        if(new Date(a.Modified) >= new Date(b.Modified)) return -1*$this.#SortD;
-                                        else return 1*$this.#SortD;
-                                    }
-                                }
-                                else if(a.Type.type==="folder") return -1;
-                                else return 1;
-                            })
-                                .forEach(el=>{
-                                    let fileItem=$(`<ul class="file-item"><li class="icon"><i class="${el.Type.icon}"></i></li><li class="Name">${el.Name}</li></ul>`)
-                                        .prepend($('<input type="checkbox">')
-                                            .on("click dblclick",function (e) {e.stopPropagation();})
-                                            .change(function () {
-                                                if(this.checked) {
-                                                    fileItem.addClass("selected");
-                                                    $this.#SelectedList.push(el);
-                                                }
-                                                else{
-                                                    fileItem.removeClass("selected");
-                                                    $this.#SelectedList.splice($this.#SelectedList.indexOf(el),1);
-                                                }
-                                                $this.UpdateSelected();
-                                            })
-                                        );
-                                    this.#ContentView.append(fileItem
-                                        .dblclick(function () {
-                                            if(el.Type.type==="folder") $this.OpenFolder(Path+"/"+el.Name);
-                                            else $this.OpenFile(Path+"/"+el.Name);
-                                        })
-                                        .click(function () {
-                                            if(!cntrlIsPressed){
-                                                $this.#ContentView.find(".selected").removeClass("selected").find("input").each((i,e)=>{e.checked=false;})
-                                                fileItem.addClass("selected").find("input").get(0).checked=true
-                                                $this.#SelectedList=[el];
-                                            }
-                                            else {
-                                                let check=fileItem.addClass("selected").find("input").get(0);
-                                                if(!check.checked) {
-                                                    fileItem.addClass("selected");
-                                                    $this.#SelectedList.push(el);
-                                                    check.checked=true
-                                                }
-                                                else{
-                                                    fileItem.removeClass("selected");
-                                                    $this.#SelectedList.splice($this.#SelectedList.indexOf(el),1);
-                                                    check.checked=false;
-                                                }
-                                            }
-                                            $this.UpdateSelected();
-                                        })
-                                        .contextmenu(function (e) {
-                                            if($this.#SelectedList.indexOf(el)===-1){
-                                                $this.#ContentView.find(".selected").removeClass("selected").find("input").each((i,e)=>{e.checked=false;})
-                                                fileItem.addClass("selected").find("input").get(0).checked=true
-                                                $this.#SelectedList=[el];
-                                            }
-                                            $this.UpdateSelected();
-                                            $('.Context-Menu').css({
-                                                display:"block",
-                                                top: ((e.pageY-10)+$(".Context-Menu").height())>window.innerHeight?window.innerHeight-$(".Context-Menu").height()-60:(e.pageY-10),
-                                                left: e.pageX -90
-                                            }).addClass("show");
-                                            return false;
-                                        })
-                                    );
-                                });
-                        }
-                        else if (data && data.files instanceof Array) this.#ContentView.append($(`<h3 class="m-auto">This folder is Empty.</h3>`));
-                        else this.#ContentView.append($(`<h3 class="m-auto">This folder doesn't Exist<./h3>`));
-                    })
-                    .then(()=> this.#ContentView.removeClass("is-loading"))
-            }
+            this.FetchData(Path,false)
+                .then(data=>{
+                    this.#Folder.data=data;
+                    this.UpdateSelected();
+                    if(data && data.files instanceof Array && data.files.length>0){
+                        if(this.#isList) this.CreateListView(Path,data);
+                        else this.CreateIconView(Path,data);
+                    }
+                    else if (data && data.files instanceof Array) this.#ContentView.append($(`<h3 class="m-auto">This folder is Empty.</h3>`));
+                    else this.#ContentView.append($(`<h3 class="m-auto">This folder doesn't Exist<./h3>`));
+                })
+                .then(()=> this.#ContentView.removeClass("is-loading"))
         }
         CreateNavBar() {
             let view=$('#view .breadcrumbs').empty(),path="";
@@ -536,6 +448,145 @@ console.clear();
         }
         OpenFile(Path) {
             console.log(Path);
+        }
+
+        CreateIconView(Path,data) {
+            let $this=this;
+            data.files.sort(function (a,b) {
+                if((a.Type.type==="folder" && b.Type.type==="folder")||(a.Type.type!=="folder" && b.Type.type!=="folder")){
+                    if($this.#Sort==="Name") {
+                        if (a.Name > b.Name) return 1*$this.#SortD;
+                        else return -1*$this.#SortD;
+                    }
+                    else if($this.#Sort==="Size"){
+                        if(a.Size > b.Size) return 1*$this.#SortD;
+                        else if(a.Size < b.Size) return -1*$this.#SortD;
+                        else{
+                            if (a.Name > b.Name) return 1*$this.#SortD;
+                            else return -1*$this.#SortD;
+                        }
+                    }
+                    else if($this.#Sort==="Modified"){
+                        if(new Date(a.Modified) >= new Date(b.Modified)) return -1*$this.#SortD;
+                        else return 1*$this.#SortD;
+                    }
+                }
+                else if(a.Type.type==="folder") return -1;
+                else return 1;
+            })
+                .forEach(el=>{
+                    let fileItem=$(`<ul class="file-item"><li class="icon"><i class="${el.Type.icon}"></i></li><li class="Name">${el.Name}</li></ul>`)
+                        .prepend($('<input type="checkbox">')
+                            .on("click",function (e) {e.stopPropagation();})
+                            .change(function () {
+                                if(this.checked) $this.AddSelect(fileItem,el,this);
+                                else $this.RemoveSelect(fileItem,el,this);
+                                $this.UpdateSelected();
+                            })
+                        )
+                        .dblclick(()=>{$this.dblclick(Path,el)})
+                        .click((e)=>{
+                            let check=fileItem.addClass("selected").find("input").get(0);
+                            if(!cntrlIsPressed) $this.Select(fileItem,el,check);
+                            else if(!check.checked) $this.AddSelect(fileItem,el,check);
+                            else $this.RemoveSelect(fileItem,el,check);
+                            $this.UpdateSelected();
+                            e.stopPropagation();
+                            return false;
+                        })
+                        .contextmenu((e)=>{$this.ContextElement(fileItem,el,e);return false;});
+                    this.#ContentView.append(fileItem);
+                });
+        }
+
+        CreateListView(Path,data) {
+            let table=$(`<table class="table table-hover"></table>`),order=[1,this.#SortD===1?"asc":"desc"];
+            if(this.#Sort==="Name") order[0]=1;
+            else if(this.#Sort==="Size") order[0]=3;
+            else if(this.#Sort==="Modified") order[0]=5;
+            this.#ContentView.append(table);
+            let dataTable=table.DataTable({
+                data:data.files,
+                columns:[
+                    {
+                        title: "",orderable:false,"searchable": false,
+                        render:function () {
+                            return "<input type='checkbox'>"
+                        }
+                    },
+                    {
+                        title:"Name",data:"Name","width": "10em",
+                        render: function (url, type, full) {
+                            return `<div class="row flex-nowrap"><i class="${full.Type.icon} my-auto"></i>${url}</div>`;
+                        }
+                    },
+                    {title:"Type",data:"Type.type"},
+                    {title:"Size",data:"Size" ,"searchable": false,
+                        render:function (size,z,full) {
+                            if(full.Type.type==="folder") return "";
+                            return size<(1044480)?
+                                ((size/1024).toFixed(2)+"KB")
+                                :((size/1044480).toFixed(2)+"MB");
+                        }
+                    },
+                    {title:"Created",data:"Created" ,"searchable": false, render:function (date) {return new Date(date).toDateString();}},
+                    {title:"Modified",data:"Modified","searchable": false, render:function (date) {return new Date(date).toDateString();}},
+                ],
+                language: {searchPlaceholder: "Search in this folder"},
+                "autoWidth": false,"paging": false,"scrollX": true,"info": false,
+                order:order
+            }),$this=this;
+            table.on("click","tr",function () {
+                let checkBox=$(this).find("input").get(0);
+                if(cntrlIsPressed) {
+                    if(!checkBox.checked) $this.AddSelect($(this),dataTable.row($(this)).data(),checkBox);
+                    else $this.RemoveSelect($(this),dataTable.row($(this)).data(),checkBox);
+                }
+                else $this.Select($(this),dataTable.row($(this)).data(),checkBox);
+                $this.UpdateSelected();
+            })
+                .on("click","input",function (e) { e.stopPropagation()})
+                .on("change","input",function () {
+                    let row=$(this).parent().parent();
+                    if(this.checked) $this.AddSelect(row,dataTable.row(row).data(),this);
+                    else $this.RemoveSelect(row,dataTable.row(row).data(),this);
+                    $this.UpdateSelected();
+                })
+                .on("dblclick","tr",function () { $this.dblclick(Path,dataTable.row(this).data()); })
+                .on("contextmenu","tr",function (e) { $this.ContextElement($(this),dataTable.row(this).data(),e); return false;})
+        }
+        AddSelect(item,el,checkbox) {
+            item.addClass("selected");
+            this.#SelectedList.push(el);
+            checkbox.checked=true;
+        }
+        RemoveSelect(item,el,checkbox) {
+            item.removeClass("selected");
+            this.#SelectedList.splice(this.#SelectedList.indexOf(el),1);
+            checkbox.checked=false;
+        }
+        Select(item,el,checkbox) {
+            this.#ContentView.find(".selected").removeClass("selected").find("input").each((i,e)=>{e.checked=false;})
+            this.#SelectedList=[];
+            this.AddSelect(item,el,checkbox)
+        }
+        dblclick(Path,el) {
+            if(el.Type.type==="folder") this.OpenFolder(Path+"/"+el.Name);
+            else this.OpenFile(Path+"/"+el.Name);
+        }
+        ContextElement(item,el,e){
+            if(this.#SelectedList.indexOf(el)===-1) this.Select(item,el,item.find("input").get(0));
+            this.UpdateSelected();
+            this.ContextMenu(e);
+        }
+        ContextMenu(e) {
+            let menu=$(".Context-Menu");
+            menu.css({
+                display:"block",
+                left: e.pageX -90,
+                top: (((e.pageY-10)+menu.height())>window.innerHeight) ? window.innerHeight - menu.height()-60 : e.pageY-10,
+            })
+            .addClass("show");
         }
     }
     $.fn.FilesManager=function(ApiUrl,rootName){return new FilesManager(this,ApiUrl,rootName);}
