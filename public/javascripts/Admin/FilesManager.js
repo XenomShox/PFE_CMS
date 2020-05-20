@@ -2,7 +2,7 @@ console.clear();
 (()=>{
     var cntrlIsPressed = false;
     $(document).keydown(function(event){
-        if(event.which=="17")
+        if(event.which==="17")
             cntrlIsPressed = true;
     });
 
@@ -77,8 +77,9 @@ console.clear();
                 this.#Modals.NewFolder.label.html(label);
                 this.#Modals.NewFolder.cancel.unbind().click(()=>{reject();})
                 let $this=this;
-                this.#Modals.NewFolder.button.unbind().click(function (e) {
+                this.#Modals.NewFolder.button.unbind().click(function () {
                     let FolderName=$this.#Modals.NewFolder.input.val();
+                    console.log(FolderName);
                     if(FolderName.match(/^[^%]+$/)){
                         $this.#Modals.NewFolder.query.modal('hide');
                         resolve(FolderName);
@@ -111,7 +112,7 @@ console.clear();
             else this.#UploadList.span.html(children+" file"+(children===1?"":"s"));
         }
         ConfigureButtons() {
-            let $this=this,body=false,
+            let $this=this,
             UploadInput= $(`#Upload input`).unbind().click(function (e) {e.stopPropagation();})
                 .change(function () {
                     let val=$(this).prop('files');
@@ -155,13 +156,13 @@ console.clear();
                                             }
                                         }))-1;
                                         $this.#ajax.ajax[index]
-                                            .then(data=>{
+                                            .then(()=>{
                                                 $this.OpenFolder();
                                                 el.removeClass("isProgressing").addClass("done").css("width","100%").delay(2000).css("width","")
                                                     .find("i").removeClass("fa-upload").addClass("fa-check");
                                                 el.find(".minute").html(((new Date()-start)/1000).toFixed(0)+"s");
                                             })
-                                            .catch(reason => {
+                                            .catch(() => {
                                                 el.removeClass("isProgressing").addClass("error").unbind().click(()=> {fetchthis();})
                                                     .css("width","").find("i").removeClass("fa fa-upload").addClass("fas fa-exclamation")
                                             })
@@ -277,11 +278,7 @@ console.clear();
                 $this.#ContentView.find(".selected").removeClass("selected").find("input").each((i,e)=>{e.checked=false;})
                 $this.#SelectedList=[];
                 $this.UpdateSelected();
-                $('.Context-Menu').css({
-                    display:"block",
-                    top: ((e.pageY-10)+$(".Context-Menu").height())>window.innerHeight?window.innerHeight-$(".Context-Menu").height()-60:(e.pageY-10),
-                    left: e.pageX -90
-                }).addClass("show");
+                $this.ContextMenu(e);
                 return false;
             })
         }
@@ -349,12 +346,15 @@ console.clear();
         }
         CreateInfo(table,data){
             table.append(`<tr><td>Name</td><td>:</td><td>${data["Name"]}</td></tr>`)
-                .append($(`<tr><td>Path</td><td>:</td></tr>`).append($(`<td><input type="txt" disabled value="${document.location.origin+this.#Url+data["Url"]}"></td>`).click(function (){
-                        let  copyText = this.querySelector("input");
-                        copyText.select();
-                        console.log(document.execCommand("copy"));
-
-                })))
+                .append($(`<tr><td>Path</td><td>:</td></tr>`)
+                    .append($(`<td><input type="txt" disabled value="${document.location.origin+this.#Url+data["Url"]}"></td>`)
+                        .click(function (){
+                            let  copyText = this.querySelector("input");
+                            copyText.select();
+                            document.execCommand("copy");
+                        })
+                    )
+                )
                 .append(`
                     <tr><td>Type</td><td>:</td><td>${data["Type"].type}</td></tr>
                     <tr><td>Size</td><td>:</td><td>
@@ -393,7 +393,6 @@ console.clear();
                 .modal();
         }
         UpdateSelected() {
-            console.log(this.#SelectedList);
             if (this.#SelectedList.length === 0) this.#Container.removeClass("selected");
             else {
                 if(this.#SelectedList.length === 1){
@@ -410,7 +409,6 @@ console.clear();
             this.#Folder.CurrentPath=Path;
             this.#ContentView.empty().addClass("is-loading");
             this.CreateNavBar();
-            let $this=this;
             this.FetchData(Path,false)
                 .then(data=>{
                     this.#Folder.data=data;
