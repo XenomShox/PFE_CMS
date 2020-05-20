@@ -4,7 +4,7 @@ let router = require('express').Router(),
     multer=require("multer"),
     storage = multer.diskStorage({
         destination: function (req, file, cb) {
-            req.FilePath="./files"+require('url').parse(req.url).pathname;
+            req.FilePath="./files"+decodeURI(require('url').parse(req.url).pathname);
             cb(null,req.FilePath);
         },filename: function (req, file, cb) {
             if(req.body.randomName) return cb(null, file.fieldname+Date.now() + '-' + Math.round(Math.random() * 1E9));
@@ -12,34 +12,54 @@ let router = require('express').Router(),
             cb(null, file.originalname);
         }
     }),
-    upload=multer({ storage: storage });
+    upload=multer({storage: storage});
 router.route('/*')
+    .all(function (req,res,next) {
+        req.URL=decodeURI(require('url').parse(req.url).pathname);
+        next();
+    })
     .get((req,res)=>{
         let {pathname:url, query: body} = require('url').parse(req.url,true),
-            callback=(JSON.parse(JSON.stringify(body)).treeView)==='true'?FilesManager.GetFilesTree:FilesManager.GetFolder;
-        callback(url==="/"?"":decodeURI(url),(status,result)=>{
+            callback=req.query.treeView==='true'?FilesManager.GetFilesTree:FilesManager.GetFolder;
+        callback(req.URL==="/"?"":req.URL,(status,result)=>{
             res.status(status).send(result);
         });
     })
-    .post(function (req,res,next) {
-        if(req.body.NewFolder) FilesManager.NewFolder(require('url').parse(req.url).pathname,req.body.NewFolder,(status,result)=>{
+    .post((req,res,next)=> {
+        if(req.body.NewFolder) FilesManager.NewFolder(req.URL,req.body.NewFolder,(status,result)=>{
             res.status(status).send(result);
         });
         else{
             req.on('close', function (err){
-                if(!req.file) fs.unlink(req.FilePath + req.FileName,function (err) {
-                    if(err) return res.end("Bad Request");
-                    console.log(req.FileName+" Aborted");
-                });
+                if(!req.file) FilesManager.DeleteFile(req.FilePath,req.FileName);
             });
             next();
         }
-    },upload.single("file"),(req,res)=>{
+    },upload.single("file"),
+        (req,res)=>{
         if(req.file) res.status(200).send("Good Request");
         else res.status(406).send("Bad Request");
     })
+    .put((req,res)=>{
+        if(req.body.Mode) {
+            if(req.body.Mode==="Copy") FilesManager.CopyFiles(req.URL,req.body.Files,(status,result)=>{
+                res.status(status).send(result);
+            })
+            else FilesManager.MoveFiles(req.URL,req.body.Files,(status,result)=>{
+                res.status(status).send(result);
+            })
+        }
+        else if(req.body.NewName &&req.body.NewName!=="index.html") FilesManager.MoveFile(req.URL+"/"+req.body.Name,req.URL+"/"+req.body.NewName)
+            .then(()=>{
+                res.status(200).send("Name was Changed from "+req.body.Name+" to "+req.body.NewName);
+            })
+            .catch((err)=>{
+                res.status(404).send("Couldn't Change Name : "+err);
+            });
+        else res.status(406).send("Bad Request");
+    })
     .delete((req,res)=>{
-        if(req.body.DeleteFolder) FilesManager.DeleteFolder(require('url').parse(req.url).pathname,req.body.DeleteFolder,(status,result)=>{
+        if(req.body.Paths) FilesManager.DeleteFiles(req.URL,req.body.Paths,(status,result)=>{
             res.status(status).send(result);
         });
         else res.status(406).send("Bad Request");

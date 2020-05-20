@@ -1,10 +1,14 @@
 #FilesManager .dropdown-menu{ min-width: auto!important; }
+#FilesManager a{cursor: pointer;}
 .nav-link:not(:hover):not(.dropdown-item):not(:focus),.UploadList .btn{ color: white!important; }
 .nav-link,.UploadList .card-header btn{
     display: flex!important;
     align-items: baseline;
     transition: color .4s ease-in-out,background-color .4s ease-in-out;
 }
+.Context-Menu .nav-link:not(:hover):not(.dropdown-item):not(:focus){color: #666!important;}
+.Context-Menu .nav-link{padding: .2em 1em;}
+.Context-Menu{position: fixed;}
 .modal-content{background-color: #202940;color: white;}
 .modal-body{display: flex;flex-direction: column;}
 .modal-body p,.modal-title{font-size: 1.4em;}
@@ -38,19 +42,42 @@ ul.view ,.content-view ul{ list-style: none; padding: 0;}
 }
 .item.active{ background-color: rgba(187,187,187,.1); }
 .item:hover{ color: #bbb; cursor: pointer}
-.dropdown-item:hover{background-color: #bbb;}
+.dropdown-item:hover,.Context-Menu .nav-link:hover{background-color: #bbb;}
 .dropdown-item{font-size: 1em;}
 .dropdown-item.active, .dropdown-item:active{background-color: #666;}
 .link{ color: white!important; text-decoration: none!important; }
-.selected-nav,.selected-item,.selected .not-selected-nav{ display: none!important; }
+.selected-nav,.selected-item,.selected .not-selected-nav,.selected.multi .ONO,.selected.Folder .Download,#FilesManager:not(.Copy) .Paste,#FilesManager:not(.Copy) .PasteClose,.selected.Copy .NPaste{ display: none!important; }
 .selected .selected-item{ display: list-item!important; }
 .selected .selected-nav,.not-selected-nav{ display: flex!important; }
 .breadcrumbs{border: none;}
 .breadcrumbs{margin: 0;}
 .breadcrumbs .nav-item a{color: white!important; padding: .5em .3em;}
 .breadcrumbs .nav-item a:hover{color: #bbb!important; }
-.nav-view{border-bottom: .1em solid;padding-bottom: 1em;height: 3.5em;}
+#SelectList span{margin-right: .3em; font-size: 1.2em;font-weight: bold;}
+#SelectList:not(:hover) i{display: none}
+#InfoModal table td{
+    word-wrap: break-word;
+    font-size: 1.2em;
+    min-width: 1em;
+    max-width: 10em;
+    text-overflow: unset;
+    padding-bottom: 1em;
+}
+#InfoModal table td input{
+    background: transparent;
+    border: none;
+    color: white;
+    width: 100%;
+}
+#InfoModal table td input:hover{color: #666;}
+#InfoModal table tr{
+    vertical-align: text-top;
+}
+.breadcrumbs .separator{    top: -.5em;
+    position: relative;}
+.nav-view{border-bottom: .1em solid;min-height: 3.5em;}
 .breadcrumbs .nav-item.btn{
+    margin-bottom: 1em;
     color: white;
     font-size: 1em;
     font-weight: bold;
@@ -61,8 +88,8 @@ ul.view ,.content-view ul{ list-style: none; padding: 0;}
     background-color: white;
     color: #666;
 }
-.content-view{min-height: 6rem;}
-.content-view.is-loading:after{width: 5em;height: 5em;top: calc(50% - 5em/2);}
+.content-view{height: calc(100% - 3.5em);width: 100%}
+.content-view.is-loading:after{top: calc(50% - 5em/2);}
 /*  view */
 .content-view{ align-items: start; width: 100%; }
 .content-view{
@@ -84,7 +111,7 @@ ul.view ,.content-view ul{ list-style: none; padding: 0;}
     border: .1em solid transparent;
 }
 .file-item *{max-width: 100%}
-.file-item:hover{
+.file-item:hover,.file-item.selected{
     border: .1em solid rgba(187,187,187,.2);
     cursor: pointer;
     background-color: rgba(187,187,187,.2);
@@ -115,7 +142,19 @@ ul.view ,.content-view ul{ list-style: none; padding: 0;}
         margin: .5em 2.5%;
     }
 }
+@media (max-width: 992px)and (min-width: 768px) {
+    .card-header .nav-link:not(:hover):not(#SelectList) i{margin: auto 2em auto .3em!important;}
+    .card-header .nav-link:not(:hover):not(#SelectList) {
+        width: 4em;
+        overflow: hidden;
+        height: 3em;
+    }
+}
 @media (max-width: 768px) {
+    #view{margin: .5em auto!important;}
+    #FilesManager .card-body{
+        flex-wrap: wrap-reverse;
+    }
     .file-item{
         flex: 0 0 20%;
         max-width: 20%;
@@ -190,6 +229,9 @@ ul.view ,.content-view ul{ list-style: none; padding: 0;}
 .UploadList .Upload-file h4{
     margin: auto .5em auto 4em;
     z-index: 2;
+    overflow: hidden;
     color: white;
+    height: 50%;
 }
+
 .UploadList .Upload-file .btn:hover{color: white;}
