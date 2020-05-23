@@ -690,4 +690,4 @@
 })();
 var $Schemas = $("#Schemas");
 $Schemas.Schema("/Api/", $("#AddButton"));
-$Schemas.sortable();
+if(!window.matchMedia("(max-width: 767px)").matches)$Schemas.sortable();

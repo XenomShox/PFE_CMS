@@ -1,5 +1,16 @@
 const fs=require('fs'),
-    path = require('path');
+    path = require('path'),
+    util = require('util'),
+    Mfs={
+       stat:util.promisify(fs.stat),
+       readdir:util.promisify(fs.readdir),
+       rmdir:util.promisify(fs.rmdir),
+       mkdir:util.promisify(fs.mkdir),
+       unlink:util.promisify(fs.unlink),
+       copy:util.promisify(fs.copyFile),
+       rename:util.promisify(fs.rename)
+    };
+
 
 module.exports = class FileManager {
     /*----------------Attributes------------*/
@@ -58,71 +69,123 @@ module.exports = class FileManager {
       return {type:"file",icon:"fas fa-file"};
    }
    static GetFolder(Path="",callback){
-      fs.readdir(path.join(__dirname, FileManager.Path + Path),(err,res)=>{
-         if(err) callback(400,{Error:"This directory doesn't exist"});
-         else{
+      Mfs.readdir(path.join(__dirname, FileManager.Path + Path),)
+          .then((res)=>{
             let result=[];
             res.forEach(el=>{
                result.push(FileManager.GetFileStats(Path,el));
             });
-            Promise.all(result).then(values=>{callback(200,values)})
-         }
-      });
-   }
-   static async GetFileStats(Path,file){
-      return new Promise((resolve,reject)=> {
-         fs.stat(path.join(__dirname, FileManager.Path + Path + '/' + file), async function (err,res) {
-            if(err) reject(err);
-            else {
-               if(res.isDirectory()) resolve({
-                     url: Path + '/' + file,
-                     name: file,
-                     type:{type:'folder',icon:'fas fa-folder'},
-                     size: res.size
-                  });
-               else if(res.isFile()){
-
-                  resolve({
-                     url: Path + '/' + file,
-                     name: file,
-                     type:FileManager.GetFileType(file),
-                     size: res.size,
-                     atime:res.atime,
-                     mtime:res.mtime,
-                     ctime:res.ctime
-                  });
-               }
-               else reject({Error:"this file isn't a file nor a directory"});
-            }
+            Promise.all(result).then(values=>{
+               FileManager.GetFileStats(Path,"").then(res=>{
+                  callback(200,{folder:res,files:values});
+               })
+            })
+         })
+          .catch(err=>{
+            callback(400,{Error:err});
          });
-      })
-          .catch(reason => {console.log(reason);});
+   }
+   static GetFileStats(Path,file){
+      return  Mfs.stat( path.join(__dirname, FileManager.Path + Path + '/' + file))
+          .then(res=>{
+             return {
+                Url: Path + file,
+                Name: file===""?"files":file,
+                Type: res.isFile()?FileManager.GetFileType(file):
+                    res.isDirectory()?{type:'folder',icon:'fas fa-folder'}:
+                        {Error:"this file isn't a file nor a directory"},
+                Size: res.size,
+                Modified:res.mtime,
+                Created:res.birthtime
+             };
+          })
+          .catch(err=>{
+             return {
+                Url: Path + '/' + file,
+                Name: file,
+                Type:{type:'Corapted',icon:'fas fa-file-medical-alt'},
+                Size: 0
+             };
+          });
    }
    static GetFilesTree(Path="",callback){
       let result={};
-      fs.readdir(path.join(__dirname, FileManager.Path + Path),{withFileTypes :true},(err,list)=>{
-         if(err) return callback(500, {err});
-         let pending=list.length;
-         if(!pending) return callback(200,result);
-         list.forEach(file=>{
-            if (file.isDirectory()) FileManager.GetFilesTree(Path+"/"+file.name, function(status, res) {
-               result[file.name]=res;
-               if (!--pending) callback(200, result);
-            });
-            else if (!--pending) callback(200, result);
-         });
-      });
+      Mfs.readdir(path.join(__dirname, FileManager.Path + Path),{withFileTypes :true})
+          .then(list=>{
+             let pending=list.length;
+             if(!pending) return callback(200,result);
+             list.forEach(file=>{
+                if (file.isDirectory()) FileManager.GetFilesTree(Path+"/"+file.name, function(status, res) {
+                   result[file.name]=res;
+                   if (!--pending) callback(200, result);
+                });
+                else if (!--pending) callback(200, result);
+             });
+          })
+          .catch(err=>{
+             callback(500, {err});
+          })
    }
    static NewFolder(Path,FolderName,callback){
-      fs.mkdir(path.join(__dirname,FileManager.Path+Path+"/"+FolderName),err=>{
-         if(err) return callback(500,"Couldn't Create Folder");
-         return callback(201,"Folder Created successfully");
-      })
+      Mfs.mkdir(path.join(__dirname,FileManager.Path+Path+"/"+FolderName))
+          .then(()=>{ callback(201,"Folder Created successfully");})
+          .catch(err=>{ callback(500,"Couldn't Create Folder :"+err);});
    }
-   static DeleteFolder(pathname, DeleteFolder, callback) {
-      fs.rmdir(path.join(__dirname,FileManager.Path+pathname+"/"+DeleteFolder),{recursive :true},err=>{
-         if(err) return callback(500,"Couldn't Create Folder");
-         return callback(200,"Folder Created successfully");
-      })
+   static DeleteFiles(Path, files, callback) {
+      if(files instanceof Array){
+         let All=[];
+         for(let i=0;i<files.length;i++){
+            All.push(FileManager.DeleteFile(Path,files[i].Name,files[i].Type.type));
+         }
+         Promise.all(All).then(values=>{
+            let count=0;
+            values.forEach(el=>{if(el instanceof Error)count++;})
+            if(count===values.length)callback(500,"Couldn't Delete any file");
+            else if(count>0)callback(500,"Couldn't Delete all the files");
+            else callback(200,"All files has been deleted");
+         })
+      }
+   }
+   static DeleteFile(Path,file,type){
+      let deleteFile;
+      if(type==="folder") deleteFile= Mfs.rmdir(path.join(__dirname,FileManager.Path+Path+"/"+file),{recursive :true});
+      else deleteFile=Mfs.unlink(path.join(__dirname,FileManager.Path+Path+"/"+file));
+      return deleteFile
+          .then(()=> {console.log(file+" has been Deleted"); return {}})
+          .catch(err=>{console.error(err); return new Error();});
+   }
+   static MoveFile(OldPath,NewPath){
+      return Mfs.rename(path.join(__dirname,FileManager.Path+"/"+OldPath),path.join(__dirname,FileManager.Path+"/"+NewPath));
+   }
+   static MoveFiles(NewPath,Files,callback){
+      let Promises=[]
+      Files.forEach(file=>{
+         Promises.push(FileManager.MoveFile(file.Url,NewPath+"/"+file.Name));
+      });
+      Promise.all(Promises)
+          .then(values => {
+             let count=0;
+             values.forEach(el=>{if(el instanceof Error)count++;})
+             if(count===values.length)callback(500,"Couldn't Move any file");
+             else if(count>0)callback(500,"Couldn't Move all the files");
+             else callback(200,"All files has been Moved");
+          });
+   }
+   static CopyFiles(NewPath,Files,callback){
+       let Promises=[]
+       Files.forEach(file=>{
+           Promises.push(FileManager.CopyFile(file.Url,NewPath+"/"+file.Name));
+       });
+       Promise.all(Promises)
+           .then(values => {
+               let count=0;
+               values.forEach(el=>{if(el instanceof Error)count++;})
+               if(count===values.length)callback(500,"Couldn't Copy any file");
+               else if(count>0)callback(500,"Couldn't Copy all the files");
+               else callback(200,"All files has been Copied");
+           });
+   }
+   static CopyFile(OldPath,NewPath){
+        return Mfs.copy(path.join(__dirname,FileManager.Path+"/"+OldPath),path.join(__dirname,FileManager.Path+"/"+NewPath),fs.constants.COPYFILE_FICLONE);
    }
 }

@@ -27,7 +27,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Creating New Folder</h5>
+                    <h5 class="modal-title"></h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -35,10 +35,45 @@
                 <div class="modal-body">
                     <p class="col-12"></p>
                     <div class="form-group form-group-default col-12">
-                        <lable>New Folder Name: </lable>
+                        <lable></lable>
                         <input class="form-control" type="text">
                     </div>
                     <button class="btn btn-success btn-border ml-auto col-4">Create</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="InfoModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <i class="fas fa-exclamation-circle text-info mt-2 mr-1"></i>
+                    <h5 class="modal-title">File(s) Info</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="col-8 mx-auto">
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="Confirmation" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirm</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <i class="fas fa-exclamation-circle fa-7x text-info mx-auto"></i>
+                    <p></p>
+                    <a class="btn btn-border btn-success ml-auto mr-2" href="#">Confirm</a>
                 </div>
             </div>
         </div>
@@ -51,36 +86,38 @@
                 </button>
                 <div class="collapse navbar-collapse" id="FilesDropdown">
                     <ul class="navbar-nav not-selected-nav">
-                        <li class="nav-item"><a id="NewFolder" href="#" class="nav-link"><i class="fa fa-folder"></i>New Folder</a></li>
-                        <li class="nav-item"><a id="Upload" href="#" class="nav-link"><i class="fa fa-upload"></i>Upload</a></li>
+                        <li class="nav-item"><a class="Paste nav-link" ><i class="fa fa-paste"></i>Paste</a></li>
+                        <li class="nav-item"><a class="PasteClose nav-link" ><i class="fa fa-times"></i>Paste</a></li>
+                        <li class="nav-item"><a class="NewFolder nav-link"><i class="fa fa-folder"></i>New Folder</a></li>
+                        <li class="nav-item"><a id="Upload" class=" nav-link"><i class="fa fa-upload"></i>Upload<input name="UploadFile" hidden="hidden" type="file" multiple></a></li>
                         <li class="nav-item dropdown">
-                            <a href="#" class="nav-link" id="Sort-by" data-toggle="dropdown"><i class="fas fa-sort-amount-up"></i>Sort by : <span>Name</span></a>
+                            <a class="nav-link" id="Sort-by" data-toggle="dropdown"><i class="fas fa-sort-amount-up"></i>Sort by : <span>Name</span></a>
                             <div class="dropdown-menu" aria-labelledby="Sort-by">
-                                <a class="dropdown-item" href="#">Name</a>
-                                <a class="dropdown-item" href="#">Size</a>
-                                <a class="dropdown-item" href="#">Modified</a>
+                                <a class="dropdown-item" >Name</a>
+                                <a class="dropdown-item" >Size</a>
+                                <a class="dropdown-item" >Modified</a>
                             </div>
                         </li>
-                        <li class="nav-item"><a id="Refresh" href="#" class="nav-link"><i class="fa fa-redo"></i>Refresh</a></li>
+                        <li class="nav-item"><a class="Refresh nav-link"><i class="fa fa-redo"></i>Refresh</a></li>
                     </ul>
                     <ul class="navbar-nav selected-nav">
-                        <li class="nav-item"><a id="Cut" class="nav-link" href="#"><i class="fa fa-cut"></i>Cut</a></li>
-                        <li class="nav-item"><a id="Copy" class="nav-link" href="#"><i class="fa fa-copy"></i>Copy</a></li>
-                        <li class="nav-item"><a id="Remove" class="nav-link" href="#"><i class="fa fa-trash"></i>Delete</a></li>
-                        <li class="nav-item"><a id="Download" class="nav-link" href="#"><i class="fas fa-file-download"></i>Download</a></li>
-                        <li class="nav-item"><a id="Rename" class="nav-link" href="#"><i class="fas fa-edit"></i>Rename</a></li>
+                        <li class="nav-item"><a class="Cut NPaste nav-link" ><i class="fa fa-cut"></i>Cut</a></li>
+                        <li class="nav-item"><a class="Copy NPaste nav-link" ><i class="fa fa-copy"></i>Copy</a></li>
+                        <li class="nav-item"><a class="Remove nav-link" ><i class="fa fa-trash"></i>Delete</a></li>
+                        <li class="nav-item"><a class="Rename ONO nav-link" ><i class="fas fa-edit"></i>Rename</a></li>
+                        <li class="nav-item"><a class="Download ONO nav-link" download><i class="fas fa-download"></i>Download</a></li>
                     </ul>
                     <ul class="navbar-nav ml-auto">
-                        <li class="nav-item selected-item"><a id="SelectList" class="nav-link" href="#"><span></span> item selected<i class="fas fa-times"></i></a></li>
+                        <li class="nav-item selected-item"><a id="SelectList" class="nav-link" ><span></span> items selected<i class="fas fa-times"></i></a></li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link " id="layout" href="#" data-toggle="dropdown" ><i class="fas fa-th"></i></a>
+                            <a class="nav-link " id="layout" data-toggle="dropdown" ><i class="fas fa-th"></i></a>
                             <div class="dropdown-menu" aria-labelledby="layout">
-                                <a class="dropdown-item" href="#"><i class="fas fa-th-list"></i>List</a>
-                                <a class="dropdown-item active" href="#"><i class="fas fa-th"></i>Medium icons</a>
-                                <a class="dropdown-item" href="#"><i class="fas fa-th-large"></i>Large icons</a>
+                                <a class="dropdown-item"><i class="fas fa-th-list"></i>List</a>
+                                <a class="dropdown-item active"><i class="fas fa-th"></i>Medium icons</a>
+                                <a class="dropdown-item"><i class="fas fa-th-large"></i>Large icons</a>
                             </div>
                         </li>
-                        <li class="nav-item"><a id="Info" href="#" class="nav-link"><i class="fas fa-info-circle"></i></a></li>
+                        <li class="nav-item"><a class="Info nav-link"><i class="fas fa-info-circle"></i></a></li>
                     </ul>
                 </div>
             </div>
@@ -95,6 +132,33 @@
                     </div>
                 </div>
             </div>
+            <div class="nav-item Context-Menu dropdown-menu" aria-labelledby="layout">
+                    <ul class="navbar-nav not-selected-nav">
+                        <li class="nav-item"><a class="Paste nav-link" ><i class="fa fa-paste"></i>Paste</a></li>
+                        <li class="nav-item"><a class="PasteClose nav-link" ><i class="fa fa-times"></i>Paste</a></li>
+                        <li class="nav-item"><a class="NewFolder nav-link"><i class="fa fa-folder"></i>New Folder</a></li>
+                        <li class="nav-item"><a class="Refresh nav-link"><i class="fa fa-redo"></i>Refresh</a></li>
+                    </ul>
+                    <ul class="navbar-nav selected-nav">
+                        <li class="nav-item"><a id="" class="Cut NPaste nav-link" ><i class="fa fa-cut"></i>Cut</a></li>
+                        <li class="nav-item"><a id="" class="Copy NPaste nav-link" ><i class="fa fa-copy"></i>Copy</a></li>
+                        <li class="nav-item"><a id="" class="Remove nav-link" ><i class="fa fa-trash"></i>Delete</a></li>
+                        <li class="nav-item"><a id="" class="Rename ONO nav-link" ><i class="fas fa-edit"></i>Rename</a></li>
+                        <li class="nav-item"><a id="" class="Download ONO nav-link" download><i class="fas fa-download"></i>Download</a></li>
+                    </ul>
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item"><a id="" class="Info nav-link"><i class="fas fa-info-circle"></i>Info</a></li>
+                    </ul>
+                </div>
+        </div>
+    </div>
+    <div class="UploadList card ml-auto mr-5 col-lg-3 col-md-4 col-sm-5 col-6" style="display: none">
+        <div class="card-header row">
+            <h2 class="card-title row"><i class="my-auto fas fa-chevron-down fa-xs mr-4"></i>Uploading<span> 1 files</span> </h2>
+            <button class="btn btn-icon btn-border ml-auto"><i class="fa fa-times"></i></button>
+        </div>
+        <div class="card-body">
+
         </div>
     </div>
     <link rel="stylesheet" href="/Files/stylesheets/Admin/FilesManager.css">
