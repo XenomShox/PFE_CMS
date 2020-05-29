@@ -2,21 +2,24 @@ var express = require('express');
 var router = express.Router();
 
 /* GET Assets page. */
-router.get('/', function (req, res ) {
+
+router.route("/")
+    .all((req,res,next)=>{
+        req.URL=decodeURI(require('url').parse(req.url).pathname);
+        next();
+    })
+    .get((req, res )=> {
     res.render("Admin/index",{url:"/Admin/dashboard"});
 });
-router.get('/:Admin',function(req,res){
-    let Admin=require('url').parse(req.params.Admin).pathname;
-    if(req.query.f!==undefined)
-        res.render("Admin/"+Admin,(err,html)=>{
-            if(err) res.render("Admin/error",{pageName:req.params.Admin,path:Admin});
-            else res.send(html);
-        });
-    else
-        res.render("Admin/index",{url:"/Admin/"+Admin});
-});
-router.get('*',function (req,res) {
-    res.render("Admin/error",{pageName:req.params.Admin,path:require('url').parse(req.originalUrl).pathname});
-})
+router.route('/:Admin')
+    .get(function(req,res,next){
+        if(req.query.f!==undefined)
+            res.render("Admin/"+req.params.Admin,(err,html)=>{
+                if(err) res.render("Admin/error",{pageName:req.params.Admin,path:req.URL});
+                else res.send(html);
+            });
+        else
+            res.render("Admin/index",{url:req.URL});
+    });
 
 module.exports = router;

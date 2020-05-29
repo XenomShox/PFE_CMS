@@ -1,15 +1,23 @@
 #FilesManager .dropdown-menu{ min-width: auto!important; }
 #FilesManager a{cursor: pointer;}
-.nav-link:not(:hover):not(.dropdown-item):not(:focus),.UploadList .btn{ color: white!important; }
+body[data-background-color="dark"] .nav-link:not(:hover):not(.dropdown-item):not(:focus),
+body[data-background-color="dark"] .UploadList .btn,
+body[data-background-color="dark"] .breadcrumbs .nav-item,
+body[data-background-color="dark"] .form-control[readonly],
+body[data-background-color="dark"] .UploadList .Upload-file h4{ color: white!important; }
+body[data-background-color="dark"] .form-control[readonly]{background-color: transparent!important; border: none;}
 .nav-link,.UploadList .card-header btn{
     display: flex!important;
     align-items: baseline;
     transition: color .4s ease-in-out,background-color .4s ease-in-out;
 }
-.Context-Menu .nav-link:not(:hover):not(.dropdown-item):not(:focus){color: #666!important;}
+body[data-background-color="dark"]  .Context-Menu .nav-link:not(:hover):not(.dropdown-item):not(:focus){color: #666!important;}
 .Context-Menu .nav-link{padding: .2em 1em;}
 .Context-Menu{position: fixed;}
-.modal-content{background-color: #202940;color: white;}
+body[data-background-color="dark"] .modal-content{
+    background-color: #202940;
+    color: white;
+}
 .modal-body{display: flex;flex-direction: column;}
 .modal-body p,.modal-title{font-size: 1.4em;}
 #Response .modal-body p{
@@ -17,8 +25,12 @@
     margin-top: 1em;
 }
 .modal-header{border-bottom: none;}
-.close{color: #bbb;opacity: 1; transition: color .2s ease-in, opacity .2s ease-in;}
-.close:not(:disabled):not(.disabled):focus, .close:not(:disabled):not(.disabled):hover{color: #fff; opacity: 1}
+#Preview .modal-dialog{max-width: 70vw;}
+#Preview .modal-body *{width: 100%;}
+#Preview .modal-body embed{min-height: 30vw;}
+body[data-background-color="dark"] .close{color: #bbb;opacity: 1; transition: color .2s ease-in, opacity .2s ease-in;}
+body[data-background-color="dark"] .close:not(:disabled):not(.disabled):focus,
+body[data-background-color="dark"] .close:not(:disabled):not(.disabled):hover{color: white; opacity: 1}
 #FilesManager i{margin: auto .4em;}
 #view{align-content: start;}
 .d-none + .fa-folder {margin-left: 2.1em!important;}
@@ -42,17 +54,19 @@ ul.view ,.content-view ul{ list-style: none; padding: 0;}
 }
 .item.active{ background-color: rgba(187,187,187,.1); }
 .item:hover{ color: #bbb; cursor: pointer}
-.dropdown-item:hover,.Context-Menu .nav-link:hover{background-color: #bbb;}
+.dropdown-item:hover,.Context-Menu .nav-link:hover{background-color: #eee;}
 .dropdown-item{font-size: 1em;}
-.dropdown-item.active, .dropdown-item:active{background-color: #666;}
-.link{ color: white!important; text-decoration: none!important; }
-.selected-nav,.selected-item,.selected .not-selected-nav,.selected.multi .ONO,.selected.Folder .Download,#FilesManager:not(.Copy) .Paste,#FilesManager:not(.Copy) .PasteClose,.selected.Copy .NPaste{ display: none!important; }
+.dropdown-item.active, .dropdown-item:active{background-color: #ddd;}
+.selected-nav,.selected-item,
+.selected .not-selected-nav,
+.selected.multi .ONO,.selected.Folder .Download,
+#FilesManager:not(.Copy) .Paste,
+#FilesManager:not(.Copy) .PasteClose,.selected.Copy .NPaste{ display: none!important; }
 .selected .selected-item{ display: list-item!important; }
 .selected .selected-nav,.not-selected-nav{ display: flex!important; }
 .breadcrumbs{border: none;}
 .breadcrumbs{margin: 0;}
-.breadcrumbs .nav-item a{color: white!important; padding: .5em .3em;}
-.breadcrumbs .nav-item a:hover{color: #bbb!important; }
+.breadcrumbs .nav-item{ padding: .5em .3em;}
 #SelectList span{margin-right: .3em; font-size: 1.2em;font-weight: bold;}
 #SelectList:not(:hover) i{display: none}
 #InfoModal table td{
@@ -66,7 +80,6 @@ ul.view ,.content-view ul{ list-style: none; padding: 0;}
 #InfoModal table td input{
     background: transparent;
     border: none;
-    color: white;
     width: 100%;
 }
 #InfoModal table td input:hover{color: #666;}
@@ -78,15 +91,17 @@ ul.view ,.content-view ul{ list-style: none; padding: 0;}
 .nav-view{border-bottom: .1em solid;min-height: 3.5em;}
 .breadcrumbs .nav-item.btn{
     margin-bottom: 1em;
-    color: white;
     font-size: 1em;
     font-weight: bold;
     padding: .5rem 1rem;
     transition: color .2s ease-in,background-color .2s ease-in;
 }
 .breadcrumbs .nav-item.btn:hover {
-    background-color: white;
-    color: #666;
+    background-color: #ddd;
+}
+body[data-background-color="dark"] .breadcrumbs .nav-item.btn:hover {
+    background-color: #eee;
+    color: #666!important;
 }
 .content-view{height: calc(100% - 3.5em);width: 100%}
 .content-view.is-loading:after{top: calc(50% - 5em/2);}
@@ -98,6 +113,7 @@ ul.view ,.content-view ul{ list-style: none; padding: 0;}
     justify-content: start;
 }
 .file-item{
+    position: relative;
     flex: 0 0 13%;
     max-width: 13%;
     max-height: 10em;
@@ -106,7 +122,6 @@ ul.view ,.content-view ul{ list-style: none; padding: 0;}
     align-items: center;
     justify-content: center;
     margin: .2em 1.733%;
-    padding: 1em!important;
     text-align: center;
     border: .1em solid transparent;
 }
@@ -117,14 +132,16 @@ ul.view ,.content-view ul{ list-style: none; padding: 0;}
     background-color: rgba(187,187,187,.2);
 }
 .file-item input{
-    position: relative;
-    left: -40%;
+    position: absolute;
+    left: 10%;
+    top:.5em;
     width: 1.2em;
     height: 1.2em;
     z-index: 10;
     opacity: 0;
 }
 .file-item input:checked,.file-item:hover input{opacity: 1;}
+.icon{margin-top: 1.5em;}
 .icon i{ font-size: 3em; margin: auto!important; }
 .Large .file-item{
     flex: 0 0 20%;
@@ -197,7 +214,8 @@ ul.view ,.content-view ul{ list-style: none; padding: 0;}
 .UploadList .card-title{align-content: center;}
 .UploadList .card-title span{margin-left: .5em;}
 .UploadList i{padding: .25em!important;}
-.UploadList .btn:hover{ color: #666!important;background-color: white!important;}
+body[data-background-color="dark"] .UploadList .btn:hover{ color: #666!important;background-color: white!important;}
+body[data-background-color="dark"] .UploadList .btn{ border-color: white!important;}
 .UploadList .Upload-file{
     padding: 0 1em 0 0;
     position: relative;
@@ -207,27 +225,22 @@ ul.view ,.content-view ul{ list-style: none; padding: 0;}
     border-bottom: .1em solid rgba(187,187,187,.1);
     overflow: hidden;
 }
-.UploadList .Upload-file .check:hover,.UploadList .Upload-file .check.isProgressing{background-color: #0d8010; color: white!important; transition: width .2s linear}
+.UploadList .Upload-file .check:hover,
+.UploadList .Upload-file .check.isProgressing{background-color: #0d8010; transition: width .2s linear}
 .UploadList .Upload-file .check{
     display: flex; transition: background-color .5s ease-in-out,color .5s ease-in-out; position: absolute;
     height: 3.5em;
     top:0; left: 1px;
 }
-
 .UploadList .Upload-file .check.isProgressing i,.UploadList .Upload-file .check.done:hover i,
 .UploadList .Upload-file .check:not(.isProgressing) h4,
 .UploadList .Upload-file .check.isProgressing:not(:hover) .minute,
 .UploadList .Upload-file .check.isProgressing:hover .percentage{display: none;}
 .UploadList .Upload-file .check.error:hover{background-color: #a01d24}
 .UploadList .Upload-file .check.done:hover .minute{display: block}
-
-
 .UploadList .Upload-file h4{
     margin: auto .5em auto 4em;
     z-index: 2;
     overflow: hidden;
-    color: white;
     height: 50%;
 }
-
-.UploadList .Upload-file .btn:hover{color: white;}

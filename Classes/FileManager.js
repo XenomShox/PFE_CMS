@@ -18,53 +18,56 @@ module.exports = class FileManager {
     /*------------------Methods-------------*/
    static GetFileType(FileName){
       let ext=FileName.match(/[\.]([^\.]+$)/);
-      if(ext!=null)
-      switch (ext[1].toLowerCase()) {
-         //audio
-         case "aif": case "cda": case "mid": case "midi":  case "mp3":  case "mpa":  case "ogg": case "wav": case "wma": case "wpl":
-            return {type: "Audio", icon: 'fas fa-file-audio'};
-         //Compressed
-         case "7z": case "arj": case "deb": case "pkg": case "rar": case "rpm": case "gz": case "z": case "zip":
-            return {type: "Compressed", icon: "fas fa-file-archive"};
-         //Disc and media file
-         case "bin": case "dmg": case "iso": case "toast": case "vcd":
-            return {type:"Disc",icon:"fas fa-compact-disc"};
-         //Data and database
-         case "csv": case "dat": case "db": case "dbf": case "log": case "mdb": case "sav": case "sql": case "tar": case "xml":
-            return {type: "Data",icon: "fas fa-database"};
-         //Email
-         case "email": case "eml": case "emlx": case "msg": case "oft": case "ost": case "pst": case "vcf":
-            return {type: "Email",icon: "far fa-envelope"};
-         //Executable
-         case "bat":  case "com": case "exe": case "gadget":  case "msi": case "wsf":
-            return {type: "Executable", icon: "far fa-window-maximize"};
-         case "jar": case "class": case "java": return {type: "Java",icon: "fab fa-java"}; //Java
-         case "c": case "cpp":case "cs": case "h":case "m":case "mm": return {type: "C-language Family",icon: "fab fa-cuttlefish"}; // C-Languages
-         case "apk": return {type: "Android-App",icon: "fab fa-android"};//Android
-         case "ipa": return {type: "Ios-App",icon: "fab fa-app-store-ios"};//Ios App
-          //fonts
-         case "fnt": case "fon": case "otf": case "ttf":
-            return {type: "Font",icon: "fas fa-font"};
-         //Images
-         case "ai": case "bmp": case "gif": case "ico": case "jpeg": case "jpg": case "png": case "ps": case "psd": case "svg": case "tif":  case "tiff":
-            return {type: "Image",icon: "fas fa-file-image"};
-         //scripts and languages
-         case "asp": case "aspx": case "cer": case "cfm": case "cgi": case "pl": case "css": case "htm": case "html": case "js": case "jsp": case "part": case "php": case "py": case "rss": case "xhtml": case "sh": case "swift": case "vb":
-            return {type: "Scripts/Languages", icon:"fas fa-file-code"};
-         //spreadsheet
-         case "ods": case "xls": case "xlsm": case "xlsx": return {type: "Spreadsheet", icon: "fas fa-file-excel"}
-         //System
-         case "bak": case "cab": case "cfg": case "cpl": case "cur": case "dll": case "dmp": case "drv": case "ini": case "lnk":  case "sys": case "tmp":
-            return {type: "System",icon: "fas fa-cogs"}
-         //videos
-         case "avi": case "mpg": case "mpe": case "mpeg": case "asf": case "wmv": case "mov": case "qt": case "rm": case "mp4": case "flv": case "m4v": case "webm": case "ogv":  case "mkv" :
-            return {type: 'Video',icon: 'fas fa-file-video'};
-         //Word
-         case "doc":case "docx": return {type: 'word',icon: 'fas fa-file-word'};
-         case "pdf": return {type: "Pdf file",icon: "fas fa-file-pdf"} //PDF
-         case "rtf": case "txt": case "tex": case "wpd": case "odt": return {type: "Text File",icon: "fas fa-file-alt"};//Text File
-         //PowerPoint
-         case "key": case "odp": case "ppt":case "pps":case "pptx": return {type: "Power-Point",icon: "fas fa-file-powerpoint"};
+      if(ext!=null){
+          ext=ext[1].toLowerCase();
+          switch (ext) {
+              case "swf":return {type: "flash",icon:"fab fa-foursquare",extension: ext}
+              //audio
+              case "aif": case "cda": case "mid": case "midi":  case "mp3":  case "mpa":  case "ogg": case "wav": case "wma": case "wpl":
+                  return {type: "Audio", icon: 'fas fa-file-audio',extension:ext};
+              //Compressed
+              case "7z": case "arj": case "deb": case "pkg": case "rar": case "rpm": case "gz": case "z": case "zip":
+                  return {type: "Compressed", icon: "fas fa-file-archive",extension:ext};
+              //Disc and media file
+              case "bin": case "dmg": case "iso": case "toast": case "vcd":
+                  return {type:"Disc",icon:"fas fa-compact-disc",extension:ext};
+              //Data and database
+              case "csv": case "dat": case "db": case "dbf": case "log": case "mdb": case "sav": case "sql": case "tar": case "xml":
+                  return {type: "Data",icon: "fas fa-database",extension:ext};
+              //Email
+              case "email": case "eml": case "emlx": case "msg": case "oft": case "ost": case "pst": case "vcf":
+                  return {type: "Email",icon: "far fa-envelope",extension:ext};
+              //Executable
+              case "bat":  case "com": case "exe": case "gadget":  case "msi": case "wsf":
+                  return {type: "Executable", icon: "far fa-window-maximize",extension:ext};
+              case "jar": case "class": case "java": return {type: "Java",icon: "fab fa-java",extension:ext}; //Java
+              case "c": case "cpp":case "cs": case "h":case "m":case "mm": return {type: "C-language Family",icon: "fab fa-cuttlefish",extension:ext}; // C-Languages
+              case "apk": return {type: "Android-App",icon: "fab fa-android",extension:ext};//Android
+              case "ipa": return {type: "Ios-App",icon: "fab fa-app-store-ios",extension:ext};//Ios App
+              //fonts
+              case "fnt": case "fon": case "otf": case "ttf":
+                  return {type: "Font",icon: "fas fa-font",extension:ext};
+              //Images
+              case "ai": case "bmp": case "gif": case "ico": case "jpeg": case "jpg": case "png": case "ps": case "psd": case "svg": case "tif":  case "tiff":
+                  return {type: "Image",icon: "fas fa-file-image",extension:ext};
+              //scripts and languages
+              case "asp": case "aspx": case "cer": case "cfm": case "cgi": case "pl": case "css": case "htm": case "html": case "js": case "jsp": case "part": case "php": case "py": case "rss": case "xhtml": case "sh": case "swift": case "vb":
+                  return {type: "Scripts/Languages", icon:"fas fa-file-code",extension:ext};
+              //spreadsheet
+              case "ods": case "xls": case "xlsm": case "xlsx": return {type: "Spreadsheet", icon: "fas fa-file-excel",extension:ext}
+              //System
+              case "bak": case "cab": case "cfg": case "cpl": case "cur": case "dll": case "dmp": case "drv": case "ini": case "lnk":  case "sys": case "tmp":
+                  return {type: "System",icon: "fas fa-cogs",extension:ext}
+              //videos
+              case "avi": case "mpg": case "mpe": case "mpeg": case "asf": case "wmv": case "mov": case "qt": case "rm": case "mp4": case "flv": case "m4v": case "webm": case "ogv":  case "mkv" :
+                  return {type: 'Video',icon: 'fas fa-file-video',extension:ext};
+              //Word
+              case "doc":case "docx": return {type: 'word',icon: 'fas fa-file-word',extension:ext};
+              case "pdf": return {type: "Pdf file",icon: "fas fa-file-pdf",extension:ext} //PDF
+              case "rtf": case "txt": case "tex": case "wpd": case "odt": return {type: "Text File",icon: "fas fa-file-alt",extension:ext};//Text File
+              //PowerPoint
+              case "key": case "odp": case "ppt":case "pps":case "pptx": return {type: "Power-Point",icon: "fas fa-file-powerpoint",extension:ext};
+          }
       }
       return {type:"file",icon:"fas fa-file"};
    }

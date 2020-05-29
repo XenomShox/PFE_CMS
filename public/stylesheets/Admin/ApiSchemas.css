@@ -16,5 +16,13 @@ option{ background-color: #202940;}
 .Schema input,.Schema select,.Schema div{
     background-color: transparent;
     border: none;
-    color:#ddd;
+    color:#575962;
+}
+body[data-background-color="dark"] .Schema input,
+body[data-background-color="dark"] .Schema select,
+body[data-background-color="dark"] .Schema div{
+    color:#eee;
+}
+body[data-background-color="dark"] input[type="date"]:not(:focus)::-webkit-calendar-picker-indicator{
+    display: none;
 }

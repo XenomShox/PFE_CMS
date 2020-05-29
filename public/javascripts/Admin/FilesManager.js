@@ -2,14 +2,12 @@ console.clear();
 (()=>{
     var cntrlIsPressed = false;
     $(document).keydown(function(event){
-        if(event.which==="17")
+        if(event.which===17)
             cntrlIsPressed = true;
     });
-
     $(document).keyup(function(){
         cntrlIsPressed = false;
     });
-
     class FilesManager{
         #Container;
         #ContentView;
@@ -39,7 +37,8 @@ console.clear();
             this.#Modals={
                 Response:{query:$("#Response"),title:$('#Response .modal-title'),icon:$('#Response .fa-exclamation-circle'),text:$('#Response .modal-body p')},
                 Confirmation:{query:$("#Confirmation"),title:$('#Confirmation .modal-title'),text:$('#Confirmation .modal-body p'),confirm:$('#Confirmation .modal-body a'),cancel:$("#Confirmation .close")},
-                NewFolder:{query:$('#NewFolder.modal'),FormGroup:$("#NewFolder.modal .modal-body .form-group"),input:$("#NewFolder.modal input"),label:$("#NewFolder.modal lable"),p:$("#NewFolder.modal .modal-body p"),button:$("#NewFolder.modal .modal-body button"),cancel: $("#NewFolder.modal .close"),title:$("#NewFolder.modal .modal-title")}
+                NewFolder:{query:$('#NewFolder.modal'),FormGroup:$("#NewFolder.modal .modal-body .form-group"),input:$("#NewFolder.modal input"),label:$("#NewFolder.modal lable"),p:$("#NewFolder.modal .modal-body p"),button:$("#NewFolder.modal .modal-body button"),cancel: $("#NewFolder.modal .close"),title:$("#NewFolder.modal .modal-title")},
+                Preview:{query:$('#Preview'),close:$("#Preview .close"),body:$("#Preview .modal-body")}
             };
             this.#Folder={CurrentPath:""};
             this.#CopyMode={Mode:"",List:[]};
@@ -57,14 +56,14 @@ console.clear();
                 arrow=$(`<i class="fas fa-chevron-${part?"down":"right"} fa-xs ${treeList.length>0?"":"d-none"}" ></i>`);
             treeList.forEach(el=>{appendList[1].append(this.CreateTreeView(Path+"/"+el,el,tree[el]))});
             appendList[0].click(function(){
-                    if($this.#Folder.CurrentPath!==Path) $this.OpenFolder(Path);
-                })
+                if($this.#Folder.CurrentPath!==Path) $this.OpenFolder(Path);
+            })
                 .prepend(arrow.click(function(){
-                appendList[1].collapse("toggle");
-                if(arrow.hasClass("fa-chevron-right")) arrow.removeClass("fa-chevron-right").addClass("fa-chevron-down");
-                else  arrow.removeClass("fa-chevron-down").addClass("fa-chevron-right");
-                return false;
-            }));
+                    appendList[1].collapse("toggle");
+                    if(arrow.hasClass("fa-chevron-right")) arrow.removeClass("fa-chevron-right").addClass("fa-chevron-down");
+                    else  arrow.removeClass("fa-chevron-down").addClass("fa-chevron-right");
+                    return false;
+                }));
             return appendList;
         }
         InputModal(title,text,label,value,Create=true){
@@ -77,18 +76,19 @@ console.clear();
                 this.#Modals.NewFolder.label.html(label);
                 this.#Modals.NewFolder.cancel.unbind().click(()=>{reject();})
                 let $this=this;
-                this.#Modals.NewFolder.button.unbind().click(function () {
-                    let FolderName=$this.#Modals.NewFolder.input.val();
-                    console.log(FolderName);
-                    if(FolderName.match(/^[^%]+$/)){
-                        $this.#Modals.NewFolder.query.modal('hide');
-                        resolve(FolderName);
-                    }
-                    else{
-                        $this.#Modals.NewFolder.FormGroup.addClass("has-error");
-                        if($this.#Modals.NewFolder.FormGroup.has("small").length===0)$this.#Modals.NewFolder.FormGroup.append($("<small class=\"form-text text-muted\">Please don't use % in the folder Name.</small>"));
-                    }
-                }).html(Create?"Create":"Modify");
+                this.#Modals.NewFolder.button.unbind()
+                    .click(function () {
+                        let FolderName=$this.#Modals.NewFolder.input.val();
+                        if(FolderName.match(/^[^%]+$/)){
+                            $this.#Modals.NewFolder.query.modal('hide');
+                            resolve(FolderName);
+                        }
+                        else{
+                            $this.#Modals.NewFolder.FormGroup.addClass("has-error");
+                            if($this.#Modals.NewFolder.FormGroup.has("small").length===0)$this.#Modals.NewFolder.FormGroup.append($("<small class=\"form-text text-muted\">Please don't use % in the folder Name.</small>"));
+                        }
+                    })
+                    .html(Create?"Create":"Modify");
                 this.#Modals.NewFolder.query.modal('show');
             })
         }
@@ -107,91 +107,94 @@ console.clear();
                 });
         }
         UploadNumber(){
-            let children =this.#UploadList.body.children().length;
-            if(children===0) this.#UploadList.span.html("done");
-            else this.#UploadList.span.html(children+" file"+(children===1?"":"s"));
+            if(this.#ajax.ajax.length===0) this.#UploadList.span.html("");
+            else {
+                let children =this.#ajax.ajax.length-this.#ajax.abort.length;
+                if(children===0) this.#UploadList.span.html("done");
+                else this.#UploadList.span.html(children+" file"+(children===1?"":"s"));
+            }
         }
         ConfigureButtons() {
             let $this=this,
-            UploadInput= $(`#Upload input`).unbind().click(function (e) {e.stopPropagation();})
-                .change(function () {
-                    let val=$(this).prop('files');
-                    if(val){
-                        $this.#UploadList.query.slideDown(500,()=>{
-                            $this.#UploadList.body.slideDown(500);
-                            $this.#UploadList.toggle.addClass("fa-chevron-down").removeClass("fa-chevron-up");
-                        });
-                        for (let i=0; i<val.length ;i++){
-                            let file=val[i],index=-1,CurrentPath=$this.#Folder.CurrentPath;
-                            $this.#UploadList.body.append($(`<div class="Upload-file">
+                UploadInput= $(`#Upload input`).unbind().click(function (e) {e.stopPropagation();})
+                    .change(function () {
+                        let val=$(this).prop('files');
+                        if(val){
+                            $this.#UploadList.query.slideDown(500,()=>{
+                                $this.#UploadList.body.slideDown(500);
+                                $this.#UploadList.toggle.addClass("fa-chevron-down").removeClass("fa-chevron-up");
+                            });
+                            for (let i=0; i<val.length ;i++){
+                                let file=val[i],index=-1,CurrentPath=$this.#Folder.CurrentPath;
+                                $this.#UploadList.body.append($(`<div class="Upload-file">
                                         <h4>${file.name}</h4>
                                     </div>`)
-                                .prepend($(`<div class="check"><i class="fa fa-upload mx-3 my-auto"></i><h4 class="mx-3 my-auto percentage">0%</h4><h4 class="mx-3 my-auto minute">0m</h4></div>`)
-                                    .click(function () {
-                                    let el=$(this).unbind().addClass("isProgressing"),
-                                        data=new FormData();
-                                    data.append("file",file);
-                                    function fetchthis() {
-                                        let start=new Date();
-                                        index=$this.#ajax.ajax.push($.ajax({
-                                            type:"POST",
-                                            url:$this.#Url+CurrentPath,
-                                            data:data,
-                                            cache: false,
-                                            contentType: false,
-                                            processData: false,
-                                            xhr:function () {
-                                                var xhr=new XMLHttpRequest(),last=new Date(),lastLoaded=0;
-                                                xhr.upload.addEventListener("progress",function (evt) {
-                                                    if(evt.lengthComputable) {
-                                                        let per=((evt.loaded / evt.total)*100).toFixed(1)+"%",
-                                                            time=((evt.total-evt.loaded)/((evt.loaded-lastLoaded)/(new Date()-last))/1000);
-                                                        time=time>60?(time/60).toFixed(0)+"Min":time.toFixed(0)+"S";
-                                                        last=new Date();
-                                                        lastLoaded=evt.loaded;
-                                                        el.css("width",per).find(".percentage").html(per).next().html(time);
+                                    .prepend($(`<div class="check"><i class="fa fa-upload mx-3 my-auto"></i><h4 class="mx-3 my-auto percentage">0%</h4><h4 class="mx-3 my-auto minute">0m</h4></div>`)
+                                        .click(function () {
+                                            let el=$(this).unbind().addClass("isProgressing"),
+                                                data=new FormData();
+                                            data.append("file",file);
+                                            function fetchthis() {
+                                                let start=new Date();
+                                                index=$this.#ajax.ajax.push($.ajax({
+                                                    type:"POST",
+                                                    url:$this.#Url+CurrentPath,
+                                                    data:data,
+                                                    cache: false,
+                                                    contentType: false,
+                                                    processData: false,
+                                                    xhr:function () {
+                                                        var xhr=new XMLHttpRequest(),last=new Date(),lastLoaded=0;
+                                                        xhr.upload.addEventListener("progress",function (evt) {
+                                                            if(evt.lengthComputable) {
+                                                                let per=((evt.loaded / evt.total)*100).toFixed(1)+"%",
+                                                                    time=((evt.total-evt.loaded)/((evt.loaded-lastLoaded)/(new Date()-last))/1000);
+                                                                time=time>60?(time/60).toFixed(0)+"Min":time.toFixed(0)+"S";
+                                                                last=new Date();
+                                                                lastLoaded=evt.loaded;
+                                                                el.css("width",per).find(".percentage").html(per).next().html(time);
+                                                            }
+                                                        },false);
+                                                        return xhr;
                                                     }
-                                                },false);
-                                                return xhr;
+                                                }))-1;
+                                                $this.#ajax.ajax[index]
+                                                    .then(()=>{
+                                                        $this.OpenFolder();
+                                                        el.removeClass("isProgressing").addClass("done").css("width","100%").delay(2000).css("width","")
+                                                            .find("i").removeClass("fa-upload").addClass("fa-check");
+                                                        el.find(".minute").html(((new Date()-start)/1000).toFixed(0)+"s");
+                                                    })
+                                                    .catch(() => {
+                                                        el.removeClass("isProgressing").addClass("error").unbind().click(()=> {fetchthis();})
+                                                            .css("width","").find("i").removeClass("fa fa-upload").addClass("fas fa-exclamation")
+                                                    })
+                                                    .always(()=>{
+                                                        $this.#ajax.abort.push(index);
+                                                        if($this.#ajax.abort.length===$this.#ajax.ajax.length) {
+                                                            $this.#ajax={ajax:[],abort:[]};
+                                                        }
+                                                        index=-1;
+                                                        $this.UploadNumber();
+                                                    });
                                             }
-                                        }))-1;
-                                        $this.#ajax.ajax[index]
-                                            .then(()=>{
-                                                $this.OpenFolder();
-                                                el.removeClass("isProgressing").addClass("done").css("width","100%").delay(2000).css("width","")
-                                                    .find("i").removeClass("fa-upload").addClass("fa-check");
-                                                el.find(".minute").html(((new Date()-start)/1000).toFixed(0)+"s");
-                                            })
-                                            .catch(() => {
-                                                el.removeClass("isProgressing").addClass("error").unbind().click(()=> {fetchthis();})
-                                                    .css("width","").find("i").removeClass("fa fa-upload").addClass("fas fa-exclamation")
-                                            })
-                                            .always(()=>{
-                                                $this.#ajax.abort.push(index);
-                                                if($this.#ajax.abort.length===$this.#ajax.ajax.length) {
-                                                    $this.#ajax={ajax:[],abort:[]};
-                                                }
-                                                index=-1;
-                                                $this.UploadNumber();
-                                            });
-                                    }
-                                    fetchthis();
-                            }))
-                                .append($(`<button class="btn btn-icon btn-border ml-auto my-auto"><i class="fa fa-times"></i></button>`).click(function () {
-                                if(index!==-1)$this.#ajax.ajax[index].abort();
-                                $(this).parent().remove();
-                                $this.UploadNumber();
-                            })
-                                )
-                            );
+                                            fetchthis();
+                                            $this.UploadNumber();
+                                        })
+                                    )
+                                    .append($(`<button class="btn btn-icon btn-default btn-border ml-auto my-auto"><i class="fa fa-times"></i></button>`)
+                                        .click(function () {
+                                            if(index!==-1)$this.#ajax.ajax[index].abort();
+                                            $(this).parent().remove();
+                                            $this.UploadNumber();
+                                        })
+                                    )
+                                );
+                            }
                         }
-                    }
-                    else{
-                        console.log("no file has been selected");
-                    }
-                    UploadInput.val("");
-                    $this.UploadNumber();
-                });
+                        UploadInput.val("");
+                        $this.UploadNumber();
+                    });
             this.#UploadList.quit.click(function () {
                 $this.#ajax.ajax.forEach(el=>{
                     el.abort();
@@ -207,9 +210,7 @@ console.clear();
             });
             this.#Buttons={
                 NewFolder : $('.NewFolder.nav-link').click(function () {$this.NewFolder();}),
-                Upload : $('#Upload').each((i,e)=>{
-                    $(e).click( ()=>{ UploadInput.trigger("click");});
-                }),
+                Upload : $('#Upload').click( ()=>{ UploadInput.trigger("click");}),
                 Refresh : $('.Refresh').click(()=>{ $this.OpenFolder();}),
                 "Sort-by" : $('#Sort-by').next().find(".dropdown-item").click(function(){
                     $('#Sort-by span').html($this.#Sort=$(this).html());
@@ -293,7 +294,6 @@ console.clear();
         }
         PasteClose(){this.#CopyMode={};this.#Container.removeClass("Copy");this.OpenFolder();}
         Paste(){
-            console.log(this.#CopyMode);
             let Files="";
             this.#CopyMode.List.forEach((el,i,arr)=>{Files+=(el.Name+(i+1===arr.length?"":", "));});
             this.Confirm("Pasting Files","Pasting these Files : "+Files+"<br> In this Path : "+this.#Folder.CurrentPath)
@@ -345,26 +345,34 @@ console.clear();
                 .finally(()=>{this.OpenFolder();});
         }
         CreateInfo(table,data){
+            let $this=this,size=data['Type'].type==="folder"?"":`
+                    <tr><td>Size</td><td>:</td><td>
+                        ${data["Size"]<(1044480)?
+                ((data["Size"]/1024).toFixed(2)+"KB")
+                :((data["Size"]/1044480).toFixed(2)+"MB")}</td></tr>`,
+                info=`
+                    <tr><td>Type</td><td>:</td><td>${data["Type"].type}</td></tr>
+                    ${size}
+                    ${data["Created"]?`<tr><td>Created</td><td>:</td><td>${new Date(data["Created"])}</td></tr>`:''}
+                    ${data["Modified"]?`<tr><td>Modified</td><td>:</td><td>${new Date(data["Modified"])}</td></tr>`:''}
+                `;
             table.append(`<tr><td>Name</td><td>:</td><td>${data["Name"]}</td></tr>`)
                 .append($(`<tr><td>Path</td><td>:</td></tr>`)
-                    .append($(`<td><input type="txt" disabled value="${document.location.origin+this.#Url+data["Url"]}"></td>`)
+                    .append($(`<div class="input-group">
+                        <input type="text" class="form-control" readonly value="${window.location.origin+$this.#Url+"/"+data["Url"]}">
+                        <div class="input-group-append">
+                            <button class="btn btn-success btn-border" type="button"><i class="fa fa-clipboard"></i></button>
+                        </div>
+                    </div>`)
                         .click(function (){
                             let  copyText = this.querySelector("input");
                             copyText.select();
                             document.execCommand("copy");
+                            $(this.querySelector("button i")).removeClass("fa-clipboard").addClass("fa-clipboard-check");
                         })
                     )
                 )
-                .append(`
-                    <tr><td>Type</td><td>:</td><td>${data["Type"].type}</td></tr>
-                    <tr><td>Size</td><td>:</td><td>
-                        ${data["Size"]<(1044480)?
-                        ((data["Size"]/1024).toFixed(2)+"KB")
-                        :((data["Size"]/1044480).toFixed(2)+"MB")}
-                    </td></tr>
-                    ${data["Created"]?`<tr><td>Created</td><td>:</td><td>${new Date(data["Created"])}</td></tr>`:''}
-                    ${data["Modified"]?`<tr><td>Modified</td><td>:</td><td>${new Date(data["Modified"])}</td></tr>`:''}
-                `);
+                .append(info);
         }
         Info(){
             let InfoModal=$("#InfoModal"),$this=this;
@@ -444,10 +452,41 @@ console.clear();
                 this.CreateView(Path);
             });
         }
-        OpenFile(Path) {
-            console.log(Path);
+        OpenFile(Path,File) {
+            this.Preview(File.Type.type,Path+"/"+File.Name,File.Type.extension)
         }
-
+        Preview(Type,Url,ext){
+            if(this.#Modals.Preview.body.attr("FileUrl")!==Url){
+                this.#Modals.Preview.body.empty();
+                let url=this.#Url+"/"+Url;
+                switch (Type) {
+                    case "Audio":{
+                        this.#Modals.Preview.body.append(`<audio controls><source src="${url}" type="audio/${ext}" preload="none">Your browser does not support the audio element.</audio>`)
+                        break;
+                    }
+                    case "Image":{
+                        this.#Modals.Preview.body.append(`<img src="${url}" alt="Couldn't open image">`)
+                        break;
+                    }
+                    case "Video":{
+                        this.#Modals.Preview.body.append(`<video controls><source src="${url}" type="video/${ext}" preload="none">Your browser does not support the audio element.</video>`);
+                        break;
+                    }
+                    default: this.#Modals.Preview.body.append(`<embed src="${url}">`)
+                }
+                this.#Modals.Preview.body.attr("FileUrl",Url);
+            }
+            this.#Modals.Preview.close.unbind()
+                .click(()=>{
+                    this.#Modals.Preview.body.get(0).querySelectorAll("video,audio").forEach(el=>{
+                        el.pause(0);
+                        el.src="";
+                        el.load();
+                        this.#Modals.Preview.body.attr("FileUrl","");
+                    })
+                });
+            this.#Modals.Preview.query.modal();
+        }
         CreateIconView(Path,data) {
             let $this=this;
             data.files.sort(function (a,b) {
@@ -496,7 +535,6 @@ console.clear();
                     this.#ContentView.append(fileItem);
                 });
         }
-
         CreateListView(Path,data) {
             let table=$(`<table class="table table-hover"></table>`),order=[1,this.#SortD===1?"asc":"desc"];
             if(this.#Sort==="Name") order[0]=1;
@@ -515,7 +553,7 @@ console.clear();
                     {
                         title:"Name",data:"Name","width": "10em",
                         render: function (url, type, full) {
-                            return `<div class="row flex-nowrap"><i class="${full.Type.icon} my-auto"></i>${url}</div>`;
+                            return `<div class="row flex-nowrap"><i class="${full.Type.icon} fa-lg my-auto"></i>${url}</div>`;
                         }
                     },
                     {title:"Type",data:"Type.type"},
@@ -570,7 +608,7 @@ console.clear();
         }
         dblclick(Path,el) {
             if(el.Type.type==="folder") this.OpenFolder(Path+"/"+el.Name);
-            else this.OpenFile(Path+"/"+el.Name);
+            else this.OpenFile(Path,el);
         }
         ContextElement(item,el,e){
             if(this.#SelectedList.indexOf(el)===-1) this.Select(item,el,item.find("input").get(0));
@@ -584,7 +622,7 @@ console.clear();
                 left: e.pageX -90,
                 top: (((e.pageY-10)+menu.height())>window.innerHeight) ? window.innerHeight - menu.height()-60 : e.pageY-10,
             })
-            .addClass("show");
+                .addClass("show");
         }
     }
     $.fn.FilesManager=function(ApiUrl,rootName){return new FilesManager(this,ApiUrl,rootName);}
