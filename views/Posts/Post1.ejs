@@ -11,13 +11,16 @@
     <div style="background-color: #fbfbfb">
         <div class="container  pt-4">
             <div class="row px-3">
-                <h3 class="font-weight-bold">Category: <%=Category%></h3>
-                <ol class="breadcrumb ml-auto pt-2">
+                <h4 class="font-weight-bold"><%=Category%> Post</h4>
+                <ol class="breadcrumb ml-auto pt-0">
                     <li class="breadcrumb-item active">
                         <a href="/"><i class="fas fa-home"></i></a>
                     </li>
-                    <li class="breadcrumb-item">
+                    <li class="breadcrumb-item active">
                         <a href="#" class="font-weight-bold"><%=Category%></a>
+                    </li>
+                    <li class="breadcrumb-item ">
+                        <a href="#" class="font-weight-bold"><%=Post%></a>
                     </li>
                 </ol>
             </div>
@@ -25,7 +28,7 @@
     </div>
     <div class="container">
         <div class="Layout row mt-3">
-            <% include ../Partials/Contents/Content1 %>
+            <% include ../Partials/PostsContents/PostContent1.ejs %>
             <% include ../Partials/SideBars/SideBar1 %>
         </div>
     </div>

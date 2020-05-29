@@ -1,16 +1,14 @@
 var express = require('express');
 var router = express.Router();
 
-/* GET Assets page. */
-
 router.route("/")
     .all((req,res,next)=>{
         req.URL=decodeURI(require('url').parse(req.url).pathname);
         next();
     })
     .get((req, res )=> {
-    res.render("Admin/index",{url:"/Admin/dashboard"});
-});
+        res.render("Admin/index",{url:"/Admin/dashboard"});
+    });
 router.route('/:Admin')
     .get(function(req,res,next){
         if(req.query.f!==undefined)

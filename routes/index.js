@@ -11,6 +11,9 @@ router.get('/LogIn',function(req,res){
 router.get('/:category',(req,res)=>{
   res.render("Categories/Category1",{title:"WebSite",Category:req.params.category});
 });
+router.get('/:category/:post',(req,res)=>{
+  res.render("Posts/Post1",{title:"WebSite",Category:req.params.category,Post:req.params.post});
+});
 
 
 module.exports = router;

@@ -5,6 +5,10 @@ body{
     overflow-x: hidden;
     color: #3f3f3f;
 }
+.container {
+    padding-right: 2em;
+    padding-left: 2em;
+}
 header {
     background-size: cover;
     background-position: center;
@@ -30,15 +34,18 @@ header {
 header h6{color: #606060;font-size: .8em}
 header h1{font-weight: bold;}
 header > .container{height: 100%; position: relative}
+header .navbar.navbar-dark .dropdown-menu{ background-color: rgba(35, 35, 35, 0.95);}
+header .navbar.navbar-light .dropdown-menu{ background-color: rgba(233, 233, 233, 0.95);}
 header .navbar .dropdown-menu{
-    background-color: rgba(35, 35, 35, 0.95)!important;
     border: none;
     border-radius: .1em;
     transform: translateX(-20%);
 }
 header .navbar .user .dropdown-menu{    transform: translateX(-70%);}
 header .navbar .dropdown-menu .dropdown-item{color: #8f8f8f;}
-header .navbar .dropdown-menu .dropdown-item:hover{background-color: transparent; color: white}
+header .navbar.navbar-dark .dropdown-menu .dropdown-item:hover{background-color: transparent; color: white;}
+header .navbar.navbar-light .dropdown-menu .dropdown-item:hover{background-color: transparent; color: black;}
+header .navbar .nav-link{font-weight: bold;}
 .Topics{ max-height: 24vw; overflow: hidden; }
 .TopicsInner{
     display: flex;
@@ -76,7 +83,7 @@ header .navbar .dropdown-menu .dropdown-item:hover{background-color: transparent
     background-color: transparent;
     width: 100%;
     height: 100%;
-    z-index: 10;
+    z-index: 6;
     transition: background-color .3s ease-in;
 }
 .card-img .Link,.card-img .Image{position: absolute;top: 0;width: 50%;height: 100%; display: flex}
@@ -97,12 +104,34 @@ header .navbar .dropdown-menu .dropdown-item:hover{background-color: transparent
     background: transparent;
     border-radius: 50%;
     padding: .8em 1em;
-    z-index: 11;
+    z-index: 7;
     transition: all .3s ease-in;
 }
 .card-img:hover::before{    background-color: rgba(23, 162, 184, 0.4);  }
 .card-img:hover div{display: block;}
 .card-body span,.card-body p{font-weight: 400; font-size: .7em;color: #8d8d8d;}
+
+.PageContent .Cover,.Details,.PostContent{width: 90%;margin-right: auto;}
+.PageContent .Cover{
+    height: 25em;
+    background-position: center;
+    background-size: cover;
+}
+.Details{
+    font-size: .8em;
+    font-weight: 400;
+    align-items: center;
+}
+.PostContent{padding: 1em 0;}
+.PageContent h3::first-letter,.PostContent p::first-letter{text-transform: uppercase;}
+.PostContent p::first-letter{font-weight: bold; font-size: 1.7em; }
+.PostContent p{
+    font-weight: 300;
+    font-size: .9em;
+}
+
+.Share .btn-outline-dark{border-radius: 2em}
+
 .blog.Latest{
     padding-bottom: 1em;
     margin-bottom: 1em;
@@ -177,19 +206,22 @@ footer .nav-link{color: #b5b5b5;}
 footer .nav-link i{font-size: 1.8em}
 footer .nav-link:hover{color: white;}
 @media (max-width: 992px) {
+    header .navbar .dropdown-menu{background-color: transparent!important; transform: translateX(0)!important;}
+    .navbar-dark .navbar-collapse.collapse.show{ background-color: rgba(10, 10, 10, 0.95) !important;}
+    .navbar-light .navbar-collapse.collapse.show{ background-color: rgba(222, 222, 222, 0.95) !important;}
+    .PageContent .Cover,.Details,.PostContent{width: 100%;margin-right: auto;margin-left: auto;}
     .navbar-collapse.collapse.show{
-        background-color: rgba(10, 10, 10, 0.95) !important;
         border: none;
         border-radius: .1em;
         padding: 1em 2em;
         margin-top: 1em;
     }
-    header .navbar .dropdown-menu{background-color: transparent!important; transform: translateX(0)!important;}
     header h1{font-size: 1.8em}
     header h4{font-size: 1.2em;}
     header p{font-size: .9em}
 }
 @media (max-width: 768px) {
+
     .TopicsInner:hover{transform: translateY(-12vw);}
     .Topics .Topic{height: 12vw; padding: 2vw 0;}
     header p,header h6{font-size: .7em}
