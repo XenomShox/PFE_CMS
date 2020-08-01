@@ -1,15 +1,15 @@
 <head>
-    <title><%= title %></title>
-    <link rel="stylesheet" href="/Admin/Files/stylesheets/Assets/bootstrap.min.css">
-    <script src="/Admin/Files/javascripts/Assets/plugin/webfont/webfont.min.js"></script>
-    <script>
-        WebFont.load({
-            custom: {"families":["Font Awesome 5 Solid", "Font Awesome 5 Regular", "Font Awesome 5 Brands"],
-                urls: ['/Admin/Files/stylesheets/Assets/fonts.min.css']},
-            active: function() {
-                sessionStorage.fonts = true;
-            }
-        });
-    </script>
-    <link rel="stylesheet" href="/files/Default/stylesheets/style.css" />
+    <title><%= WebSite.Title %></title>
+
+    <meta name="application-name" content="<%= WebSite.Name %>">
+    <meta name="description" content="<%= WebSite.Description %>">
+    <meta name="keywords" content="<%= WebSite.Keywords.join() %>">
+    <link rel="icon" href="<%= WebSite.Icon%>">
+    <% WebSite.Styles.URLS.forEach(el=>{ %>
+        <link rel="stylesheet" href="<%= el %>" />
+    <%})%>
+    <% WebSite.Styles.Codes.forEach(el=>{ %>
+        <style><%- el %></style>
+    <%})%>
+
 </head>

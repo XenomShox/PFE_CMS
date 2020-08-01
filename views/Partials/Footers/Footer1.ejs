@@ -1,12 +1,12 @@
 <footer>
     <div class="container row mx-auto pt-5">
         <div id="AboutUs" class="col-md-4 p-md-4 d-flex flex-column">
-            <a class="brand" href="/"><%= title %></a>
-            <p>Pellentesque placerat tincidunt urna, vitae feugiat magna vestibulum non. Mauris ut sagittis est. Pellentesque a felis est. Duis in risus metus. Cras felis ante, sodales eget pretium eu, hendrerit at metus. Maecenas aliquam dictum sapien id ornare.</p>
+            <a class="brand" href="/"><%= WebSite.Name %></a>
+            <p><%= WebSite.Description%></p>
             <li class="nav-item d-flex">
-                <a class="nav-link mr-3 mx-lg-0" href="#"><i class="fab fa-facebook-square"></i></a>
-                <a class="nav-link mr-3 mx-lg-0" href="#"><i class="fab fa-twitter-square"></i></a>
-                <a class="nav-link mr-3 mx-lg-0" href="#"><i class="fab fa-instagram"></i></a>
+                <a class="nav-link mr-3 mx-lg-0" href="<%= WebSite.SocialMedia.Facebook.Url%>"><i class="fab fa-facebook-square"></i></a>
+                <a class="nav-link mr-3 mx-lg-0" href="<%= WebSite.SocialMedia.Twitter.Url%>"><i class="fab fa-twitter-square"></i></a>
+                <a class="nav-link mr-3 mx-lg-0" href="<%= WebSite.SocialMedia.Instagram.Url%>"><i class="fab fa-instagram"></i></a>
             </li>
         </div>
         <div class="col-md-4 p-md-4">
@@ -79,7 +79,10 @@
     </div>
 </footer>
 <div class="Scripts">
-    <script src="/Admin/Files/javascripts/Assets/core/jquery.3.2.1.min.js"></script>
-    <script src="/Admin/Files/javascripts/Assets/core/popper.min.js"></script>
-    <script src="/Admin/Files/javascripts/Assets/core/bootstrap.min.js"></script>
+    <% WebSite.Scripts.URLS.forEach(el=>{ %>
+        <script src="<%= el %>"></script>
+    <%})%>
+    <% WebSite.Scripts.Codes.forEach(el=>{ %>
+        <script><%- el %></script>
+    <%})%>
 </div>

@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
+const { isLoggedIn ,isAdmin} = require("../middlewares/middleware");
 
+router.all('*',isLoggedIn,isAdmin);
 router.route("/")
     .all((req,res,next)=>{
         req.URL=decodeURI(require('url').parse(req.url).pathname);

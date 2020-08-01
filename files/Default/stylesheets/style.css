@@ -86,27 +86,6 @@ header .navbar .nav-link{font-weight: bold;}
     z-index: 6;
     transition: background-color .3s ease-in;
 }
-.card-img .Link,.card-img .Image{position: absolute;top: 0;width: 50%;height: 100%; display: flex}
-.card-img .Image{right: 0}
-.card-img .Image:hover div,.card-img .Link:hover div{
-    background-color: white;
-    color: #3f3f3f;
-    transform: translateY(-10%);
-    -webkit-box-shadow: -5px 3px 18px -6px rgba(0,0,0,0.75);
-    -moz-box-shadow: -5px 3px 18px -6px rgba(0,0,0,0.75);
-    box-shadow: -5px 3px 18px -6px rgba(0,0,0,0.75);
-}
-.card-img .Link{left: 0}
-.card-img div{
-    display: none;
-    margin: auto;
-    color: white;
-    background: transparent;
-    border-radius: 50%;
-    padding: .8em 1em;
-    z-index: 7;
-    transition: all .3s ease-in;
-}
 .card-img:hover::before{    background-color: rgba(23, 162, 184, 0.4);  }
 .card-img:hover div{display: block;}
 .card-body span,.card-body p{font-weight: 400; font-size: .7em;color: #8d8d8d;}
@@ -207,10 +186,10 @@ footer .nav-link i{font-size: 1.8em}
 footer .nav-link:hover{color: white;}
 @media (max-width: 992px) {
     header .navbar .dropdown-menu{background-color: transparent!important; transform: translateX(0)!important;}
-    .navbar-dark .navbar-collapse.collapse.show{ background-color: rgba(10, 10, 10, 0.95) !important;}
-    .navbar-light .navbar-collapse.collapse.show{ background-color: rgba(222, 222, 222, 0.95) !important;}
+    .navbar-dark .navbar-collapse.collapse.show,.navbar-dark .navbar-collapse.collapsing{ background-color: rgba(10, 10, 10, 0.95) !important;}
+    .navbar-light .navbar-collapse.collapse.show,.navbar-light .navbar-collapse.collapsing{ background-color: rgba(222, 222, 222, 0.95) !important;}
     .PageContent .Cover,.Details,.PostContent{width: 100%;margin-right: auto;margin-left: auto;}
-    .navbar-collapse.collapse.show{
+    .navbar-collapse.collapse.show,.navbar-collapse.collapsing{
         border: none;
         border-radius: .1em;
         padding: 1em 2em;
@@ -234,3 +213,4 @@ footer .nav-link:hover{color: white;}
     header h1{font-size: .9em}
     header .readMore{font-size: .5em ;}
 }
+header .navbar .dropdown-menu .dropdown-menu{ transform: translateX(0)!important; padding-left: 1em;}

@@ -21,8 +21,7 @@ router.get("/", getUsers);
 
 router.post("/signup", createUser);
 
-router
-    .route("/login")
+router.route("/login")
     .get(renderLogin)
     .post(
         passport.authenticate("local", {

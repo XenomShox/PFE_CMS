@@ -4,14 +4,10 @@ module.exports = class ApiManager {
     static Schemas = require("./Schemas");
     static Models = require("./Models");
     /*------------------Methods-------------*/
-    static StartApiManager(promise) {
-        promise.then(() => {
-            ApiManager.Schemas.LoadSchemaSystem(ApiManager).then(() => {
-                ApiManager.Schemas.GetAllSchemas((status, result) => {
-                    ApiManager.Models.LoadModels(result);
-                }).then(() => {
-                    console.log("Db connected");
-                });
+    static StartApiManager() {
+        ApiManager.Schemas.LoadSchemaSystem(ApiManager).then(() => {
+            ApiManager.Schemas.GetAllSchemas((status, result) => {
+                ApiManager.Models.LoadModels(result);
             });
         });
     }

@@ -19,8 +19,7 @@ router.route('/*')
         next();
     })
     .get((req,res)=>{
-        let {pathname:url, query: body} = require('url').parse(req.url,true),
-            callback=req.query.treeView==='true'?FilesManager.GetFilesTree:FilesManager.GetFolder;
+        let callback=req.query.treeView==='true'?FilesManager.GetFilesTree:FilesManager.GetFolder;
         callback(req.URL==="/"?"":req.URL,(status,result)=>{
             res.status(status).send(result);
         });

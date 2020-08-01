@@ -1,0 +1,40 @@
+{
+    "Name": "TheWebSite",
+    "Logo": "",
+    "Icon": "/Admin/files/images/icon.ico",
+    "Description": "Pellentesque placerat tincidunt urna, vitae feugiat magna vestibulum non. Mauris ut sagittis est. Pellentesque a felis est. Duis in risus metus. Cras felis ante, sodales eget pretium eu, hendrerit at metus. Maecenas aliquam dictum sapien id ornare.",
+    "Keywords": ["Web","CMS"],
+    "Licence": "All CopyRights ....",
+    "Styles": {
+        "URLS": [
+            "/Admin/Files/stylesheets/Assets/bootstrap.min.css",
+            "/files/Default/stylesheets/style.css"
+        ],
+        "Codes":[]
+    },
+    "Scripts": {
+        "URLS": [
+            "/Admin/Files/javascripts/Assets/plugin/webfont/webfont.min.js",
+            "/Admin/Files/javascripts/Assets/core/jquery.3.2.1.min.js",
+            "/Admin/Files/javascripts/Assets/core/popper.min.js",
+            "/Admin/Files/javascripts/Assets/core/bootstrap.min.js"
+        ],
+        "Codes":[
+            "WebFont.load({            custom: {'families':['Font Awesome 5 Solid', 'Font Awesome 5 Regular', 'Font Awesome 5 Brands'],                urls: ['/Admin/Files/stylesheets/Assets/fonts.min.css']},            active: function() {                sessionStorage.fonts = true;            }       });"
+        ]
+    },
+    "SocialMedia": {
+        "Facebook": {
+            "Name": "The WebSite",
+            "Url": "https://www.facebook.com/TheWebsite"
+        },
+        "Instagram": {
+            "Name": "The WebSite",
+            "Url": "https://www.instagram.com/TheWebsite"
+        },
+        "Twitter": {
+            "Name": "The WebSite",
+            "Url": "https://www.twitter.com/TheWebsite"
+        }
+    }
+}
