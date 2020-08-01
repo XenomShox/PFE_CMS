@@ -2,39 +2,44 @@ const router = require("express").Router();
 const passport = require("passport");
 
 // Helpers
-const {
-    createUser,
-    renderLogin,
-    getUsers,
-    logout,
+// const {
+//     createUser,
+//     renderLogin,
+//     getUsers,
+//     logout,
 
-    banUser,
-    unbanUser,
+//     banUser,
+//     unbanUser,
 
-    profile,
-} = require("../handler/user");
+//     profile,
+// } = require("../handler/user");
+const userMethods = require("../handler/user");
 
 // Middlewares
 const { isLoggedIn } = require("../middlewares/middleware");
 
-router.get("/", getUsers);
+router.get("/", userMethods.getUsers);
 
-router.post("/signup", createUser);
+router.post("/signup", userMethods.createUser);
 
-router.route("/login")
-    .get(renderLogin)
+router
+    .route("/login")
+    .get(userMethods.renderLogin)
     .post(
         passport.authenticate("local", {
-            successRedirect: "/Admin",
             failureRedirect: "/user/login",
             failureFlash: true,
-        })
+        }),
+        (req, res) => {
+            console.log(req.body.to);
+            res.redirect(req.body.to);
+        }
     );
 
-router.route("/logout").get(logout);
+router.route("/logout").get(userMethods.logout);
 
-router.route("/ban/:user_id").put(banUser);
-router.route("/unban/:user_id").put(unbanUser);
-router.route("/profile").get(isLoggedIn, profile);
+router.route("/ban/:user_id").put(userMethods.banUser);
+router.route("/unban/:user_id").put(userMethods.unbanUser);
+router.route("/profile").get(isLoggedIn, userMethods.profile);
 
 module.exports = router;
