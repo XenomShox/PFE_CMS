@@ -43,17 +43,31 @@ class PostManager {
             },
         });
     }
-    GetPostsFromCategory(Category,options,callback){
-        let query=this.#Model.find({_id:{"$in":Category.Posts}});
-        if(options.sort)query.sort(options.sort);
-        if(options.limit)query.limit(options.limit);
-        query.exec((err,res)=>{
-            if(err) callback(500,"Couldn't find the posts");
-            else callback(200,Category,res);
-        });
-    }
     CreatePost(post,callback){
         this.#Model.create(post,callback);
+    }
+    UpdatePost(Id,Post,callback){
+        this.#Model.findOneAndUpdate(Id,Post,(err,res)=>{
+            if(err) callback(500,"Internal Error");
+            else callback(200,res);
+        })
+    }
+    GetPosts(options,callback){
+        let query;
+        if(options){
+            if(options.category) query=this.#Model.find({_id:{"$in":options.category.Posts}})
+            else query=this.#Model.find({})
+            if(options.sort) query.sort(options.sort);
+            if(options.limit) query.limit(options.limit);
+            if(options.skip) query.skip(options.skip);
+        }else{
+            query=this.#Model.find({});
+            callback=options;
+        }
+        query.exec((err,res)=>{
+            if(err) callback(500,"Internal error");
+            else callback(200,res);
+        })
     }
 }
 module.exports = new PostManager();

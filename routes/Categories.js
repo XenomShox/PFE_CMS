@@ -1,5 +1,6 @@
 const router = require('express').Router(),
-    CategoriesManager=require("../Classes/CategoriesManager");
+    CategoriesManager=require("../Classes/CategoriesManager"),
+    PostManager=require("../Classes/PostManager");
 router.route('/*')
     .all((req,res,next)=> {
         let {pathname,query}=require('url').parse(req.url,true);
@@ -8,35 +9,37 @@ router.route('/*')
         next();
     } )
     .get((req,res,next)=>{
-        console.log(req.URL,req.query)
-        if(req.URL==="/") res.redirect("/");
-        else if(req.query.post) next();//post
-        else CategoriesManager.GetCategory(req.URL.substr(1),
-            {
-                sort:req.query.sort
-            },
-            (status,category,posts)=>{
+        if (req.URL==="/") res.redirect("/");
+        else if(req.query.post) next();  //post
+        else
+            CategoriesManager.GetCategory(req.URL.substr(1),(status,category)=>{
                 res.locals.WebSite.Title+=" - "+category.Name;
-                switch (status) {
-                    case 200: {
-                        if(req.query.create) res.render("Categories/CreatePost",{
+                if(status===200){
+                    if(req.query.create) res.render("Categories/CreatePost",{
                             Category:category
                         });
-                        else res.status(200).render("Categories/Category1",{
-                            Category:category,
-                            Posts:posts
-                        });
+                    else {
+                        PostManager.GetPosts({
+                            category:category,
+                            sort:req.query.sort,
+                            limit:req.query.limit,
+                            skip:req.query.skip
+                        },(status,posts)=>{
+                            if(status===200)res.status(200).render("Categories/Category1",{
+                                Category:category,
+                                Posts:posts
+                            });
+                            else next();
+                        })
                     }
-                        break;
-                    case 500:
-                    case 404:
-                        res.status(404).render("Categories/error",{
-                            message:category
-                        });
-                        break;
                 }
-            }
-            );
+               else next();
+            });
+    })
+    .get((req, res, next) => {
+        res.status(404).render("Categories/error",{
+            message:"Couldn't Find this Categories"
+        });
     })
     .post((req,res)=>{
         if(!req.Categories) res.status(400).send("Bad Request");
