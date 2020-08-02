@@ -70,7 +70,7 @@
                 </div>
                 <h3 class="text-center">Sign In To Admin</h3>
                 <!-- <div class="login-form d-flex flex-column"> -->
-                    <form class="login-form d-flex flex-column" action="/user/login" method="POST">
+                    <form class="login-form d-flex flex-column" action="/user/login/" method="POST">
                         <div class="form-group form-floating-label">
                             <input id="username" name="username" type="text" value="" class="form-control input-border-bottom" required>
                             <label for="username" class="placeholder">Username</label>
@@ -81,6 +81,9 @@
                             <div class="show-password">
                                 <i class="flaticon-interface"></i>
                             </div>
+                        </div>
+                        <div class="d-none form-group form-floating-label">
+                            <input name="to" value="<%= to %>">
                         </div>
                         <div class="row form-sub m-0">
                             <div class="custom-control custom-checkbox">
