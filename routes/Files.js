@@ -1,18 +1,18 @@
 let router = require('express').Router(),
     FilesManager= require('../Classes/FileManager'),
     multer=require("multer"),
-    storage = multer.diskStorage({
-        destination: function (req, file, cb) {
-            req.FilePath="./files"+req.URL;
-            cb(null,req.FilePath);
-        },
-        filename: function (req, file, cb) {
-            if(req.body.randomName) req.FileName=file.fieldname+Date.now() + '-' + Math.round(Math.random() * 1E9);
-            else req.FileName=file.originalname;
-            cb(null, req.FileName);
-        }
-    }),
-    upload=multer({storage: storage});
+    upload=multer({storage:  multer.diskStorage({
+            destination: function (req, file, cb) {
+                req.FilePath="./files"+req.URL;
+                cb(null,req.FilePath);
+            },
+            filename: function (req, file, cb) {
+                if(req.body.randomName) req.FileName=file.fieldname+Date.now() + '-' + Math.round(Math.random() * 1E9);
+                else req.FileName=file.originalname;
+                cb(null, req.FileName);
+            }
+        })
+    });
 router.route('/*')
     .all((req,res,next)=>{
         req.URL=decodeURI(require('url').parse(req.url).pathname);

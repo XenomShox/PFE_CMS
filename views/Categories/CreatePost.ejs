@@ -33,17 +33,43 @@
     <div class="container d-flex flex-column">
         <a class="btn btn-success ml-auto mr-5 my-3" href="<%= Category.Slug%>?create=true"> <i class="far fa-edit"></i><span class="ml-1">Write an article</span></a>
         <div class="Layout row mt-3">
-            <% if(Posts.length>0){%>
-                <% include ../Partials/Contents/Content1 %>
-                <% include ../Partials/SideBars/SideBar1 %>
-            <%}else{%>
-                <h1 class="text-center my-5 mx-auto">There is no Post yet.</h1>
-                <% include ../Partials/SideBars/SideBar2 %>
-            <%}%>
+            <form action="/Categories/<%=Category.Slug%>" method="post" class="PageContent col-12 col-lg-9  d-flex flex-column align-items-start">
+                <div class="form-group w-100">
+                    <label for="title">Title of the Post</label>
+                    <input name="title" type="text" class="form-control w-75" id="title" aria-describedby="title" required>
+                </div>
+                <div class="form-group w-100">
+                    <label for="excerpt">Excerpt of the Post</label>
+                    <textarea name="excerpt" class="form-control w-75" id="excerpt" aria-describedby="description" maxlength="150" required></textarea>
+                    <small class="form-text text-muted">this description is gonna be used to help for search optimisation.</small>
+                </div>
+                <div class="form-group w-100">
+                    <label for="covers">Covers for the Post</label>
+                    <input name="covers" multiple type="file" class="form-control-file w-75" id="covers" aria-describedby="post covers">
+                    <small class="form-text text-muted">the selected images are gonna be used as cover for the post.</small>
+                </div>
+                <div class="form-group w-100">
+                    <label for="tags">Tags of the Post</label>
+                    <input name="tags" type="text" class="form-control w-75" id="tags" aria-describedby="title">
+                </div>
+                <div class="form-group w-100">
+                    <label for="content">The content of the Post</label>
+                    <textarea name="content" class="w-75" id="content" aria-describedby="description" required></textarea>
+                </div>
+                <input type="submit" class="btn btn-success" value="Post it">
+            </form>
+            <% include ../Partials/SideBars/SideBar1 %>
         </div>
     </div>
 </div>
 <% include ../Partials/Footers/Footer1.ejs %>
+<link href="/admin/files/javascripts/Assets/plugin/summernote/summernote-bs4.min.css" rel="stylesheet">
+<script src="/admin/files/javascripts/Assets/plugin/summernote/summernote-bs4.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#content').summernote();
+    });
 
+</script>
 </body>
 </html>
