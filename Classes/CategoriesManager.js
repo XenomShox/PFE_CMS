@@ -1,3 +1,4 @@
+
 const mongoose=require("mongoose"),
     WebSite=require("./WebSite");
 class CategoriesManager {
@@ -9,17 +10,19 @@ class CategoriesManager {
             Name:String,
             Cover:String,
             Slug:{type:String,unique:true,dropDups:true,index:true},
-            Description:String,
-            Posts:{
-                type:[mongoose.Schema.ObjectId],
-                ref:"Vinland_Post"
-            }
+            Description:String
         })
         this.GetCategories((status,cats)=>{
             WebSite.LoadCategories(cats);
         })
     }
-
+    GetCategoryByID(id,callback){
+        this.#CategoriesModel.find({Posts:id},(err,Category)=>{
+            if(err) return callback(500,"Internal Error");
+            else if(Category.length===0) return callback(404,"Category not found");
+            else callback(200,Category[0]);
+        });
+    }
     CreateCategory(Category,callback){
         this.#CategoriesModel.create(Category,(err)=>{
             if(err) return callback(500,"Couldn't create this Category");
@@ -34,10 +37,10 @@ class CategoriesManager {
     }
     GetCategory(Slug,callback){
         this.#CategoriesModel.find({Slug:Slug},(err,Category)=>{
-                if(err) return callback(500,"Internal Error");
-                else if(Category.length===0) return callback(404,"Category not found");
-                else callback(200,Category[0]);
-            });
+            if(err) return callback(500,"Internal Error");
+            else if(Category.length===0) return callback(404,"Category not found");
+            else callback(200,Category[0]);
+        });
     }
     AddPost(Id,PostID,callback){
         this.#CategoriesModel.updateOne({"_id":Id},{$push: { Posts: PostID }},(err)=>{

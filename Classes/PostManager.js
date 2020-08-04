@@ -12,6 +12,7 @@ class PostManager {
             author:{type:mongoose.Schema.ObjectId,ref:"User"},
             date:{type:Date,default:new Date()},
             content:String,
+            category:{type:mongoose.Schema.ObjectId,ref:"Vinland_Category"},
             comments:{type: [mongoose.Schema.ObjectId],ref:"comments"},
             comments_status:{
                 type: String,
@@ -59,7 +60,7 @@ class PostManager {
     GetPosts(options,callback){
         let query;
         if(options){
-            if(options.category) query=this.#Model.find({_id:{"$in":options.category.Posts}})
+            if(options.category) query=this.#Model.find({category:options.category._id})
             else if(options.tag) query=this.#Model.find({tags:options.tag});
             else query=this.#Model.find({})
             if(options.sort) query.sort(options.sort);
