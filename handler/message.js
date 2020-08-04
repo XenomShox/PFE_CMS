@@ -23,12 +23,12 @@ exports.getMessage = async (req, res, next) => {
 
 exports.addMessage = async (req, res, next) => {
     try {
-        const { user1, user2 } = req.params;
+        const { sender, receiver } = req.params;
         const { text } = req.body;
-        let message = await Message.create({ text, user1, user2 });
+        let message = await Message.create({ text, sender, receiver });
 
-        let userSender = await User.findById(user1);
-        let userReceiver = await User.findById(user2);
+        let userSender = await User.findById(sender);
+        let userReceiver = await User.findById(receiver);
 
         userSender.messages.push(message.id);
         userReceiver.messages.push(message.id);
@@ -37,10 +37,10 @@ exports.addMessage = async (req, res, next) => {
         await userReceiver.save();
 
         const foundMessage = await Message.findById(message.id)
-            .populate("user1", {
+            .populate("sender", {
                 username: true,
             })
-            .populate("user2", {
+            .populate("receiver", {
                 username: true,
             });
 

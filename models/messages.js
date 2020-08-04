@@ -7,11 +7,11 @@ messageSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
-        user1: {
+        sender: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",
         },
-        user2: {
+        receiver: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",
         },
@@ -23,14 +23,14 @@ messageSchema = new mongoose.Schema(
 
 messageSchema.pre("remove", async function (next) {
     try {
-        let user1 = await User.findById(this.user1);
-        let user2 = await User.findById(this.user2);
+        let sender = await User.findById(this.sender);
+        let receiver = await User.findById(this.receiver);
 
-        user1.messages.remove(this.id);
-        user2.messages.remove(this.id);
+        sender.messages.remove(this.id);
+        receiver.messages.remove(this.id);
 
-        await user1.save();
-        await user2.save();
+        await sender.save();
+        await receiver.save();
 
         return next();
     } catch (err) {
