@@ -1,6 +1,5 @@
 const mongoose=require("mongoose"),
-    WebSite=require("./WebSite"),
-    PostManager=require("./PostManager");
+    WebSite=require("./WebSite");
 class CategoriesManager {
     /*----------------Attributes------------*/
     #CategoriesModel;
@@ -33,15 +32,11 @@ class CategoriesManager {
             else callback(200,Category);
         });
     }
-    GetCategory(Slug,options,callback){
+    GetCategory(Slug,callback){
         this.#CategoriesModel.find({Slug:Slug},(err,Category)=>{
                 if(err) return callback(500,"Internal Error");
                 else if(Category.length===0) return callback(404,"Category not found");
-                else{
-                    PostManager.GetPostsFromCategory(Category[0],options,(status,category,posts)=>{
-                        callback(200,category,posts);
-                    })
-                }
+                else callback(200,Category[0]);
             });
     }
     AddPost(Slug,PostID,callback){

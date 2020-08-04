@@ -6,7 +6,8 @@
                     <img class="card-img-top" src="<%=post.covers[0]%>" alt="Card image cap">
 
                 </div>
-            <% }else{ %>
+            <% }
+            else{ %>
                 <div id="blog" class="carousel slide"  data-interval="0" data-ride="carousel">
                     <ol class="carousel-indicators">
                         <li data-target=".carousel" data-slide-to="0" class="active"></li>
@@ -35,7 +36,7 @@
                     <% let date=new Date(post.modified_date).toLocaleDateString(undefined,{ weekday: undefined, year: 'numeric', month: 'numeric', day: undefined })%>
                     <span>on <a href="/search?date=<%=date%>" class="text-muted"><%= date%></a></span>
                     <br>
-                    <a href="/" class="card-title"><%=post.title%></a>
+                    <a href="/Categories/<%=Category.Slug%>?post=<%=post["_id"]%>" class="card-title"><%=post.title%></a>
                     <p><%=post.excerpt%></p>
                     <div class="row align-items-center">
                         <div class="border-bottom flex-grow-1"></div>

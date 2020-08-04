@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 class PostManager {
     /*----------------Attributes------------*/
-    #Model
+    #Model;
+    #Schema;
     /*------------------Methods-------------*/
    /* SetModel(contentType){
         if(contentType) this.#Schema.content=contentType;
@@ -9,6 +10,7 @@ class PostManager {
     }*/
     constructor() {
         this.#Model=mongoose.model('Vinland_Post',{
+            author:{type:mongoose.Schema.ObjectId,ref:"User"},
             date:{type:Date,default:new Date()},
             content:String,
             comments:{type: [mongoose.Schema.ObjectId],ref:"comments"},
@@ -43,17 +45,42 @@ class PostManager {
             },
         });
     }
-    GetPostsFromCategory(Category,options,callback){
-        let query=this.#Model.find({_id:{"$in":Category.Posts}});
-        if(options.sort)query.sort(options.sort);
-        if(options.limit)query.limit(options.limit);
-        query.exec((err,res)=>{
-            if(err) callback(500,"Couldn't find the posts");
-            else callback(200,Category,res);
+    CreatePost(post,callback){
+        this.#Model.create(post,(err)=>{
+            if(err) callback(500,"Internal Error");
+            else callback(201,"Posted");
         });
     }
-    CreatePost(post,callback){
-        this.#Model.create(post,callback);
+    UpdatePost(Id,Post,callback){
+        this.#Model.findOneAndUpdate(Id,Post,(err,res)=>{
+            if(err) callback(500,"Internal Error");
+            else callback(200,res);
+        })
+    }
+    GetPosts(options,callback){
+        let query;
+        if(options){
+            if(options.category) query=this.#Model.find({_id:{"$in":options.category.Posts}})
+            else query=this.#Model.find({})
+            if(options.sort) query.sort(options.sort);
+            if(options.limit) query.limit(options.limit);
+            if(options.skip) query.skip(options.skip);
+        }else{
+            query=this.#Model.find({});
+            callback=options;
+        }
+        query.exec((err,res)=>{
+            if(err) callback(500,"Internal error");
+            else callback(200,res);
+        })
+    }
+    GetPost(id,callback){
+        this.#Model.findOneAndUpdate({_id:id},{$inc : {'visited' : 1}})
+            .populate("author")
+            .exec((err,res)=>{
+           if(err)  callback(404,"Post Not Found");
+           else callback(200,res);
+        });
     }
 }
 module.exports = new PostManager();
