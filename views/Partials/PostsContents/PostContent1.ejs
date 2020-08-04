@@ -1,6 +1,5 @@
 <div class="PageContent col-12 col-lg-9  d-flex flex-column align-items-start my-3">
-    <div class="Cover" style="background-image: url(https://cdn.jevelin.shufflehound.com/wp-content/uploads/sites/11/2016/11/1-1024x777.jpg)">
-    </div>
+    <img class="Cover" src="<%=Post.covers[0]%>">
     <h3 class="font-weight-bold mt-4"><%=Post.title%></h3>
     <div class="Details row ml-2 border-bottom">
         <span>by <a href="/user/<%=Post.author.username%>" class="text-muted"><%=Post.author.username%></a></span>

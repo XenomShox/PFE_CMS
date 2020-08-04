@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+    <% include ../Partials/Heads/Head1 %>
+    <body>
+        <header class="position-relative" style="background-image: url(/files/Default/images/background.jpg);">
+                <div class="container d-flex flex-column">
+                    <% include ../Partials/Navs/Nav1 %>
+                    <div class="my-4 my-md-5"></div>
+                    <div class="row align-items-center mb-3 mb-md-3">
+                        <div class="col-6">
+                            <h6>PHOTOGRAPHY</h6>
+                            <h1 class="text-white">Stromtrooper is here to save your day</h1>
+                            <p class="text-light">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+                            <a href="/" class="readMore btn btn-outline-info btn-round">Read more</a>
+                        </div>
+                        <div class="Topics col-4 col-lg-3 ml-auto">
+                            <div class="TopicsInner">
+                                <div class="Topic">
+                                    <a href="#" class="text-muted">
+                                        <h6>PHOTOGRAPHY</h6>
+                                        <h4 class="text-white">Stromtrooper is here to save your day</h4>
+                                    </a>
+                                </div>
+                                <div class="Topic">
+                                    <a href="#" class="text-muted">
+                                        <h6>PHOTOGRAPHY</h6>
+                                        <h4 class="text-white">Stromtrooper is here to save your day</h4>
+                                    </a>
+                                </div>
+                                <div class="Topic">
+                                    <a href="#" class="text-muted">
+                                        <h6>PHOTOGRAPHY</h6>
+                                        <h4 class="text-white">Stromtrooper is here to save your day</h4>
+                                    </a>
+                                </div>
+                                <div class="Topic">
+                                    <a href="#" class="text-muted">
+                                        <h6>Design</h6>
+                                        <h4 class="text-white">Stromtrooper is here to save your day</h4>
+                                    </a>
+                                </div>
+                                <div class="Topic">
+                                    <a href="#" class="text-muted">
+                                        <h6>PHOTOGRAPHY</h6>
+                                        <h4 class="text-white">Stromtrooper is here to save your day</h4>
+                                    </a>
+                                </div>
+                                <div class="Topic">
+                                    <a href="#" class="text-muted">
+                                        <h6>PHOTOGRAPHY</h6>
+                                        <h4 class="text-white">Stromtrooper is here to save your day</h4>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </header>
+        <div class="Content">
+            <div class="container">
+                <div class="row CatNav justify-content-center my-5">
+                    <a href="#" class="btn btn-round btn-info m-1">Hot</a>
+                    <% Categories.forEach(category=>{%>
+                        <a href="/Categories/<%=category.Slug%>" class="readMore btn btn-outline-info btn-round m-1"><%=category.Name%></a>
+                    <%})%>
+                </div>
+                <div class="Layout row">
+                    <% include ../Partials/Contents/Content1 %>
+                    <% include ../Partials/SideBars/SideBar1 %>
+                </div>
+            </div>
+        </div>
+        <% include ../Partials/Footers/Footer1.ejs %>
+
+    </body>
+</html>

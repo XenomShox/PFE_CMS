@@ -1,0 +1,55 @@
+{
+    "Type": "Blog",
+    "Structure": {
+        "Index": {
+            "path": "Index",
+            "scripts": [],
+            "styles": []
+        },
+        "Categories": {
+            "path": "Categories",
+            "scripts": [],
+            "styles": []
+        },
+        "Post": {
+            "path": "Post",
+            "scripts": [],
+            "styles": []
+        },
+        "CreatePost": {
+            "path": "CreatePost",
+            "scripts": [],
+            "styles": []
+        },
+        "EditPost": {
+            "path": "EditPost",
+            "scripts": [],
+            "styles": []
+        },
+        "Tags": {
+            "path": "Tags",
+            "scripts": [],
+            "styles": []
+        },
+        "Search": {
+            "path": "Search",
+            "scripts": [],
+            "styles": []
+        },
+        "Messenger": {
+            "path": "Messenger",
+            "scripts": [],
+            "styles": []
+        },
+        "Profile": {
+            "path": "Profile",
+            "scripts": [],
+            "styles": []
+        },
+        "Error": {
+            "path": "Error",
+            "scripts": [],
+            "styles": []
+        }
+    }
+}

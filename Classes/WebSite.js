@@ -25,9 +25,9 @@ class WebSite {
         this.LoadWebSiteSettings().then(file=>{
             if(file) {
                 this.#Settings=file;
-                this.CMSLunch();
+                this.StartUp();
             }
-            else this.CMSInstallation();
+            else this.Installation();
         });
     }
     /*------------------Methods-------------*/
@@ -43,9 +43,9 @@ class WebSite {
                 if(typeof file==="string") return JSON.parse(file);
                 else return null;
             })
-            .catch(() => { return null;});
+            .catch(() => { return undefined;});
     }
-    CMSLunch(){
+    StartUp(){
         console.log("Lunching The WebSite");
         mongoose.connect(this.#Settings.DataBase.URI, {
             useNewUrlParser: true,
@@ -74,8 +74,7 @@ class WebSite {
                 app.use("/", require("../routes/index"));
                 switch (this.#Settings.Type) {
                     case "Blog":
-                        app.use("/Categories",require("../routes/Categories"));
-                        break;
+                        return this.SetUpBlog();
                 }
             })//Web Site Type
             .then(()=>{app.use("*",require("../routes/error"));})//Add the error page
@@ -92,7 +91,7 @@ class WebSite {
             }
         })
     }
-    CMSInstallation(){
+    Installation(){
         console.log("Installing the WebSite");
     }
     LoadCategories(categories){
@@ -106,6 +105,13 @@ class WebSite {
             });
         })
         console.log("Categories Loaded");
+    }
+
+    SetUpBlog() {
+        return this.LoadJsonFile("../views/"+this.#WebSiteDetails.Template+"/Schema.json").then((data)=>{
+            app.set("Schema",data);
+            app.use(require("../routes/BlogRouting"));
+        })
     }
 }
 module.exports = new WebSite();

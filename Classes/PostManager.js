@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 class PostManager {
     /*----------------Attributes------------*/
     #Model;
-    #Schema;
     /*------------------Methods-------------*/
    /* SetModel(contentType){
         if(contentType) this.#Schema.content=contentType;
@@ -46,9 +45,9 @@ class PostManager {
         });
     }
     CreatePost(post,callback){
-        this.#Model.create(post,(err)=>{
+        this.#Model.create(post,(err,res)=>{
             if(err) callback(500,"Internal Error");
-            else callback(201,"Posted");
+            else callback(201,res);
         });
     }
     UpdatePost(Id,Post,callback){
@@ -61,18 +60,21 @@ class PostManager {
         let query;
         if(options){
             if(options.category) query=this.#Model.find({_id:{"$in":options.category.Posts}})
+            else if(options.tag) query=this.#Model.find({tags:options.tag});
             else query=this.#Model.find({})
             if(options.sort) query.sort(options.sort);
+            else query.sort("-date");
             if(options.limit) query.limit(options.limit);
             if(options.skip) query.skip(options.skip);
         }else{
             query=this.#Model.find({});
             callback=options;
         }
-        query.exec((err,res)=>{
-            if(err) callback(500,"Internal error");
-            else callback(200,res);
-        })
+        query.select("-content")
+            .exec((err,res)=>{
+                if(err) callback(500,"Internal error");
+                else callback(200,res);
+            })
     }
     GetPost(id,callback){
         this.#Model.findOneAndUpdate({_id:id},{$inc : {'visited' : 1}})
@@ -82,5 +84,6 @@ class PostManager {
            else callback(200,res);
         });
     }
+
 }
 module.exports = new PostManager();

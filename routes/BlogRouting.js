@@ -1,20 +1,10 @@
 const router = require('express').Router(),
     CategoriesManager=require("../Classes/CategoriesManager"),
-    PostManager=require("../Classes/PostManager"),
-    FilesManager= require('../Classes/FileManager'),
-    multer=require("multer"),
-    storage=multer.diskStorage({
-        destination: function (req, file, cb) {
-            req.FilePath="./files/";
-            cb(null,req.FilePath);
-        },
-        filename: function (req, file, cb) {
-            req.FileName=file.originalname+Date.now();
-            cb(null, req.FileName);
-        }
-    }),
-    upload=multer({storage}).array("covers",10);
-router.route('/')
+    PostManager=require("../Classes/PostManager")
+    //app=require("../app");
+console.log("BlogRouting")
+
+router.route('/Categories')
     .get((req, res, next) => {
         res.redirect("/");
     })
@@ -27,18 +17,18 @@ router.route('/')
             Posts:[]
         },(status,message)=>{res.status(status).send(message);});
     })
-router.route('/*')
+router.route('/Categories/*')
     .all((req,res,next)=> {
         let {pathname,query}=require('url').parse(req.url,true);
         req.URL=decodeURI(pathname);
+        console.log(req.URL)
         req.query=query;
-        CategoriesManager.GetCategory(req.URL.substr(1),(status,category)=>{
+        CategoriesManager.GetCategory(req.URL,(status,category)=>{
             if(status===200){
                 res.locals.Category=category;
                 next();
             } else res.status(404).render("Categories/error",{message:"Couldn't Find this Categories"});
         })
-
     } )
     .get((req,res,next)=>{
         if(req.query.post) PostHandler(req,res);  //post
@@ -49,19 +39,30 @@ router.route('/*')
         else CategoryHandler(req,res);
     })
     .post((req,res,next)=>{
-        if(res.locals.currentUser!==undefined){
-            upload(req,res,function (err){
-                console.log(err,req.file)
-                next();
-            });
+        if(res.locals.currentUser){
+            req.body.tags=req.body.tags.split(" ")
+            if( !(req.body.covers instanceof Array) ) req.body.covers=[req.body.covers];
+
+            PostManager.CreatePost({...req.body,author:res.locals.currentUser["_id"]},(status,post)=>{
+                if(status===201)CategoriesManager.AddPost(res.locals.Category["_id"],post['_id'],(status)=>{
+                    if(status===201) res.redirect("/categories/"+res.locals.Category.Slug);
+                    else res.redirect("/categories/"+res.locals.Category.Slug+"?create=true");
+                })
+                else res.status(status).render("Categories/error",{message:"Couldn't Create Post"});
+            })
         }
         else res.status(305).send("You can't create a post without LogIn");
-    },((req, res, next) => {
-        /*PostManager.CreatePost({...req.body,author:res.locals.currentUser["_id"]},(status,message)=>{
-                res.status(status).send(message)
-        })*/
-        res.send("done");
-    }));
+    });
+/*----------------Tag System-----------------*/
+router.route("/tags/:tag")
+    .get((req, res, next) => {
+        let {query}=require('url').parse(req.url,true);
+        PostManager.GetPosts({tag:req.params.tag,...query},(status,Posts)=>{
+            if(status===200)res.status(200).render("Blog(vinlandCMS)/Tags",{Posts,tag:req.params.tag});
+            else res.status(status).render("Categories/error",{message:Posts});
+        });
+
+    })
 /*---------------Categories------------------*/
 function CategoryHandler(req,res){
     let category=res.locals.Category;

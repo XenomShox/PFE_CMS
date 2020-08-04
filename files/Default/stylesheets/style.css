@@ -91,11 +91,6 @@ header .navbar .nav-link{font-weight: bold;}
 .card-body span,.card-body p{font-weight: 400; font-size: .7em;color: #8d8d8d;}
 
 .PageContent .Cover,.Details,.PostContent{width: 90%;margin-right: auto;}
-.PageContent .Cover{
-    height: 25em;
-    background-position: center;
-    background-size: cover;
-}
 .Details{
     font-size: .8em;
     font-weight: 400;

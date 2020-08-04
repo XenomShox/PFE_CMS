@@ -39,8 +39,11 @@ class CategoriesManager {
                 else callback(200,Category[0]);
             });
     }
-    AddPost(Slug,PostID,callback){
-
+    AddPost(Id,PostID,callback){
+        this.#CategoriesModel.updateOne({"_id":Id},{$push: { Posts: PostID }},(err)=>{
+            if(err) callback(500);
+            else callback(201);
+        })
     }
 }
 module.exports = new CategoriesManager();
