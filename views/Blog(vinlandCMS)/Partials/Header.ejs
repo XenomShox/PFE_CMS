@@ -5,11 +5,7 @@
     <meta name="description" content="<%= WebSite.Description %>">
     <meta name="keywords" content="<%= WebSite.Keywords.join() %>">
     <link rel="icon" href="<%= WebSite.Icon%>">
-    <% WebSite.Styles.URLS.forEach(el=>{ %>
-        <link rel="stylesheet" href="<%= el %>" />
-    <%})%>
-    <% WebSite.Styles.Codes.forEach(el=>{ %>
-        <style><%- el %></style>
-    <%})%>
+    <link rel="stylesheet" href="/Admin/Files/stylesheets/Assets/bootstrap.min.css" />
+    <link rel="stylesheet" href="/files/Default/stylesheets/style.css" />
 
 </head>

@@ -26,7 +26,7 @@
                     </div>
                     <div class="blog Latest row">
                         <a href="#" class="blogImage p-0">
-                            <div class="img" style="background-image: url(/files/Default/images/background.jpg)" alt=""></div>
+                            <div class="img" style="background-image: url(/Default/images/background.jpg)" alt=""></div>
                             <div class="Comments">100</div>
                         </a>
                         <div class="col ml-5 ml-lg-1">
@@ -48,7 +48,7 @@
                     </div>
                     <div class="blog Latest row">
                         <a href="#" class="blogImage p-0">
-                            <div class="img" style="background-image: url(/files/Default/images/background.jpg)" alt=""></div>
+                            <div class="img" style="background-image: url(/Default/images/background.jpg)" alt=""></div>
                             <div class="Comments">100</div>
                         </a>
                         <div class="col ml-5 ml-lg-1">
@@ -79,10 +79,19 @@
     </div>
 </footer>
 <div class="Scripts">
-    <% WebSite.Scripts.URLS.forEach(el=>{ %>
-        <script src="<%= el %>"></script>
-    <%})%>
-    <% WebSite.Scripts.Codes.forEach(el=>{ %>
-        <script><%- el %></script>
-    <%})%>
+    <script src="/Admin/Files/javascripts/Assets/plugin/webfont/webfont.min.js"></script>
+    <script src="/Admin/Files/javascripts/Assets/core/jquery.3.2.1.min.js"></script>
+    <script src="/Admin/Files/javascripts/Assets/core/popper.min.js"></script>
+    <script src="/Admin/Files/javascripts/Assets/core/bootstrap.min.js"></script>
+    <script>
+        WebFont.load({
+            custom: {
+                'families':['Font Awesome 5 Solid', 'Font Awesome 5 Regular', 'Font Awesome 5 Brands'],
+                urls: ['/Admin/Files/stylesheets/Assets/fonts.min.css']
+            },
+            active: function() {
+                sessionStorage.fonts = true;
+            }
+        });
+    </script>
 </div>

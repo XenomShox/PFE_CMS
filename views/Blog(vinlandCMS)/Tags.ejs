@@ -25,20 +25,19 @@
     </div>
     <div class="container d-flex flex-column">
         <div class="form-inline row">
-            <div class="input-group mr-3 ml-auto">
+            <div class="input-group mr-5 ml-auto my-1">
                 <div class="input-group-prepend">
                     <label class="input-group-text" for="form">Sort</label>
                 </div>
                 <select class="custom-select" id="form" onchange="location = this.value;">
-                    <option value="/tag/<%= tag%>?sort=title">Title A-Z</option>
-                    <option value="/tag/<%= tag%>?sort=-title">Title Z-A</option>
-                    <option value="/tag/<%= tag%>?sort=date">Oldest</option>
-                    <option value="/tag/<%= tag%>?sort=-date" selected>Newest</option>
-                    <option value="/tag/<%= tag%>?sort=rating.likes">Most Liked</option>
-                    <option value="/tag/<%= tag%>?sort=rating.dislikes">Most Disliked</option>
+                    <option value="/tags/<%= tag%>?sort=title">Title A-Z</option>
+                    <option value="/tags/<%= tag%>?sort=-title">Title Z-A</option>
+                    <option value="/tags/<%= tag%>?sort=date">Oldest</option>
+                    <option value="/tags/<%= tag%>?sort=-date" selected>Newest</option>
+                    <option value="/tags/<%= tag%>?sort=rating.likes">Most Liked</option>
+                    <option value="/tags/<%= tag%>?sort=rating.dislikes">Most Disliked</option>
                 </select>
             </div>
-            <a class="btn btn-success mr-5 my-3" href="/tag/<%= tag%>?create=true"> <i class="far fa-edit"></i><span class="ml-1">Write an article</span></a>
         </div>
         <div class="Layout row mt-3">
             <% if(Posts.length>0){%>

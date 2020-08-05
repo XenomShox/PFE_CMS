@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
-    <% include ../Partials/Heads/Head1 %>
+    <% include ./Partials/Header %>
     <body>
         <header class="position-relative" style="background-image: url(/files/Default/images/background.jpg);">
                 <div class="container d-flex flex-column">
-                    <% include ../Partials/Navs/Nav1 %>
+                    <% include ./Partials/Navbar-Dark.ejs %>
                     <div class="my-4 my-md-5"></div>
                     <div class="row align-items-center mb-3 mb-md-3">
                         <div class="col-6">
@@ -65,12 +65,12 @@
                     <%})%>
                 </div>
                 <div class="Layout row">
-                    <% include ../Partials/Contents/Content1 %>
-                    <% include ../Partials/SideBars/SideBar1 %>
+                    <% include ./Partials/Posts.ejs %>
+                    <% include ./Partials/SideBar1.ejs %>
                 </div>
             </div>
         </div>
-        <% include ../Partials/Footers/Footer1.ejs %>
+        <% include ./Partials/Footer.ejs %>
 
     </body>
 </html>

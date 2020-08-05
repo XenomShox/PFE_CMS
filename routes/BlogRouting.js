@@ -3,7 +3,12 @@ const router = require('express').Router(),
     PostManager=require("../Classes/PostManager")
     //app=require("../app");
 console.log("BlogRouting")
-
+router.get('/', function(req, res) {
+    PostManager.GetPosts({sort:"-visited"},(status,Posts)=>{
+        if(status===200) res.render('Blog(vinlandCMS)/index', {Posts});
+        else res.render("Blog(vinlandCMS)/Error",{message:Posts})
+    })
+});
 router.route('/Categories')
     .get((req, res, next) => {
         res.redirect("/");
@@ -27,14 +32,14 @@ router.route('/Categories/*')
             if(status===200){
                 res.locals.Category=category;
                 next();
-            } else res.status(404).render("Categories/error",{message:"Couldn't Find this Categories"});
+            } else res.status(404).render("Blog(vinlandCMS)/Error",{message:"Couldn't Find this Categories"});
         })
     } )
     .get((req,res,next)=>{
         if(req.query.post) PostHandler(req,res);  //post
         else if(req.query.create){
             res.locals.WebSite.Title+=" - Create Post"
-            res.render("Categories/CreatePost");
+            res.render("Blog(vinlandCMS)/Create");
         }
         else CategoryHandler(req,res);
     })
@@ -42,12 +47,9 @@ router.route('/Categories/*')
         if(res.locals.currentUser){
             req.body.tags=req.body.tags.split(" ")
             if( !(req.body.covers instanceof Array) ) req.body.covers=[req.body.covers];
-
-            PostManager.CreatePost({...req.body,author:res.locals.currentUser["_id"]},(status,post)=>{
-                if(status===201)CategoriesManager.AddPost(res.locals.Category["_id"],post['_id'],(status)=>{
-                    if(status===201) res.redirect("/categories/"+res.locals.Category.Slug);
-                    else res.redirect("/categories/"+res.locals.Category.Slug+"?create=true");
-                })
+            console.log(req.query.post)
+            PostManager.CreatePost({...req.body,category:res.locals.Category["_id"],author:res.locals.currentUser["_id"]},(status,post)=>{
+                if(status===201) res.redirect(res.locals.Category.Slug);
                 else res.status(status).render("Categories/error",{message:"Couldn't Create Post"});
             })
         }
@@ -67,9 +69,9 @@ router.route("/tags/:tag")
 function CategoryHandler(req,res){
     let category=res.locals.Category;
     res.locals.WebSite.Title+=" - "+category.Name;
-    PostManager.GetPosts({category, ...req.query},(status,posts)=>{
-        if(status===200)res.status(200).render("Categories/Category1",{Posts:posts});
-        else res.status(status).render("Categories/error",{message:posts});
+    PostManager.GetPosts({category, ...req.query},(status,Posts)=>{
+        if(status===200)res.status(200).render("Blog(vinlandCMS)/Categories",{Posts});
+        else res.status(status).render("Blog(vinlandCMS)/Error",{message:Posts});
     })
 }
 /*--------------Post-----------------*/
@@ -78,12 +80,17 @@ function PostHandler(req,res) {
     PostManager.GetPost(req.query.post,(status,Post)=>{
         if(status===200) {
             res.locals.WebSite.Title+=" - "+Post.title;
-            res.render("Posts/Post1",{Post});
+            if(req.query.edit) res.render("Blog(vinlandCMS)/Edit",{Post});
+            else res.render("Blog(vinlandCMS)/Post",{Post});
         }
         else {
             res.locals.WebSite.Title+=" - "+Post;
-            res.render("Categories/error",{message:Post});
+            res.render("Blog(vinlandCMS)/Error",{message:Post});
         }
     })
 }
+/*-------------------Error-------------*/
+router.route("*").all((req, res, next) => {
+    res.status(404).render("Blog(vinlandCMS)/Error", {message: "Page Not Found"});
+})
 module.exports = router;

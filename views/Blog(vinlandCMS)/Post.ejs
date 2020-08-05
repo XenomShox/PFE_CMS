@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
-<% include ../Partials/Heads/Head1 %>
+<% include ./Partials/Header.ejs %>
 <body class="Category">
 <header class="position-relative">
     <div class="container d-flex flex-column">
-        <% include ../Partials/Navs/Nav2 %>
+        <% include ./Partials/Navbar-light.ejs %>
     </div>
 </header>
 <div class="Content">
@@ -17,8 +17,8 @@
                         <a href="/"><i class="fas fa-home"></i></a>
                     </li>
                     <%
-                    let Slugs=Category.Slug.split("/"),sslug="/Categories";
-                    for(let i=0 ;i<Slugs.length;i++){
+                    let Slugs=Category.Slug.split("/"),sslug="";
+                    for(let i=1 ;i<Slugs.length;i++){
                         sslug+="/"+Slugs[i];
                     %>
                     <li class="breadcrumb-item">
@@ -33,14 +33,15 @@
             </div>
         </div>
     </div>
-    <div class="container">
-        <div class="Layout row mt-3">
-            <% include ../Partials/PostsContents/PostContent1.ejs %>
-            <% include ../Partials/SideBars/SideBar1 %>
+    <div class="container d-flex flex-column">
+        <a class="btn btn-success ml-auto mr-5 my-3" href="<%= Category.Slug%>?post=<%=Post._id%>&edit=true"> <i class="far fa-edit"></i><span class="ml-1">Edit the Post</span></a>
+        <div class="Layout row ">
+            <% include ./Partials/PostContent.ejs %>
+            <% include ./Partials/SideBar1.ejs %>
         </div>
     </div>
 </div>
-<% include ../Partials/Footers/Footer1.ejs %>
+<% include ./Partials/Footer.ejs %>
 
 </body>
 </html>

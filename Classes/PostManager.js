@@ -3,12 +3,8 @@ class PostManager {
     /*----------------Attributes------------*/
     #Model;
     /*------------------Methods-------------*/
-   /* SetModel(contentType){
-        if(contentType) this.#Schema.content=contentType;
-        this.#Model=
-    }*/
     constructor() {
-        this.#Model=mongoose.model('Vinland_Post',{
+        let schema=mongoose.Schema({
             author:{type:mongoose.Schema.ObjectId,ref:"User"},
             date:{type:Date,default:new Date()},
             content:String,
@@ -44,9 +40,12 @@ class PostManager {
                 default:0
             },
         });
+
+        this.#Model=mongoose.model('Vinland_Post',schema);
     }
     CreatePost(post,callback){
         this.#Model.create(post,(err,res)=>{
+            console.log(err)
             if(err) callback(500,"Internal Error");
             else callback(201,res);
         });
@@ -67,11 +66,13 @@ class PostManager {
             else query.sort("-date");
             if(options.limit) query.limit(options.limit);
             if(options.skip) query.skip(options.skip);
-        }else{
+        }
+        else{
             query=this.#Model.find({});
             callback=options;
         }
         query.select("-content")
+            .populate("category")
             .exec((err,res)=>{
                 if(err) callback(500,"Internal error");
                 else callback(200,res);

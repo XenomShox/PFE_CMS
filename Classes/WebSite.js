@@ -71,13 +71,11 @@ class WebSite {
                     res.locals.WebSite.Title=res.locals.WebSite.Name;
                     next();
                 })
-                app.use("/", require("../routes/index"));
                 switch (this.#Settings.Type) {
                     case "Blog":
                         return this.SetUpBlog();
                 }
             })//Web Site Type
-            .then(()=>{app.use("*",require("../routes/error"));})//Add the error page
             .then(()=>{console.log("WebSite Lunched correctly")})
             .catch((reason => {console.log("WebSite did't lunch correctly ",reason)}));
         this.LoadWebSiteDetails().then((file)=>{

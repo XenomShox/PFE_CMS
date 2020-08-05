@@ -6,24 +6,6 @@
     "Keywords": ["Web","CMS"],
     "Licence": "All CopyRights ....",
     "Template":"Blog(vinlandCMS)",
-    "Styles": {
-        "URLS": [
-            "/Admin/Files/stylesheets/Assets/bootstrap.min.css",
-            "/files/Default/stylesheets/style.css"
-        ],
-        "Codes":[]
-    },
-    "Scripts": {
-        "URLS": [
-            "/Admin/Files/javascripts/Assets/plugin/webfont/webfont.min.js",
-            "/Admin/Files/javascripts/Assets/core/jquery.3.2.1.min.js",
-            "/Admin/Files/javascripts/Assets/core/popper.min.js",
-            "/Admin/Files/javascripts/Assets/core/bootstrap.min.js"
-        ],
-        "Codes":[
-            "WebFont.load({            custom: {'families':['Font Awesome 5 Solid', 'Font Awesome 5 Regular', 'Font Awesome 5 Brands'],                urls: ['/Admin/Files/stylesheets/Assets/fonts.min.css']},            active: function() {                sessionStorage.fonts = true;            }       });"
-        ]
-    },
     "SocialMedia": {
         "Facebook": {
             "Name": "The WebSite",
