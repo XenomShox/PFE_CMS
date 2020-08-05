@@ -1,12 +1,12 @@
 const router = require('express').Router(),
     CategoriesManager=require("../Classes/CategoriesManager"),
-    PostManager=require("../Classes/PostManager")
-    //app=require("../app");
-console.log("BlogRouting")
+    PostManager=require("../Classes/PostManager"),
+    app=require("../app"),
+    Schema=app.get("Schema");
 router.get('/', function(req, res) {
     PostManager.GetPosts({sort:"-visited"},(status,Posts)=>{
-        if(status===200) res.render('Blog(vinlandCMS)/Index', {Posts});
-        else res.render("Blog(vinlandCMS)/Error",{message:Posts})
+        if(status===200) res.render(Schema.path+Schema.Index.path, {Posts});
+        else res.render(Schema.path+Schema.Error.path,{message:Posts})
     })
 });
 router.route('/Categories')
@@ -32,14 +32,14 @@ router.route('/Categories/*')
             if(status===200){
                 res.locals.Category=category;
                 next();
-            } else res.status(404).render("Blog(vinlandCMS)/Error",{message:"Couldn't Find this Categories"});
+            } else res.status(404).render(Schema.path+Schema.Error.path,{message:"Couldn't Find this Categories"});
         })
     } )
     .get((req,res,next)=>{
         if(req.query.post) PostHandler(req,res);  //post
         else if(req.query.create){
             res.locals.WebSite.Title+=" - Create Post"
-            res.render("Blog(vinlandCMS)/Create");
+            res.render(Schema.path+Schema.CreatePost.path);
         }
         else CategoryHandler(req,res);
     })
@@ -50,7 +50,7 @@ router.route('/Categories/*')
             console.log(req.query.post)
             PostManager.CreatePost({...req.body,category:res.locals.Category["_id"],author:res.locals.currentUser["_id"]},(status,post)=>{
                 if(status===201) res.redirect(res.locals.Category.Slug);
-                else res.status(status).render("Categories/error",{message:"Couldn't Create Post"});
+                else res.status(status).render(Schema.path+Schema.Error.path,{message:"Couldn't Create Post"});
             })
         }
         else res.status(305).send("You can't create a post without LogIn");
@@ -60,8 +60,8 @@ router.route("/tags/:tag")
     .get((req, res, next) => {
         let {query}=require('url').parse(req.url,true);
         PostManager.GetPosts({tag:req.params.tag,...query},(status,Posts)=>{
-            if(status===200)res.status(200).render("Blog(vinlandCMS)/Tags",{Posts,tag:req.params.tag});
-            else res.status(status).render("Categories/error",{message:Posts});
+            if(status===200)res.status(200).render(Schema.path+Schema.Tags.path,{Posts,tag:req.params.tag});
+            else res.status(status).render(Schema.path+Schema.Error.path,{message:Posts});
         });
 
     })
@@ -70,8 +70,8 @@ function CategoryHandler(req,res){
     let category=res.locals.Category;
     res.locals.WebSite.Title+=" - "+category.Name;
     PostManager.GetPosts({category, ...req.query},(status,Posts)=>{
-        if(status===200)res.status(200).render("Blog(vinlandCMS)/Categories",{Posts});
-        else res.status(status).render("Blog(vinlandCMS)/Error",{message:Posts});
+        if(status===200)res.status(200).render(Schema.path+Schema.Categories.path,{Posts});
+        else res.status(status).render(Schema.path+Schema.Error.path,{message:Posts});
     })
 }
 /*--------------Post-----------------*/
@@ -80,17 +80,17 @@ function PostHandler(req,res) {
     PostManager.GetPost(req.query.post,(status,Post)=>{
         if(status===200) {
             res.locals.WebSite.Title+=" - "+Post.title;
-            if(req.query.edit) res.render("Blog(vinlandCMS)/Edit",{Post});
-            else res.render("Blog(vinlandCMS)/Post",{Post});
+            if(req.query.edit) res.render(Schema.path+Schema.EditPost.path,{Post});
+            else res.render(Schema.path+Schema.Post.path,{Post});
         }
         else {
             res.locals.WebSite.Title+=" - "+Post;
-            res.render("Blog(vinlandCMS)/Error",{message:Post});
+            res.render(Schema.path+Schema.Error.path,{message:Post});
         }
     })
 }
 /*-------------------Error-------------*/
 router.route("*").all((req, res, next) => {
-    res.status(404).render("Blog(vinlandCMS)/Error", {message: "Page Not Found"});
+    res.status(404).render(Schema.path+Schema.Error.path, {message: "Page Not Found"});
 })
 module.exports = router;

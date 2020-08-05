@@ -2,7 +2,8 @@ const mongoose =require("mongoose"),
     path = require("path"),
     fs=require("fs"),
     readFile= require('util').promisify(fs.readFile),
-    app=require("../app");
+    app=require("../app"),
+    PostManager=require("./PostManager");
 const statistics=mongoose.Schema({
     Total:{type:Number,default:0},
     LastMonth:[{type:Number,default:0}]
@@ -107,7 +108,18 @@ class WebSite {
 
     SetUpBlog() {
         return this.LoadJsonFile("../views/"+this.#WebSiteDetails.Template+"/Schema.json").then((data)=>{
-            app.set("Schema",data);
+            app.set("Schema", {path:this.#WebSiteDetails.Template+'/',...data.Structure});
+            let additional={};
+            data.Data.forEach(elm=>{
+                PostManager.GetPosts(elm,(status,res)=>{
+                    if(status===200) additional[elm.name]=res;
+                    else additional[elm.name]=[];
+                })
+            })
+            app.use(function (req,res,next){
+                res.locals.Additional=additional
+                next();
+            });
             app.use(require("../routes/BlogRouting"));
         })
     }
