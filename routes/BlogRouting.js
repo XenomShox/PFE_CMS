@@ -5,7 +5,7 @@ const router = require('express').Router(),
 console.log("BlogRouting")
 router.get('/', function(req, res) {
     PostManager.GetPosts({sort:"-visited"},(status,Posts)=>{
-        if(status===200) res.render('Blog(vinlandCMS)/index', {Posts});
+        if(status===200) res.render('Blog(vinlandCMS)/Index', {Posts});
         else res.render("Blog(vinlandCMS)/Error",{message:Posts})
     })
 });
