@@ -3,8 +3,7 @@
         <div class="blog card col-11 col-md-5 mx-auto mb-5 p-0">
             <% if(post.covers.length===1){ %>
                 <div class="card-img">
-                    <img class="card-img-top" src="<%=post.covers[0]%>" alt="<%=Category.Cover%>">
-
+                    <img class="card-img-top" src="<%=post.covers[0]%>" alt="Cover Image">
                 </div>
             <% }
             else{ %>
@@ -36,13 +35,13 @@
                     <% let date=new Date(post.modified_date).toLocaleDateString(undefined,{ weekday: undefined, year: 'numeric', month: 'numeric', day: undefined })%>
                     <span>on <a href="/search?date=<%=date%>" class="text-muted"><%= date%></a></span>
                     <br>
-                    <a href="<%=Category.Slug%>?post=<%=post["_id"]%>" class="card-title"><%=post.title%></a>
+                    <a href="<%=post.category.Slug%>?post=<%=post["_id"]%>" class="card-title"><%=post.title%></a>
                     <p><%=post.excerpt%></p>
                     <div class="row align-items-center">
                         <div class="border-bottom flex-grow-1"></div>
-                        <a href="#Comments" class="btn"><i class="far fa-thumbs-up"></i> <%=post.rating.likes%></a>
-                        <a href="#Comments" class="btn"><i class="far fa-thumbs-down"></i> <%=post.rating.dislikes%></a>
-                        <a href="#Comments" class="btn"><i class="far fa-comment-dots"></i> <%=post.comments.length%></a>
+                        <a href="<%=post.category.Slug%>?post=<%=post["_id"]%>" class="btn"><i class="far fa-thumbs-up"></i> <%=post.rating.likes%></a>
+                        <a href="<%=post.category.Slug%>?post=<%=post["_id"]%>" class="btn"><i class="far fa-thumbs-down"></i> <%=post.rating.dislikes%></a>
+                        <a href="<%=post.category.Slug%>?post=<%=post["_id"]%>#Comments" class="btn"><i class="far fa-comment-dots"></i> <%=post.comments.length%></a>
                     </div>
                     <span class="fas fa-tags"></span>
                     <%post.tags.forEach(tag=>{%>

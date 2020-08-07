@@ -3,15 +3,12 @@ class PostManager {
     /*----------------Attributes------------*/
     #Model;
     /*------------------Methods-------------*/
-   /* SetModel(contentType){
-        if(contentType) this.#Schema.content=contentType;
-        this.#Model=
-    }*/
     constructor() {
-        this.#Model=mongoose.model('Vinland_Post',{
+        let schema=mongoose.Schema({
             author:{type:mongoose.Schema.ObjectId,ref:"User"},
             date:{type:Date,default:new Date()},
             content:String,
+            category:{type:mongoose.Schema.ObjectId,ref:"Vinland_Category"},
             comments:{type: [mongoose.Schema.ObjectId],ref:"comments"},
             comments_status:{
                 type: String,
@@ -43,9 +40,12 @@ class PostManager {
                 default:0
             },
         });
+
+        this.#Model=mongoose.model('Vinland_Post',schema);
     }
     CreatePost(post,callback){
         this.#Model.create(post,(err,res)=>{
+            console.log(err)
             if(err) callback(500,"Internal Error");
             else callback(201,res);
         });
@@ -59,18 +59,21 @@ class PostManager {
     GetPosts(options,callback){
         let query;
         if(options){
-            if(options.category) query=this.#Model.find({_id:{"$in":options.category.Posts}})
+            if(options.title) query=this.#Model.find({title:{ "$regex": options.title, "$options": "i" }});
+            else if(options.category) query=this.#Model.find({category:options.category._id})
             else if(options.tag) query=this.#Model.find({tags:options.tag});
             else query=this.#Model.find({})
             if(options.sort) query.sort(options.sort);
             else query.sort("-date");
             if(options.limit) query.limit(options.limit);
             if(options.skip) query.skip(options.skip);
-        }else{
+        }
+        else{
             query=this.#Model.find({});
             callback=options;
         }
         query.select("-content")
+            .populate("category")
             .exec((err,res)=>{
                 if(err) callback(500,"Internal error");
                 else callback(200,res);

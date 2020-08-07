@@ -2,7 +2,8 @@ const mongoose =require("mongoose"),
     path = require("path"),
     fs=require("fs"),
     readFile= require('util').promisify(fs.readFile),
-    app=require("../app");
+    app=require("../app"),
+    PostManager=require("./PostManager");
 const statistics=mongoose.Schema({
     Total:{type:Number,default:0},
     LastMonth:[{type:Number,default:0}]
@@ -71,15 +72,13 @@ class WebSite {
                     res.locals.WebSite.Title=res.locals.WebSite.Name;
                     next();
                 })
-                app.use("/", require("../routes/index"));
                 switch (this.#Settings.Type) {
                     case "Blog":
                         return this.SetUpBlog();
                 }
             })//Web Site Type
-            .then(()=>{app.use("*",require("../routes/error"));})//Add the error page
             .then(()=>{console.log("WebSite Lunched correctly")})
-            .catch((reason => {console.log("WebSite did't lunch correctly ",reason)}));
+            .catch((reason => {console.log("WebSite didn't lunch correctly ",reason)}));
         this.LoadWebSiteDetails().then((file)=>{
             if(file){
                 this.#WebSiteDetails=file;
@@ -109,7 +108,18 @@ class WebSite {
 
     SetUpBlog() {
         return this.LoadJsonFile("../views/"+this.#WebSiteDetails.Template+"/Schema.json").then((data)=>{
-            app.set("Schema",data);
+            app.set("Schema", {path:this.#WebSiteDetails.Template+'/',...data.Structure});
+            let additional={};
+            data.Data.forEach(elm=>{
+                PostManager.GetPosts(elm,(status,res)=>{
+                    if(status===200) additional[elm.name]=res;
+                    else additional[elm.name]=[];
+                })
+            })
+            app.use(function (req,res,next){
+                res.locals.Additional=additional
+                next();
+            });
             app.use(require("../routes/BlogRouting"));
         })
     }
