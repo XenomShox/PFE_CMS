@@ -72,6 +72,8 @@ class WebSite {
                     res.locals.WebSite.Title=res.locals.WebSite.Name;
                     next();
                 })
+                app.use("/user", require("../routes/user"));
+                app.use("/message", require("../routes/message"));
                 switch (this.#Settings.Type) {
                     case "Blog":
                         return this.SetUpBlog();

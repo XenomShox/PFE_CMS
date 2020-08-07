@@ -1,29 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<title>Azzara Bootstrap 4 Admin Dashboard</title>
-	<meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
-	<link rel="icon" href="/Admin/Files/images/icon.ico" type="image/x-icon"/>
-	
-	<!-- Fonts and icons -->
-	<script src="/Admin/Files/javascripts/Assets/plugin/webfont/webfont.min.js"></script>
-	<script>
-		WebFont.load({
-			google: {"families":["Open+Sans:300,400,600,700"]},
-			custom: {"families":["Flaticon", "Font Awesome 5 Solid", "Font Awesome 5 Regular", "Font Awesome 5 Brands"], urls: ['/Admin/Files/stylesheets/Assets/fonts.css']},
-			active: function() {
-				sessionStorage.fonts = true;
-			}
-		});
-	</script>
-	
-	<!-- CSS Files -->
-	<link rel="stylesheet" href="/Admin/Files/stylesheets/Assets/bootstrap.min.css">
-	<link rel="stylesheet" href="/Admin/Files/stylesheets/Assets/azzara.min.css">
-	<!-- CSS Just for demo purpose, don't include it in your project -->
-	<link rel="stylesheet" href="/Admin/Files/stylesheets/Admin/index_az.css">
-</head>
+<% include ./Partials/Header %>
 <body data-background-color="dark">
 	<div class="wrapper">
 
@@ -37,13 +14,13 @@
 								<div class="card-header" style="background-image: url('../assets/img/blogpost.jpg')">
 									<div class="profile-picture">
 										<div class="avatar avatar-xl">
-											<img src=<%= currentUser.profileImage %> alt="..." class="avatar-img rounded-circle">
+											<img src=<%= user.profileImage %> alt="..." class="avatar-img rounded-circle">
 										</div>
 									</div>
 								</div>
 								<div class="card-body">
 									<div class="user-profile text-center">
-										<div class="name"><%= currentUser.username %></div>
+										<div class="name"><%= user.username %></div>
 										<div class="social-media">
 											<a class="btn btn-info btn-twitter btn-sm btn-link" href="#"> 
 												<span class="btn-label just-icon"><i class="flaticon-twitter"></i> </span>
@@ -92,13 +69,13 @@
 										<div class="col-md-6">
 											<div class="form-group form-group-default">
 												<label>Username</label>
-												<input type="text" class="form-control" name="username" placeholder="Username" value=<%= currentUser.username %>>
+												<input type="text" class="form-control" name="username" placeholder="Username" value=<%= user.username %>>
 											</div>
 										</div>
 										<div class="col-md-6">
 											<div class="form-group form-group-default">
 												<label>Email</label>
-												<input type="email" class="form-control" name="email" placeholder="Name" value=<%= currentUser.email %>>
+												<input type="email" class="form-control" name="email" placeholder="Name" value=<%= user.email %>>
 											</div>
 										</div>
 									</div>
@@ -106,20 +83,20 @@
 										<div class="col-md-4">
 											<div class="form-group form-group-default">
 												<label>First Name</label>
-												<input type="text" class="form-control" value=<%= currentUser.firstName %> name="firstName" placeholder="First Name">
+												<input type="text" class="form-control" value=<%= user.firstName %> name="firstName" placeholder="First Name">
 											</div>
 										</div>
 										<div class="col-md-4">
 											<div class="form-group form-group-default">
 												<label>Last Name</label>
-												<input type="text" class="form-control" value=<%= currentUser.lastName %> name="lastName" placeholder="Last Name">
+												<input type="text" class="form-control" value=<%= user.lastName %> name="lastName" placeholder="Last Name">
 											</div>
 										</div>
 										<div class="col-md-4">
 											<div class="form-group form-group-default">
-												<label>Birth Date: <%= `${currentUser.birthday.getFullYear()}-${currentUser.birthday.getMonth()}-${currentUser.birthday.getDate()}` %></label>
+												<label>Birth Date: <%= `${user.birthday.getFullYear()}-${user.birthday.getMonth()}-${user.birthday.getDate()}` %></label>
 												
-												<input type="date" class="form-control" id="datepicker" name="birthday" value=<%= `${currentUser.birthday.getFullYear()}-${currentUser.birthday.getMonth()}-${currentUser.birthday.getDate()}` %> placeholder="Birth Date">
+												<input type="date" class="form-control" id="datepicker" name="birthday" value=<%= `${user.birthday.getFullYear()}-${user.birthday.getMonth()}-${user.birthday.getDate()}` %> placeholder="Birth Date">
 											</div>
 										</div>
 									</div>
@@ -127,7 +104,7 @@
 										<div class="col-md-12">
 											<div class="form-group form-group-default">
 												<label>Phone</label>
-												<input type="text" class="form-control" value=<%= currentUser.phone %> name="phone" placeholder="Phone">
+												<input type="text" class="form-control" value=<%= user.phone %> name="phone" placeholder="Phone">
 											</div>
 										</div>
 									</div>
@@ -162,22 +139,7 @@
 		</div>
 
 	</div>
-	<!--   Core JS Files   -->
-	<script src="/Admin/Files/javascripts/Assets/core/jquery.3.2.1.min.js"></script>
-	<script src="/Admin/Files/javascripts/Assets/core/popper.min.js"></script>
-	<script src="/Admin/Files/javascripts/Assets/core/bootstrap.min.js"></script>
-	<!-- jQuery UI -->
-	<script src="/Admin/Files/javascripts/Assets/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
-	<script src="/Admin/Files/javascripts/Assets/plugin/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js"></script>
-	<!-- Moment JS -->
-	<script src="/Admin/Files/javascripts/Assets/plugin/moment/moment.min.js"></script>
-	<!-- Bootstrap Toggle -->
-	<script src="/Admin/Files/javascripts/Assets/js/plugin/bootstrap-toggle/bootstrap-toggle.min.js"></script>
-	<!-- jQuery Scrollbar -->
-	<script src="/Admin/Files/javascripts/Assets/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
-	<!-- Azzara JS -->
-	<script src="/Admin/Files/javascripts/Assets/ready.min.js"></script>
-	<!-- Azzara DEMO methods, don't include it in your project! -->
-	<script src="/Admin/Files/javascripts/Assets/setting-demo.js"></script>
+
 </body>
+<% include ./Partials/Footer.ejs %>
 </html>

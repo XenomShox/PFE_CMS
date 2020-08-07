@@ -86,8 +86,7 @@ app.route("/logout").get(userMethods.logout);
 
 app.use("/files", require("./routes/Files"));
 app.use("/Admin", require("./routes/Admin"));
-app.use("/user", require("./routes/user"));
-app.use("/message", require("./routes/message"));
+
 // </editor-fold>
 module.exports = app;
 const Website = require("./Classes/WebSite");
