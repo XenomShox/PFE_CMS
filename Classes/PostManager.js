@@ -59,7 +59,8 @@ class PostManager {
     GetPosts(options,callback){
         let query;
         if(options){
-            if(options.category) query=this.#Model.find({category:options.category._id})
+            if(options.title) query=this.#Model.find({title:{ "$regex": options.title, "$options": "i" }});
+            else if(options.category) query=this.#Model.find({category:options.category._id})
             else if(options.tag) query=this.#Model.find({tags:options.tag});
             else query=this.#Model.find({})
             if(options.sort) query.sort(options.sort);

@@ -10,10 +10,10 @@ router.get('/', function(req, res) {
     })
 });
 router.route('/Categories')
-    .get((req, res, next) => {
+    .get((req, res) => {
         res.redirect("/");
     })
-    .post((req, res, next) => {
+    .post((req, res) => {
         //verify if he is an admin
         CategoriesManager.CreateCategory({
             Slug:req.body.Slug,
@@ -26,7 +26,6 @@ router.route('/Categories/*')
     .all((req,res,next)=> {
         let {pathname,query}=require('url').parse(req.url,true);
         req.URL=decodeURI(pathname);
-        console.log(req.URL)
         req.query=query;
         CategoriesManager.GetCategory(req.URL,(status,category)=>{
             if(status===200){
@@ -35,7 +34,7 @@ router.route('/Categories/*')
             } else res.status(404).render(Schema.path+Schema.Error.path,{message:"Couldn't Find this Categories"});
         })
     } )
-    .get((req,res,next)=>{
+    .get((req,res)=>{
         if(req.query.post) PostHandler(req,res);  //post
         else if(req.query.create){
             res.locals.WebSite.Title+=" - Create Post"
@@ -43,13 +42,13 @@ router.route('/Categories/*')
         }
         else CategoryHandler(req,res);
     })
-    .post((req,res,next)=>{
+    .post((req,res)=>{
         if(res.locals.currentUser){
             req.body.tags=req.body.tags.split(" ")
             if( !(req.body.covers instanceof Array) ) req.body.covers=[req.body.covers];
             console.log(req.query.post)
             PostManager.CreatePost({...req.body,category:res.locals.Category["_id"],author:res.locals.currentUser["_id"]},(status,post)=>{
-                if(status===201) res.redirect(res.locals.Category.Slug);
+                if(status===201) res.redirect(res.locals.Category.Slug+"?post="+post._id);
                 else res.status(status).render(Schema.path+Schema.Error.path,{message:"Couldn't Create Post"});
             })
         }
@@ -57,7 +56,7 @@ router.route('/Categories/*')
     });
 /*----------------Tag System-----------------*/
 router.route("/tags/:tag")
-    .get((req, res, next) => {
+    .get((req, res) => {
         let {query}=require('url').parse(req.url,true);
         PostManager.GetPosts({tag:req.params.tag,...query},(status,Posts)=>{
             if(status===200)res.status(200).render(Schema.path+Schema.Tags.path,{Posts,tag:req.params.tag});
@@ -65,6 +64,29 @@ router.route("/tags/:tag")
         });
 
     })
+/*----------------Search System-----------------*/
+router.route("/search/")
+    .all((req, res, next) => {
+        let {pathname,query}=require('url').parse(req.url,true);
+        req.URL=decodeURI(pathname);
+        req.query=query;
+        next();
+    })
+    .get((req, res,next) => {
+        PostManager.GetPosts({
+            title:req.query.search,
+            sort:req.query.sort,
+            skip:(req.query.page-1)*10,//*page time limit
+            limit:10,
+            tag:req.query.tag,
+            category:req.query.category
+        },(status,Posts)=>{
+            if(status===200) res.status(200).render(Schema.path+Schema.Search.path,
+                {Posts,search:req.query.search || req.query.category || req.query.tag});
+            else next();
+        })
+    })
+
 /*---------------Categories------------------*/
 function CategoryHandler(req,res){
     let category=res.locals.Category;
@@ -90,7 +112,7 @@ function PostHandler(req,res) {
     })
 }
 /*-------------------Error-------------*/
-router.route("*").all((req, res, next) => {
+router.route("*").all((req, res) => {
     res.status(404).render(Schema.path+Schema.Error.path, {message: "Page Not Found"});
 })
 module.exports = router;

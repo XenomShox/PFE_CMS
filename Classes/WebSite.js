@@ -78,7 +78,7 @@ class WebSite {
                 }
             })//Web Site Type
             .then(()=>{console.log("WebSite Lunched correctly")})
-            .catch((reason => {console.log("WebSite did't lunch correctly ",reason)}));
+            .catch((reason => {console.log("WebSite didn't lunch correctly ",reason)}));
         this.LoadWebSiteDetails().then((file)=>{
             if(file){
                 this.#WebSiteDetails=file;

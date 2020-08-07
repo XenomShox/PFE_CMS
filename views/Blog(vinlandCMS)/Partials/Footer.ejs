@@ -1,6 +1,6 @@
 <footer>
     <div class="container row mx-auto pt-5">
-        <div id="AboutUs" class="col-md-4 p-md-4 d-flex flex-column">
+        <div id="AboutUs" class="col-md-7 p-md-4 d-flex flex-column">
             <a class="brand" href="/"><%= WebSite.Name %></a>
             <p><%= WebSite.Description%></p>
             <li class="nav-item d-flex">
@@ -9,7 +9,7 @@
                 <a class="nav-link mr-3 mx-lg-0" href="<%= WebSite.SocialMedia.Instagram.Url%>"><i class="fab fa-instagram"></i></a>
             </li>
         </div>
-        <div class="col-md-4 p-md-4">
+        <div class="col-md-5 p-md-4">
             <div class="Latest">
                 <h5 class="font-weight-bold mb-4">Popular Posts</h5>
                 <div class="Post d-flex flex-column">
@@ -20,28 +20,16 @@
                                 <div class="Comments"><%=post.comments.length%></div>
                             </a>
                             <div class="col ml-5 ml-lg-1">
-                                <a href="#" class="Category text-muted"><%=post.category.Name%></a>
+                                <a href="<%=post.category.Slug%>" class="Category text-muted"><%=post.category.Name%></a>
                                 <br>
-                                <a href="#" class="card-title"><%=post.title%></a>
+                                <a href="<%=post.category.Slug%>?post=<%=post._id%>" class="card-title"><%=post.title%></a>
                             </div>
                         </div>
                     <%})%>
                 </div>
             </div>
         </div>
-        <div class="col-md-4 p-md-4">
-            <div class="PTags">
-                <h5 class="font-weight-bold mb-4">All Tags</h5>
-                <div class="row">
-                    <a href="#" class="btn btn-outline-light">bike</a>
-                    <a href="#" class="btn btn-outline-light">building</a>
-                    <a href="#" class="btn btn-outline-light">camera</a>
-                    <a href="#" class="btn btn-outline-light">craft</a>
-                    <a href="#" class="btn btn-outline-light">gear</a>
-                    <a href="#" class="btn btn-outline-light">girl</a>
-                </div>
-            </div>
-        </div>
+
     </div>
     <div class="Theme d-flex w-100">
         <h6 class="m-auto">Vinland CMS Theme</h6>

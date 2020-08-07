@@ -1,29 +1,17 @@
 <!DOCTYPE html>
 <html>
-<% include ../Partials/Heads/Head1 %>
+<% include ./Partials/Header.ejs %>
 <body class="Category">
 <header class="position-relative">
     <div class="container d-flex flex-column">
-        <% include ../Partials/Navs/Nav2 %>
+        <% include ./Partials/Navbar-light.ejs %>
     </div>
 </header>
 <div class="Content">
     <div style="background-color: #fbfbfb">
         <div class="container  pt-4">
             <div class="row px-3">
-                <h3 class="font-weight-bold">Category: <%=Category.Name%></h3>
-                <ol class="breadcrumb ml-auto pt-2">
-                    <li class="breadcrumb-item active">
-                        <a href="/"><i class="fas fa-home"></i></a>
-                    </li>
-                    <%  let Slugs=Category.Slug.split("/"),sslug="";
-                        for(let i=1 ;i<Slugs.length;i++){
-                            sslug+="/"+Slugs[i]; %>
-                        <li class="breadcrumb-item">
-                            <a href="<%=sslug%>" class="font-weight-bold"><%=Slugs[i]%></a>
-                        </li>
-                    <%  }%>
-                </ol>
+                <h3 class="font-weight-bold">Search: <%=search%></h3>
             </div>
         </div>
     </div>
@@ -34,28 +22,27 @@
                     <label class="input-group-text" for="form">Sort</label>
                 </div>
                 <select class="custom-select" id="form" onchange="location = this.value;">
-                    <option value="<%= Category.Slug%>?sort=title">Title A-Z</option>
-                    <option value="<%= Category.Slug%>?sort=-title">Title Z-A</option>
-                    <option value="<%= Category.Slug%>?sort=date">Oldest</option>
-                    <option value="<%= Category.Slug%>?sort=-date" selected>Newest</option>
-                    <option value="<%= Category.Slug%>?sort=rating.likes">Most Liked</option>
-                    <option value="<%= Category.Slug%>?sort=rating.dislikes">Most Disliked</option>
+                    <option value="/search/?search=<%=search%>&sort=title">Title A-Z</option>
+                    <option value="/search/?search=<%=search%>&sort=-title">Title Z-A</option>
+                    <option value="/search/?search=<%=search%>&sort=date">Oldest</option>
+                    <option value="/search/?search=<%=search%>&sort=-date" selected>Newest</option>
+                    <option value="/search/?search=<%=search%>&sort=rating.likes">Most Liked</option>
+                    <option value="/search/?search=<%=search%>&sort=rating.dislikes">Most Disliked</option>
                 </select>
             </div>
-            <a class="btn btn-success mr-5 my-3" href="<%= Category.Slug%>?create=true"> <i class="far fa-edit"></i><span class="ml-1">Write an article</span></a>
         </div>
         <div class="Layout row mt-3">
             <% if(Posts.length>0){%>
-                <% include ../Partials/Contents/Content1 %>
-                <% include ../Partials/SideBars/SideBar1 %>
+                <% include ./Partials/Posts.ejs %>
+                <% include ./Partials/SideBar1.ejs %>
             <%}else{%>
                 <h1 class="text-center my-5 mx-auto">There is no Post yet.</h1>
-                <% include ../Partials/SideBars/SideBar2 %>
+                <% include ./Partials/SideBar2.ejs %>
             <%}%>
         </div>
     </div>
 </div>
-<% include ../Partials/Footers/Footer1.ejs %>
+<% include ./Partials/Footer.ejs %>
 
 </body>
 </html>
