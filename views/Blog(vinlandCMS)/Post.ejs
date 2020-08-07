@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<% include ../Partials/Heads/Head1 %>
+<body class="Category">
+<header class="position-relative">
+    <div class="container d-flex flex-column">
+        <% include ../Partials/Navs/Nav2 %>
+    </div>
+</header>
+<div class="Content">
+    <div style="background-color: #fbfbfb">
+        <div class="container  pt-4">
+            <div class="row px-3">
+                <h4 class="font-weight-bold"><%=Category.Name%> Post</h4>
+                <ol class="breadcrumb ml-auto pt-0">
+                    <li class="breadcrumb-item active">
+                        <a href="/"><i class="fas fa-home"></i></a>
+                    </li>
+                    <%
+                    let Slugs=Category.Slug.split("/"),sslug="/Categories";
+                    for(let i=0 ;i<Slugs.length;i++){
+                        sslug+="/"+Slugs[i];
+                    %>
+                    <li class="breadcrumb-item">
+                        <a href="<%=sslug%>" class="font-weight-bold"><%=Slugs[i]%></a>
+                    </li>
+                    <%}
+                    %>
+                    <li class="breadcrumb-item ">
+                        <a href="" class="font-weight-bold"><%=Post.title%></a>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="Layout row mt-3">
+            <% include ../Partials/PostsContents/PostContent1.ejs %>
+            <% include ../Partials/SideBars/SideBar1 %>
+        </div>
+    </div>
+</div>
+<% include ../Partials/Footers/Footer1.ejs %>
+
+</body>
+</html>

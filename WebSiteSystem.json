@@ -5,6 +5,7 @@
     "Description": "Pellentesque placerat tincidunt urna, vitae feugiat magna vestibulum non. Mauris ut sagittis est. Pellentesque a felis est. Duis in risus metus. Cras felis ante, sodales eget pretium eu, hendrerit at metus. Maecenas aliquam dictum sapien id ornare.",
     "Keywords": ["Web","CMS"],
     "Licence": "All CopyRights ....",
+    "Template":"Blog(vinlandCMS)",
     "Styles": {
         "URLS": [
             "/Admin/Files/stylesheets/Assets/bootstrap.min.css",

@@ -27,15 +27,12 @@
                     data-toggle="dropdown"
                     aria-haspopup="true"
                     aria-expanded="false"
+                    >categories</a
                 >
-                    categories
-                </a>
                 <div class="dropdown-menu" aria-labelledby="CategoriesDropdown">
                     <% function DropDown(elm) {%> <% elm.forEach( category => {
                     %> <%if(!category.SubClass){%>
-                    <a
-                        class="dropdown-item"
-                        href="/Categories/<%= category.Slug %>"
+                    <a class="dropdown-item" href="<%= category.Slug %>"
                         ><%= category.Name %></a
                     >
                     <%} else {%>
@@ -92,6 +89,9 @@
                     <i class="fa fa-user"></i>
                 </a>
                 <div class="dropdown-menu" aria-labelledby="UserDropdown">
+                    <% if (!currentUser) { %>
+                    <a class="dropdown-item" href="/user/login">Log In</a>
+                    <% } else { %>
                     <div
                         class="dropdown-item d-flex justify-content-between align-items-center"
                     >
@@ -100,10 +100,16 @@
                             src="<%= currentUser.profileImage %>"
                             alt=""
                         />
-                        <h2><%= currentUser.username %></h2>
+                        <div>
+                            <p class="m-0 p-0"><%= currentUser.username %></p>
+                            <p style="font-size: 0.8rem;" class="m-0 p-0">
+                                <%= currentUser.email %>
+                            </p>
+                        </div>
                     </div>
                     <a class="dropdown-item" href="/user/Profile">Profile</a>
-                    <a class="dropdown-item" href="/user/logout">SignOut</a>
+                    <a class="dropdown-item" href="/logout">Log Out</a>
+                    <% } %>
                 </div>
             </li>
         </ul>

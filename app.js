@@ -67,6 +67,22 @@ mongoose.set("debug", true);
 app.use(require("morgan")("tiny"));
 // </editor-fold>
 // <editor-fold desc="Routes">
+
+const userMethods = require("./handler/user");
+app.route("/login")
+    .get(userMethods.renderLogin)
+    .post(
+        passport.authenticate("local", {
+            failureRedirect: "/login",
+            failureFlash: true,
+        }),
+        (req, res) => {
+            console.log(req.body.to);
+            res.redirect(req.body.to);
+        }
+    );
+app.route("/logout").get(userMethods.logout);
+
 app.use("/files", require("./routes/Files"));
 app.use("/Admin", require("./routes/Admin"));
 app.use("/user", require("./routes/user"));

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link
+            rel="stylesheet"
+            href="/Admin/Files/stylesheets/Assets/bootstrap.min.css"
+        />
+        <title>Messages</title>
+    </head>
+    <body>
+        <div class="container">
+            <ul class="list-group w-50">
+                <% contacts.forEach(contact => { %>
+                <li class="list-group-item d-flex">
+                    <div>
+                        <img
+                            src="<%= contact.profileImage %>"
+                            alt="profile image"
+                            height="80"
+                            class="rounded mr-5"
+                        />
+                    </div>
+                    <h4>
+                        <a href="/user/chat/<%= contact.id %>/messages"
+                            ><%= contact.username %></a
+                        >
+                    </h4>
+                </li>
+                <% }) %>
+            </ul>
+        </div>
+    </body>
+</html>
