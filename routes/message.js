@@ -15,6 +15,6 @@ router.get("/:id", getMessage);
 
 router.delete("/:id", deleteMessage);
 
-router.route("/add/:user1/:user2").post(addMessage);
+router.route("/add/:sender/:receiver").post(addMessage);
 
 module.exports = router;

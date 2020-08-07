@@ -109,7 +109,7 @@ function PostHandler(req,res) {
             res.locals.WebSite.Title+=" - "+Post;
             res.render(Schema.path+Schema.Error.path,{message:Post});
         }
-    })
+    });
 }
 /*-------------------Error-------------*/
 router.route("*").all((req, res) => {

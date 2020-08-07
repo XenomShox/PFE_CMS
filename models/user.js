@@ -46,6 +46,26 @@ let userSchema = new mongoose.Schema({
             ref: "Message",
         },
     ],
+    contacts: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+        },
+    ],
+    // chat: [
+    //     {
+    //         partner: {
+    //             type: mongoose.Schema.Types.ObjectId,
+    //             ref: "User",
+    //         },
+    //         messages: [
+    //             {
+    //                 type: mongoose.Schema.Types.ObjectId,
+    //                 ref: "Message",
+    //             },
+    //         ],
+    //     },
+    // ],
 });
 
 userSchema.pre("save", async function (next) {

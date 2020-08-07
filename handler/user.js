@@ -74,7 +74,7 @@ class UserMethods {
     };
 
     profile = function (req, res, next) {
-        res.render("Admin/userProfile");
+        res.render("Blog(vinlandCMS)/Profile");
     };
 }
 
