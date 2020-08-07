@@ -2,7 +2,7 @@ exports.isLoggedIn = function (req, res, next) {
     if (req.isAuthenticated()) return next();
     console.log("You must be Loged in to do that");
     req.flash("error", "Please Login First");
-    res.redirect("/user/login");
+    res.redirect("/login");
 };
 
 exports.isAdmin = function (req, res, next) {

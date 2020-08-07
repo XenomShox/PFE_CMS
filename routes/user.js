@@ -23,7 +23,7 @@ const { isLoggedIn } = require("../middlewares/middleware");
 
 router.get("/", userMethods.getUsers);
 
-router.post("/signup", userMethods.createUser);
+// router.post("/signup", userMethods.createUser);
 
 // router
 //     .route("/login")
@@ -43,7 +43,6 @@ router.post("/signup", userMethods.createUser);
 
 router.route("/ban/:user_id").put(userMethods.banUser);
 router.route("/unban/:user_id").put(userMethods.unbanUser);
-router.route("/profile").get(isLoggedIn, userMethods.profile);
 router.route("/chat").get(async (req, res, next) => {
     try {
         let loggedUser = await User.findById(req.user._id).populate(
@@ -61,7 +60,7 @@ router.route("/chat").get(async (req, res, next) => {
         next(err);
     }
 });
-router.route("/chat/:partner_id/messages").get(async (req, res, next) => {
+router.route("/chat/:partner_id").get(async (req, res, next) => {
     try {
         const { partner_id } = req.params;
 
@@ -90,5 +89,6 @@ router.route("/chat/:partner_id/messages").get(async (req, res, next) => {
         next(err);
     }
 });
+router.route("/:user_id").get(userMethods.profile);
 
 module.exports = router;

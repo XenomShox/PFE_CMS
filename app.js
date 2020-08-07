@@ -69,6 +69,7 @@ app.use(require("morgan")("tiny"));
 // <editor-fold desc="Routes">
 
 const userMethods = require("./handler/user");
+app.post("/signup", userMethods.createUser);
 app.route("/login")
     .get(userMethods.renderLogin)
     .post(

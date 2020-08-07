@@ -73,8 +73,13 @@ class UserMethods {
         }
     };
 
-    profile = function (req, res, next) {
-        res.render("Blog(vinlandCMS)/Profile");
+    profile = async function (req, res, next) {
+        try{
+            let user = await User.findById(req.params.id)
+            res.render("Blog(vinlandCMS)/Profile", {user});
+        }catch(err){
+            next(err)
+        }
     };
 }
 
