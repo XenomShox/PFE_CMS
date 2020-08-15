@@ -51,8 +51,9 @@ class UserMethods {
     // PUT - /user/ban/:user_id/:days
     banUser = async function (req, res, next) {
         try {
-            days = Number(req.body.days);
+            let days = Number(req.body.days);
             let user = await User.findById(req.params.user_id);
+            console.log(`user found: ${user}`)
             user.setBan(days);
             await user.save();
             res.status(200).json(user.banned);

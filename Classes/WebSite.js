@@ -21,6 +21,7 @@ class WebSite {
     #Settings;
     #WebSiteDetails;
     #WebSiteCategories;
+    #Roles;
     /*----------------constructor------------*/
     constructor() {
         this.LoadWebSiteSettings().then(file=>{
@@ -45,6 +46,12 @@ class WebSite {
                 else return null;
             })
             .catch(() => { return undefined;});
+    }
+    updateRoles() {
+        require('../models/role').find({},(err, res)=>{
+            if(err) console.error(err);
+            else this.Roles = res;
+        });
     }
     StartUp(){
         console.log("Lunching The WebSite");
@@ -72,8 +79,10 @@ class WebSite {
                     res.locals.WebSite.Title=res.locals.WebSite.Name;
                     next();
                 })
+                this.updateRoles();
                 app.use("/user", require("../routes/user"));
                 app.use("/message", require("../routes/message"));
+                app.use("/role", require("../routes/roles"));
                 switch (this.#Settings.Type) {
                     case "Blog":
                         return this.SetUpBlog();

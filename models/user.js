@@ -20,10 +20,12 @@ let userSchema = new mongoose.Schema({
         unique: true,
         required: true,
     },
-    role: {
-        type: String,
-        enum: ["user", "admin"],
-    },
+    roles: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Role",
+        },
+    ],
     password: {
         type: String,
     },
@@ -52,20 +54,6 @@ let userSchema = new mongoose.Schema({
             ref: "User",
         },
     ],
-    // chat: [
-    //     {
-    //         partner: {
-    //             type: mongoose.Schema.Types.ObjectId,
-    //             ref: "User",
-    //         },
-    //         messages: [
-    //             {
-    //                 type: mongoose.Schema.Types.ObjectId,
-    //                 ref: "Message",
-    //             },
-    //         ],
-    //     },
-    // ],
 });
 
 userSchema.pre("save", async function (next) {
@@ -75,15 +63,12 @@ userSchema.pre("save", async function (next) {
                 this.profileImage =
                     "https://www.sackettwaconia.com/wp-content/uploads/default-profile.png";
 
-            if (!this.role || this.role === "admin") this.role = "user";
+            // if (!this.role || this.role === "admin") this.role = "user";
 
             this.banned.isBanned = false;
             this.banned.dateOfBan = undefined;
             this.banned.duration = undefined;
         }
-
-        if (this.isNew && (!this.role || this.role === "admin"))
-            this.role = "user";
 
         return next();
     } catch (err) {
@@ -100,6 +85,7 @@ userSchema.methods.setBan = function (days) {
         this.banned.isBanned = true;
         this.banned.dateOfBan = new Date();
         this.banned.duration = days;
+        console.log("user banned")
     } else {
         console.log("user already banned");
     }
