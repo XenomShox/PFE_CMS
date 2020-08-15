@@ -96,20 +96,37 @@
 
                         let form = $(`<form></form>`).submit(function (e) {
                             e.preventDefault();
-                            var values = {};
+                            let permsKeys = [
+                                "owner",
+                                "admin_privillage",
+                                "create_post",
+                                "delete_post",
+                            ];
+                            let values = {};
                             $.each($(this).serializeArray(), function (
                                 i,
                                 field
                             ) {
                                 values[field.name] = field.value;
                             });
-                            console.log(values);
+                            let { category, name, ...perms } = values;
+                            Object.keys(perms).forEach((key) => {
+                                perms[key] = Boolean(perms[key]);
+                            });
+                            permsKeys.forEach((key) => {
+                                perms[key] = !!perms[key] || false;
+                            });
+                            console.log(perms);
                             $.ajax({
                                 contentType: "application/json",
                                 url: `/role/${_id}`,
                                 method: "PUT",
                                 dataType: "json",
-                                data: JSON.stringify(values),
+                                data: JSON.stringify({
+                                    category,
+                                    name,
+                                    ...perms,
+                                }),
                                 success: function (role) {
                                     roleLi.find("span").text(values.name);
                                     console.log(role);
