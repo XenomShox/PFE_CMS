@@ -21,7 +21,7 @@ class WebSite {
     #Settings;
     #WebSiteDetails;
     #WebSiteCategories;
-    #Roles;
+    // #Roles;
     /*----------------constructor------------*/
     constructor() {
         this.LoadWebSiteSettings().then(file=>{
@@ -47,12 +47,12 @@ class WebSite {
             })
             .catch(() => { return undefined;});
     }
-    updateRoles() {
-        require('../models/role').find({},(err, res)=>{
-            if(err) console.error(err);
-            else this.Roles = res;
-        });
-    }
+    // updateRoles() {
+    //     require('../models/role').find({},(err, res)=>{
+    //         if(err) console.error(err);
+    //         else this.Roles = res;
+    //     });
+    // }
     StartUp(){
         console.log("Lunching The WebSite");
         mongoose.connect(this.#Settings.DataBase.URI, {
@@ -79,7 +79,7 @@ class WebSite {
                     res.locals.WebSite.Title=res.locals.WebSite.Name;
                     next();
                 })
-                this.updateRoles();
+                
                 app.use("/user", require("../routes/user"));
                 app.use("/message", require("../routes/message"));
                 app.use("/role", require("../routes/roles"));

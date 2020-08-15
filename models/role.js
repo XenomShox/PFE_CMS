@@ -6,21 +6,20 @@ roleSchema = new mongoose.Schema({
         type: String,
         max: 30,
         required: true,
-        unique: true,
     },
     category: {
         type: String,
         required: true,
-    },
-    create_post: {
-        type: Boolean,
-        default: false,
     },
     owner: {
         type: Boolean,
         default: false,
     },
     admin_privillage: {
+        type: Boolean,
+        default: false,
+    },
+    create_post: {
         type: Boolean,
         default: false,
     },

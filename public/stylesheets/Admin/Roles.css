@@ -1,0 +1,58 @@
+div.roles {
+    width: 25%;
+}
+
+div.roles li {
+    transition: all 150ms ease-in-out;
+}
+
+div.roles li:hover {
+    cursor: pointer;
+    background-color: #6059ca;
+}
+
+div.roles li.role-permission-button i {
+    transition: color 150ms ease-in-out;
+    opacity: 0;
+}
+
+div.roles li.role-permission-button:hover i {
+    opacity: 1;
+}
+
+div.roles i.fa-trash-alt:hover {
+    color: rgb(245, 82, 60);
+}
+
+ul {
+    list-style-type: none;
+}
+
+li {
+    text-transform: capitalize;
+    margin: 10px 0;
+}
+
+hr {
+    background-color: rgba(150, 150, 150, 0.445);
+}
+
+li.add-role-button {
+    border-bottom: 1px solid rgba(169, 175, 187, 0.82);
+    border-bottom-left-radius: 40%;
+    border-bottom-right-radius: 40%;
+}
+
+/* Permissions Section */
+
+div.role-permission {
+    width: 60%;
+}
+div.role-permission-list label,
+div.role-permission-list input {
+    color: rgba(169, 175, 187, 0.82);
+}
+
+div.fml h4 {
+    text-transform: capitalize;
+}
