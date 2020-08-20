@@ -239,7 +239,6 @@
                 notifScrollbar.scrollbar();
             }
 
-            $('.scroll-bar').draggable();
 
             var toggle_sidebar = false,
                 toggle_topbar = false,
@@ -396,9 +395,7 @@
             }
         }
 
-        $('.input-file-image input[type="file"').change(function () {
-            readURL(this);
-        });
+        $('.input-file-image input[type="file"]').change(function () {readURL(this);});
 
         // Show Password
 

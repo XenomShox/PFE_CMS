@@ -14,6 +14,10 @@ app.set('port', port);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
+process.on('exit', (code) => {
+  if(code===100) console.log("WebSiteDetails not found");
+  else console.log(`About to exit with code: ${code}`);
+});
 //Normalize a port into a number, string, or false.
 function normalizePort(val) {
   let port = parseInt(val, 10);

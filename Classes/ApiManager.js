@@ -1,4 +1,3 @@
-const mongoose = require("mongoose");
 module.exports = class ApiManager {
     /*----------------Attributes------------*/
     static Schemas = require("./Schemas");

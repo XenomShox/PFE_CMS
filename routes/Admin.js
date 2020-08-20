@@ -1,25 +1,30 @@
-var express = require('express');
-var router = express.Router();
-const { isLoggedIn ,isAdmin} = require("../middlewares/middleware");
+const router = require('express').Router(),
+    { isLoggedIn ,isAdmin} = require("../middlewares/middleware"),
+    WebSite=require("../Classes/WebSite");
 
 router.all('*',isLoggedIn,isAdmin);
 router.route("/")
-    .all((req,res,next)=>{
-        req.URL=decodeURI(require('url').parse(req.url).pathname);
-        next();
-    })
     .get((req, res )=> {
         res.render("Admin/index",{url:"/Admin/dashboard"});
     });
 router.route('/:Admin')
-    .get(function(req,res,next){
+    .all((req,res,next)=>{
+        req.URL=decodeURI(require('url').parse(req.url).pathname);
+        next();
+    })
+    .get((req,res)=>{
         if(req.query.f!==undefined)
             res.render("Admin/"+req.params.Admin,(err,html)=>{
-                if(err) res.render("Admin/error",{pageName:req.params.Admin,path:req.URL});
+                if(err) res.status(404).render("Admin/error",{pageName:req.params.Admin,path:req.URL});
                 else res.send(html);
             });
-        else
-            res.render("Admin/index",{url:req.URL});
-    });
+        else res.render("Admin/index",{url:"/Admin"+req.URL});
+
+    })
+    .post((req,res)=>{
+        WebSite.SaveDetails(req.body,(status,message)=>{
+            res.status(status).send(message);
+        })
+    })
 
 module.exports = router;

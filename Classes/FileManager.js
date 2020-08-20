@@ -2,13 +2,16 @@ const fs=require('fs'),
     path = require('path'),
     util = require('util'),
     Mfs={
-       stat:util.promisify(fs.stat),
-       readdir:util.promisify(fs.readdir),
-       rmdir:util.promisify(fs.rmdir),
-       mkdir:util.promisify(fs.mkdir),
-       unlink:util.promisify(fs.unlink),
-       copy:util.promisify(fs.copyFile),
-       rename:util.promisify(fs.rename)
+        stat:util.promisify(fs.stat),
+        readdir:util.promisify(fs.readdir),
+        rmdir:util.promisify(fs.rmdir),
+        mkdir:util.promisify(fs.mkdir),
+        unlink:util.promisify(fs.unlink),
+        copy:util.promisify(fs.copyFile),
+        rename:util.promisify(fs.rename),
+        readFile:util.promisify(fs.readFile),
+        exists:util.promisify(fs.exists),
+        writeFile:util.promisify(fs.writeFile)
     };
 
 
@@ -16,9 +19,50 @@ module.exports = class FileManager {
     /*----------------Attributes------------*/
    static Path="../files";
     /*------------------Methods-------------*/
+    static async UploadFile(Path,File){
+        return Mfs.readFile(File.path)
+            .then(data=>{
+                console.log(path.join(__dirname, FileManager.Path + Path +File.name));
+                return Mfs.exists(path.join(__dirname, FileManager.Path + Path +File.name))
+                    .then(exist=>{
+                        if(!exist) return Mfs.writeFile(path.join(__dirname, FileManager.Path + Path +File.name),data);
+                        else {
+                            let extension=File.name.match(/(.*)(\.[^.]+)$/)
+                            if(extension!==null) {
+                                File.name=extension[1]+(new Date()).getTime()+extension[2];
+                                return FileManager.UploadFile(Path,File);
+                            }
+                        }
+                    })
+            })
+            .then(()=>{
+                console.log(File.name);
+                return [200,File.name+" Uploaded Successfully"]
+            })
+            .catch(reason => {
+                console.log(reason);
+                return [400,File.name+" "+reason.message];
+            })
+    }
+    static UploadFiles(multiple,Path,Files,callback){
+        Mfs.readdir(path.join(__dirname, FileManager.Path + Path))
+            .catch(()=>{ return Mfs.mkdir(path.join(__dirname,FileManager.Path+Path)) })
+            .then(()=>{
+                if(multiple){
+                    let promises=[];
+                    Files.forEach(file=>{ promises.push( FileManager.UploadFile(Path,file) );});
+                    Promise.all(promises)
+                        .then((data)=>{callback(200,data)})
+                        .catch(reason => {callback(400,reason)});
+                }
+                else FileManager.UploadFile(Path,Files)
+                    .then(result=>{callback(result[0],result[1])})
+                    .catch(reason => { console.log(reason);callback(400,[Files.name,reason])});
+            })
+    }
    static GetFileType(FileName){
-      let ext=FileName.match(/[\.]([^\.]+$)/);
-      if(ext!=null){
+      let ext=FileName.match(/[.]([^.]+$)/);
+      if(ext!==null){
           ext=ext[1].toLowerCase();
           switch (ext) {
               case "swf":return {type: "flash",icon:"fab fa-foursquare",extension: ext}
@@ -64,7 +108,7 @@ module.exports = class FileManager {
               //Word
               case "doc":case "docx": return {type: 'word',icon: 'fas fa-file-word',extension:ext};
               case "pdf": return {type: "Pdf file",icon: "fas fa-file-pdf",extension:ext} //PDF
-              case "rtf": case "txt": case "tex": case "wpd": case "odt": return {type: "Text File",icon: "fas fa-file-alt",extension:ext};//Text File
+              case "rtf": case "txt": case "tex": case "wpd": case "odt": return {type: "Text",icon: "fas fa-file-alt",extension:ext};//Text File
               //PowerPoint
               case "key": case "odp": case "ppt":case "pps":case "pptx": return {type: "Power-Point",icon: "fas fa-file-powerpoint",extension:ext};
           }
@@ -72,7 +116,7 @@ module.exports = class FileManager {
       return {type:"file",icon:"fas fa-file"};
    }
    static GetFolder(Path="",callback){
-      Mfs.readdir(path.join(__dirname, FileManager.Path + Path),)
+      Mfs.readdir(path.join(__dirname, FileManager.Path + Path))
           .then((res)=>{
             let result=[];
             res.forEach(el=>{
@@ -102,7 +146,7 @@ module.exports = class FileManager {
                 Created:res.birthtime
              };
           })
-          .catch(err=>{
+          .catch(()=>{
              return {
                 Url: Path + '/' + file,
                 Name: file,
@@ -130,7 +174,7 @@ module.exports = class FileManager {
           })
    }
    static NewFolder(Path,FolderName,callback){
-      Mfs.mkdir(path.join(__dirname,FileManager.Path+Path+"/"+FolderName))
+      return Mfs.mkdir(path.join(__dirname,FileManager.Path+Path+"/"+FolderName))
           .then(()=>{ callback(201,"Folder Created successfully");})
           .catch(err=>{ callback(500,"Couldn't Create Folder :"+err);});
    }

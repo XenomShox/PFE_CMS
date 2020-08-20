@@ -1,9 +1,13 @@
 let router = require('express').Router(),
     FilesManager= require('../Classes/FileManager'),
     multer=require("multer"),
+    formidable=require("formidable"),
+    { isLoggedIn ,isAdmin} = require("../middlewares/middleware"),
     upload=multer({storage:  multer.diskStorage({
             destination: function (req, file, cb) {
-                req.FilePath="./files"+req.URL;
+                if(req.params.UserId)req.FilePath = "./files"+req.params.UserId;
+                else if(req.URL) req.FilePath="./files"+req.URL;
+                else req.FilePath="./files/"
                 cb(null,req.FilePath);
             },
             filename: function (req, file, cb) {
@@ -13,11 +17,34 @@ let router = require('express').Router(),
             }
         })
     });
-router.route('/*')
-    .all((req,res,next)=>{
-        req.URL=decodeURI(require('url').parse(req.url).pathname);
-        next();
+
+router.all("*",isLoggedIn,(req,res,next)=>{
+    req.URL=decodeURI(require('url').parse(req.url).pathname);
+    next();
+});
+router.route("/:UserId")
+    .get((req, res, next) => {
+        if(req.params.UserId===req.user._id.toString())
+            FilesManager.GetFolder("/"+req.params.UserId,(status,result)=>{
+                res.status(status).send(result);
+            });
+        else next();
     })
+    .post( (req,res,next)=>{
+        if(req.params.UserId===req.user._id.toString()) {
+            const form = formidable({ multiples: true });
+            form.parse(req, (err, fields, files) => {
+                if (err || !files["file"]) return res.status(401).send("Bad Request");
+                FilesManager.UploadFiles((files["file"] instanceof Array),"/"+req.params.UserId+"/",files["file"],
+                    (status,result)=>{
+                        res.status(status).send(result);
+                    });
+            });
+        }
+        else next();
+    });
+router.route('/*')
+    .all(isAdmin)
     .get((req,res)=>{
         let callback=req.query.treeView==='true'?FilesManager.GetFilesTree:FilesManager.GetFolder;
         callback(req.URL==="/"?"":req.URL,(status,result)=>{
@@ -25,20 +52,16 @@ router.route('/*')
         });
     })
     .post((req,res,next)=> {
-        if(req.body.NewFolder) FilesManager.NewFolder(req.URL,req.body.NewFolder,(status,result)=>{
-            res.status(status).send(result);
-        });
+        if(req.body.NewFolder) FilesManager.NewFolder(req.URL,req.body.NewFolder,(status,result)=>{ res.status(status).send(result); });
         else{
-            req.on('close', function (err){
-                if(!req.file) FilesManager.DeleteFile(req.FilePath,req.FileName);
+            formidable({ multiples: true }).parse(req, (err, fields, files) => {
+                if (err || !files["file"]) return res.status(401).send("Bad Request");
+                FilesManager.UploadFiles((files["file"] instanceof Array),req.URL+"/",files["file"],
+                    (status,result)=>{
+                        res.status(status).send(result);
+                    });
             });
-            next();
         }
-    },
-        upload.single("file"),
-        (req,res)=>{
-        if(req.file) res.status(200).send("Good Request");
-        else res.status(406).send("Bad Request");
     })
     .put((req,res)=>{
         if(req.body.Mode) {

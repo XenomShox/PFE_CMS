@@ -199,7 +199,7 @@
                 <div class="dropdown-user-scroll scrollbar-outer">
                   <li>
                     <div class="user-box">
-                      <div class="avatar-lg"><img src=<%= currentUser.profileImage %> alt="image profile" class="avatar-img rounded"></div>
+                      <div class="avatar-lg"><img src=<%= currentUser.profileImage %> alt="image-profile" class="avatar-img rounded"></div>
                       <div class="u-text">
                         <h4><%= currentUser.username %></h4>
                         <p class="text-muted"><%= currentUser.email %></p><a href="/user/<%= currentUser.id %>" class="btn btn-xs btn-secondary btn-sm">View Profile</a>
@@ -323,6 +323,43 @@
                 <p>Files Manager</p>
               </a>
             </li>
+            <li class="nav-item">
+              <a data-toggle="collapse" href="#WebSiteSettings" >
+                <i class="fas fa-cog"></i>
+                <p>WebSite Settings</p>
+                <span class="caret"></span>
+              </a>
+              <div class="collapse" id="WebSiteSettings">
+                <ul class="nav nav-collapse">
+                  <li>
+                    <a href="#"  loading-Link="/Admin/General">
+                      <span class="sub-item">General</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#"  loading-Link="/Admin/DataBaseSettings">
+                      <span class="sub-item">DataBase</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#"  loading-Link="/Admin/Writing">
+                      <span class="sub-item">Writing</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#"  loading-Link="/Admin/Reading">
+                      <span class="sub-item">Reading</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#"  loading-Link="/Admin/Templates">
+                      <span class="sub-item">DataBase</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </li>
+
           </ul>
         </div>
       </div>

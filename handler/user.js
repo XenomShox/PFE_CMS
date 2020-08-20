@@ -51,7 +51,7 @@ class UserMethods {
     // PUT - /user/ban/:user_id/:days
     banUser = async function (req, res, next) {
         try {
-            days = Number(req.body.days);
+            var days = Number(req.body.days);
             let user = await User.findById(req.params.user_id);
             user.setBan(days);
             await user.save();
@@ -75,8 +75,7 @@ class UserMethods {
 
     profile = async function (req, res) {
         let user = await User.findById(req.params.user_id)
-        console.log(user)
-        if(user)res.render("Blog(vinlandCMS)/Profile", {user});
+        if(user) res.render("Blog(vinlandCMS)/Profile", {user});
         else res.redirect("/");
     };
 }

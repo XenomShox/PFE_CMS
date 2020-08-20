@@ -13,9 +13,9 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 // </editor-fold>
 // <editor-fold desc="Files Routing">
-app.use("/Admin/files", express.static(path.join(__dirname, "public"))); //CMS Files
-app.use("/Admin/files/*", (req, res) => res.status(404).send("Not Found")); // Files Not Found in Admin
-app.use("/files", express.static(path.join(__dirname, "files"))); //Files
+app.use('/Admin/files', express.static(path.join(__dirname, "public"))); //CMS Files
+app.use('/Admin/files/*', (req, res) => {res.status(404).send("Not Found")}); // Files Not Found in Admin
+app.use('/files', express.static(path.join(__dirname, 'files'))); //Files
 //</editor-fold>
 // <editor-fold desc="User Setup">
 const User = require("./models/user");
@@ -25,17 +25,12 @@ const passport = require("passport"),
     { stratV2 } = require("./handler/strategy");
 // </editor-fold>
 // <editor-fold desc="serialization of password and user">
-app.use(
-    require("express-session")({
-        secret: process.env.SECRET_KEY,
-        resave: false,
-        saveUninitialized: false,
-    })
-);
-app.use(passport.initialize());
-app.use(passport.session());
-// passport.use(new LocalStrategy(customLocalStrat));
-passport.use(new LocalStrategy(stratV2));
+let expressSession = require("express-session")({secret: process.env.SECRET_KEY, resave: false, saveUninitialized: false}),
+    strategy = new LocalStrategy({},stratV2);
+app.use(expressSession);
+app.use(passport.initialize({}));
+app.use(passport.session({}));
+passport.use("Vinland Strategy",strategy);
 
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
@@ -72,21 +67,11 @@ const userMethods = require("./handler/user");
 app.post("/signup", userMethods.createUser);
 app.route("/login")
     .get(userMethods.renderLogin)
-    .post(
-        passport.authenticate("local", {
-            failureRedirect: "/login",
-            failureFlash: true,
-        }),
-        (req, res) => {
-            console.log(req.body.to);
-            res.redirect(req.body.to);
-        }
-    );
+    .post(passport.authenticate("Vinland Strategy", {failureRedirect: "/login", failureFlash: true}),
+        (req, res) => {res.redirect(req.body.to);});
 app.route("/logout").get(userMethods.logout);
 
-app.use("/files", require("./routes/Files"));
-app.use("/Admin", require("./routes/Admin"));
 
 // </editor-fold>
 module.exports = app;
-const Website = require("./Classes/WebSite");
+require("./Classes/WebSite");

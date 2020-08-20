@@ -2,7 +2,7 @@
     <img class="Cover" src="<%=Post.covers[0]%>">
     <h3 class="font-weight-bold mt-4"><%=Post.title%></h3>
     <div class="Details row ml-2 border-bottom">
-        <span>by <a href="/user/<%=Post.author.username%>" class="text-muted"><%=Post.author.username%></a></span>
+        <span>by <a href="/user/<%=Post.author._id%>" class="text-muted"><%=Post.author.username%></a></span>
         <span class="ml-2"><a href="/search?date=<%=new Date(Post.modified_date).toLocaleDateString(undefined,{ weekday: undefined, year: 'numeric', month: 'numeric', day: undefined })%>" class="text-muted"><%=new Date(Post.modified_date).toLocaleDateString(undefined,{ weekday: undefined, year: 'numeric', month: 'long', day: undefined })%></a></span>
         <a href="/Categories/<%=Category.Slug%>" class="text-muted font-weight-bold ml-auto mr-2"><%=Category.Name%></a>
         <a href="#comments" class="btn"><i class="far fa-comment-dots"></i> <%=Post.comments.length%></a>

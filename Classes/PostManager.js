@@ -74,6 +74,7 @@ class PostManager {
         }
         query.select("-content")
             .populate("category")
+            .populate("author",{username:1})
             .exec((err,res)=>{
                 if(err) callback(500,"Internal error");
                 else callback(200,res);
