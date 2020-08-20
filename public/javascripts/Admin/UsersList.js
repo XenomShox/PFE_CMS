@@ -1,6 +1,19 @@
 (() => {
     class UsersList {
+        #roles;
         constructor(table, _url) {
+            let $this = this;
+            $.ajax({
+                url: "/role",
+                dataType: "json",
+                success: function (res) {
+                    $this.#roles = res;
+                    let menu = $(".Context-Menu");
+                },
+                error: function (xhr, err) {
+                    console.log(xhr, err);
+                },
+            });
             let datatable = table.DataTable({
                 ajax: { url: _url, dataSrc: "" },
                 lengthMenu: [20, 30, 40, 50],
@@ -16,7 +29,7 @@
                     { data: "firstName", title: "First Name" },
                     { data: "lastName", title: "Last Name" },
                     { data: "email", title: "Email" },
-                    { data: "role", title: "Role" },
+                    // { data: "role", title: "Role" },
                     { data: "birthday", title: "Birthday" },
                     { data: "phone", title: "Phone Number" },
                     {
@@ -76,6 +89,7 @@
                                         });
                                     })
                                     .catch((err) => {
+                                        console.log(err);
                                         return Swal.insertQueueStep({
                                             title: `${data.username} couldn't be banned`,
                                             text: err,
@@ -139,13 +153,75 @@
                 }
                 // location.reload();
             });
+            table.on("contextmenu", "tr", function (e) {
+                e.preventDefault();
+                let rowUser = datatable.row($(this)).data();
+                let menu = $(".Context-Menu");
+                menu.empty()
+                    .append($('<h4 class="text-center">Roles</h4>'))
+                    .append($('<hr class="w-75 rounded mb-2 mt-1">'))
+                    .append($this.createRolesElems(rowUser));
+                menu.css({
+                    display: "block",
+                    left: e.pageX - 90,
+                    top:
+                        e.pageY - 10 + menu.height() > window.innerHeight
+                            ? window.innerHeight - menu.height() - 60
+                            : e.pageY - 10,
+                }).show();
+            });
+            $(document).click(function (e) {
+                if ($(e.target).parents(".Context-Menu").length === 0) {
+                    $(".Context-Menu").hide();
+                }
+            });
+        }
+        createRolesElems(user) {
+            let list = $(`<ul class="navbar-nav not-selected-nav"></ul>`);
+            this.#roles.forEach((role, idx) => {
+                let checkbox = $(
+                    `<input id="check${idx}" type="checkbox" ${
+                        user.roles.indexOf(role._id) !== -1 ? "checked" : ""
+                    }>`
+                ).change(function (e) {
+                    if (this.checked) {
+                        $.ajax({
+                            url: `/user/role/${user._id}/${role._id}`,
+                            type: "POST",
+                            success: () => {
+                                console.log("Role Added");
+                            },
+                        });
+                    } else {
+                        $.ajax({
+                            url: `/user/role/delete/${user._id}/${role._id}`,
+                            type: "DELETE",
+                            success: () => {
+                                console.log("Role Deleted");
+                            },
+                            error: function (xhr, err) {
+                                console.log(xhr);
+                                console.log(err);
+                            },
+                        });
+                    }
+                });
+                list.append(
+                    $(
+                        `<li class="rounded p-1 my-1 d-flex justify-content-between align-items-center"></li>`
+                    )
+                        .append($(`<h5 class="m-0 mr-4">${role.name}</h5>`))
+                        .append(checkbox)
+                );
+            });
+            return list;
         }
     }
     $.fn.UsersList = function (url) {
         return new UsersList(this, url);
     };
 })();
-$("#UsersList table").UsersList("/user/");
+let userList = $("#UsersList table").UsersList("/user/");
 
 $("#UsersList table tr").on("click", "button", function () {
     alert("testing");
