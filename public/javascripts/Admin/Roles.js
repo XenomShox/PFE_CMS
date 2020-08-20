@@ -26,7 +26,7 @@
                     });
                 },
                 error: function (xhr, err) {
-                    console.log(xhr, res);
+                    console.log(xhr, err);
                 },
             });
             $("li.add-role-button").on("click", function (e) {
@@ -129,9 +129,35 @@
                                 }),
                                 success: function (role) {
                                     roleLi.find("span").text(values.name);
+                                    $.notify(
+                                        {
+                                            // options
+                                            icon: "fas fa-check-circle",
+                                            title: "Changes Saved",
+                                            message:
+                                                "Your changes have been saved you can apply them by right clicking on a user in the User List page",
+                                        },
+                                        {
+                                            // settings
+                                            type: "success",
+                                        }
+                                    );
                                     console.log(role);
                                 },
                                 error: function (xhr, err) {
+                                    $.notify(
+                                        {
+                                            // options
+                                            icon: "fas fa-times",
+                                            title: "Error",
+                                            message:
+                                                "Your changes couldn't be saved for some reasons",
+                                        },
+                                        {
+                                            // settings
+                                            type: "danger",
+                                        }
+                                    );
                                     console.log(xhr, err);
                                 },
                             });
