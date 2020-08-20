@@ -4,6 +4,7 @@
     });
     class FileSelector{
         #Tab
+        #Selectors;
         constructor(){
             $("body").append(this.#Tab=$(`<div class="modal FileSelector fade" tabindex="-1">
                     <div class="modal-dialog modal-dialog-centered">
@@ -33,7 +34,9 @@
                         </div>
                     </div>
                 </div>`));
-            console.log($("[selector-file]"));
+            $("[selector-file]").each((index,elem)=>{
+
+            });
         }
         ShowTab(){this.#Tab.modal("show");}
 

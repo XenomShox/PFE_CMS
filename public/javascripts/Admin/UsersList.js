@@ -160,14 +160,11 @@
                 menu.empty()
                     .append($('<h4 class="text-center">Roles</h4>'))
                     .append($('<hr class="w-75 rounded mb-2 mt-1">'))
-                    .append($this.createRolesElems(rowUser));
+                    .append($this.createRolesElems(rowUser))
                 menu.css({
                     display: "block",
                     left: e.pageX - 90,
-                    top:
-                        e.pageY - 10 + menu.height() > window.innerHeight
-                            ? window.innerHeight - menu.height() - 60
-                            : e.pageY - 10,
+                    top: e.pageY
                 }).show();
             });
             $(document).click(function (e) {

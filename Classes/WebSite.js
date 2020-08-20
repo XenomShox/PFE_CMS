@@ -163,7 +163,8 @@ class WebSite {
                 res.locals.Additional=additional
                 next();
             });
-            app.use("/user", require("../routes/user"));
+            app.use("/user", require("../routes/user"))
+            app.use("/role", require("../routes/roles"));
             app.use("/message", require("../routes/message"));
             app.use(require("../routes/BlogRouting"));
         })

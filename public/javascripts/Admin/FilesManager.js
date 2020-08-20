@@ -620,7 +620,7 @@ console.clear();
             menu.css({
                 display:"block",
                 left: e.pageX -90,
-                top: (((e.pageY-10)+menu.height())>window.innerHeight) ? window.innerHeight - menu.height()-60 : e.pageY-10,
+                top: e.pageY,
             })
                 .addClass("show");
         }
