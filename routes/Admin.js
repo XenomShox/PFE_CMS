@@ -1,8 +1,8 @@
 const router = require('express').Router(),
-    { isLoggedIn ,isAdmin} = require("../middlewares/middleware"),
+    { isLoggedIn ,hasPermission} = require("../middlewares/middleware"),
     WebSite=require("../Classes/WebSite");
 
-router.all('*',isLoggedIn,isAdmin);
+router.all('*',isLoggedIn,hasPermission("admin_privillage"));
 router.route("/")
     .get((req, res )=> {
         res.render("Admin/index",{url:"/Admin/dashboard"});

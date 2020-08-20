@@ -1,22 +1,7 @@
 let router = require('express').Router(),
     FilesManager= require('../Classes/FileManager'),
-    multer=require("multer"),
     formidable=require("formidable"),
-    { isLoggedIn ,isAdmin} = require("../middlewares/middleware"),
-    upload=multer({storage:  multer.diskStorage({
-            destination: function (req, file, cb) {
-                if(req.params.UserId)req.FilePath = "./files"+req.params.UserId;
-                else if(req.URL) req.FilePath="./files"+req.URL;
-                else req.FilePath="./files/"
-                cb(null,req.FilePath);
-            },
-            filename: function (req, file, cb) {
-                if(req.body.randomName) req.FileName=file.fieldname+Date.now() + '-' + Math.round(Math.random() * 1E9);
-                else req.FileName=file.originalname;
-                cb(null, req.FileName);
-            }
-        })
-    });
+    { isLoggedIn ,hasPermission} = require("../middlewares/middleware");
 
 router.all("*",isLoggedIn,(req,res,next)=>{
     req.URL=decodeURI(require('url').parse(req.url).pathname);
@@ -44,7 +29,7 @@ router.route("/:UserId")
         else next();
     });
 router.route('/*')
-    .all(isAdmin)
+    .all(hasPermission("admin_privillage"))
     .get((req,res)=>{
         let callback=req.query.treeView==='true'?FilesManager.GetFilesTree:FilesManager.GetFolder;
         callback(req.URL==="/"?"":req.URL,(status,result)=>{
