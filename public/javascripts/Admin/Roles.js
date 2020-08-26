@@ -26,7 +26,7 @@
                     });
                 },
                 error: function (xhr, err) {
-                    console.log(xhr, res);
+                    console.log(xhr, err);
                 },
             });
             $("li.add-role-button").on("click", function (e) {

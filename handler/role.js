@@ -17,16 +17,9 @@ exports.getRole = async (req, res, next) => {
 
 exports.modifyRole = async (req, res, next) => {
     try {
-        const { category, name, ...body } = req.body;
-        Object.keys(body).forEach((key) => {
-            body[key] = Boolean(body[key]);
-        });
         let role = await Role.findByIdAndUpdate(req.params.role_id, {
-            category,
-            name,
-            ...body,
+            ...req.body,
         });
-        console.log(req.body);
         return res.status(200).json(role);
     } catch (err) {
         next(err);
