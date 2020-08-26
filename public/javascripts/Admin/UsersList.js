@@ -224,7 +224,7 @@
         return new UsersList(this, url);
     };
 })();
-let userList = $("#UsersList table").UsersList("/user/");
+$("#UsersList table").UsersList("/user/");
 
 $("#UsersList table tr").on("click", "button", function () {
     alert("testing");
