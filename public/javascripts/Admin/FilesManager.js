@@ -446,7 +446,7 @@ console.clear();
         OpenFolder(Path=this.#Folder.CurrentPath) {
             this.#SelectedList=[];
             this.#Container.removeClass("selected");
-            this.FetchData("",true)
+            return this.FetchData("",true)
                 .then(tree=>{
                     this.#Folder.CurrentPath=Path;
                     this.#Container.find("#TreeView").empty().append(this.CreateTreeView("",this.#RootName,tree));
