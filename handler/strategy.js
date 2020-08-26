@@ -17,6 +17,7 @@ exports.stratV1 = async function (username, password, done) {
             if (err) {
                 console.log(`err: ${err}`);
                 return done(null, false);
+
             }
             console.log(`result: ${result}`);
             if (!result) {

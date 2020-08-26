@@ -30,14 +30,14 @@ module.exports = class FileManager {
                             let extension=File.name.match(/(.*)(\.[^.]+)$/)
                             if(extension!==null) {
                                 File.name=extension[1]+(new Date()).getTime()+extension[2];
-                                return FileManager.UploadFile(Path,File);
+                                return Mfs.writeFile(path.join(__dirname, FileManager.Path + Path +File.name),data);
                             }
                         }
                     })
             })
             .then(()=>{
                 console.log(File.name);
-                return [200,File.name+" Uploaded Successfully"]
+                return [200,File.name]
             })
             .catch(reason => {
                 console.log(reason);
@@ -65,7 +65,7 @@ module.exports = class FileManager {
       if(ext!==null){
           ext=ext[1].toLowerCase();
           switch (ext) {
-              case "swf":return {type: "flash",icon:"fab fa-foursquare",extension: ext}
+              case "swf":return {type: "Flash",icon:"fab fa-foursquare",extension: ext}
               //audio
               case "aif": case "cda": case "mid": case "midi":  case "mp3":  case "mpa":  case "ogg": case "wav": case "wma": case "wpl":
                   return {type: "Audio", icon: 'fas fa-file-audio',extension:ext};
@@ -92,8 +92,10 @@ module.exports = class FileManager {
               case "fnt": case "fon": case "otf": case "ttf":
                   return {type: "Font",icon: "fas fa-font",extension:ext};
               //Images
-              case "ai": case "bmp": case "gif": case "ico": case "jpeg": case "jpg": case "png": case "ps": case "psd": case "svg": case "tif":  case "tiff":
+              case "ai": case "bmp": case "gif": case "jpeg": case "jpg": case "png": case "ps": case "psd": case "svg": case "tif":  case "tiff":
                   return {type: "Image",icon: "fas fa-file-image",extension:ext};
+              //Icons
+              case "ico": return {type: "Icon",icon: "fas fa-file-image",extension:ext};
               //scripts and languages
               case "asp": case "aspx": case "cer": case "cfm": case "cgi": case "pl": case "css": case "htm": case "html": case "js": case "jsp": case "part": case "php": case "py": case "rss": case "xhtml": case "sh": case "swift": case "vb":
                   return {type: "Scripts/Languages", icon:"fas fa-file-code",extension:ext};
@@ -106,11 +108,11 @@ module.exports = class FileManager {
               case "avi": case "mpg": case "mpe": case "mpeg": case "asf": case "wmv": case "mov": case "qt": case "rm": case "mp4": case "flv": case "m4v": case "webm": case "ogv":  case "mkv" :
                   return {type: 'Video',icon: 'fas fa-file-video',extension:ext};
               //Word
-              case "doc":case "docx": return {type: 'word',icon: 'fas fa-file-word',extension:ext};
-              case "pdf": return {type: "Pdf file",icon: "fas fa-file-pdf",extension:ext} //PDF
+              case "doc":case "docx": return {type: 'Word',icon: 'fas fa-file-word',extension:ext};
+              case "pdf": return {type: "Pdf",icon: "fas fa-file-pdf",extension:ext} //PDF
               case "rtf": case "txt": case "tex": case "wpd": case "odt": return {type: "Text",icon: "fas fa-file-alt",extension:ext};//Text File
               //PowerPoint
-              case "key": case "odp": case "ppt":case "pps":case "pptx": return {type: "Power-Point",icon: "fas fa-file-powerpoint",extension:ext};
+              case "key": case "odp": case "ppt":case "pps":case "pptx": return {type: "PowerPoint",icon: "fas fa-file-powerpoint",extension:ext};
           }
       }
       return {type:"file",icon:"fas fa-file"};
@@ -136,7 +138,7 @@ module.exports = class FileManager {
       return  Mfs.stat( path.join(__dirname, FileManager.Path + Path + '/' + file))
           .then(res=>{
              return {
-                Url: Path + file,
+                Url: Path[0]==="/"?"/files"+ Path + file:"/files/"+ Path + file,
                 Name: file===""?"files":file,
                 Type: res.isFile()?FileManager.GetFileType(file):
                     res.isDirectory()?{type:'folder',icon:'fas fa-folder'}:

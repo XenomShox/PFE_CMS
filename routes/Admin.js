@@ -25,9 +25,19 @@ router
         else res.render("Admin/index", { url: "/Admin" + req.URL });
     })
     .post((req, res) => {
-        WebSite.SaveDetails(req.body, (status, message) => {
+        let callback = (status, message) => {
             res.status(status).send(message);
-        });
+        };
+        switch (req.params.Admin) {
+            case "General":
+                return WebSite.SaveDetails(req.body, callback);
+            case "DataBaseSettings":
+                return WebSite.SaveSettings(req.body, callback);
+            case "Writing":
+                return WebSite.SaveEmail(req.body, callback);
+            default:
+                return callback(404, "Not Found");
+        }
     });
 
 module.exports = router;

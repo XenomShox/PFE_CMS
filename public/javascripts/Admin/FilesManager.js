@@ -359,7 +359,7 @@ console.clear();
             table.append(`<tr><td>Name</td><td>:</td><td>${data["Name"]}</td></tr>`)
                 .append($(`<tr><td>Path</td><td>:</td></tr>`)
                     .append($(`<div class="input-group">
-                        <input type="text" class="form-control" readonly value="${window.location.origin+$this.#Url+"/"+data["Url"]}">
+                        <input type="text" class="form-control" readonly value="${window.location.origin+data["Url"]}">
                         <div class="input-group-append">
                             <button class="btn btn-success btn-border" type="button"><i class="fa fa-clipboard"></i></button>
                         </div>
@@ -446,11 +446,12 @@ console.clear();
         OpenFolder(Path=this.#Folder.CurrentPath) {
             this.#SelectedList=[];
             this.#Container.removeClass("selected");
-            return this.FetchData("",true).then(tree=>{
-                this.#Folder.CurrentPath=Path;
-                this.#Container.find("#TreeView").empty().append(this.CreateTreeView("",this.#RootName,tree));
-                this.CreateView(Path);
-            });
+            this.FetchData("",true)
+                .then(tree=>{
+                    this.#Folder.CurrentPath=Path;
+                    this.#Container.find("#TreeView").empty().append(this.CreateTreeView("",this.#RootName,tree));
+                    this.CreateView(Path);
+                });
         }
         OpenFile(Path,File) {
             this.Preview(File.Type.type,Path+"/"+File.Name,File.Type.extension)
@@ -620,7 +621,7 @@ console.clear();
             menu.css({
                 display:"block",
                 left: e.pageX -90,
-                top: e.pageY,
+                top: e.originalEvent.y
             })
                 .addClass("show");
         }

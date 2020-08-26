@@ -1,0 +1,77 @@
+<div class="content" plugin-scripts="/Admin/files/javascripts/Assets/plugin/bootstrap-notify/bootstrap-notify.min.js,/Admin/files/javascripts/Assets/core/FormAjax.js"
+     loading-script="/Admin/Files/javascripts/Admin/DataBaseSettings.js">
+    <div class="page-inner row py-5 bg-secondary-gradient">
+        <div class="ml-5 text-white pb-2">
+            <h1>DataBase Settings</h1>
+            <p>You can manage your WebSite database details from here.</p>
+        </div>
+    </div>
+    <div id="Settings" class="row align-items-start col-11 mx-auto mt--4">
+        <div class="card col-12">
+            <form class="card-body d-flex flex-column" method="post" action="/Admin/DataBaseSettings" >
+                <h1 class="ml-4">Database</h1>
+                <div class="ml-5">
+                    <div class="form-group form-inline">
+                        <label for="Name" class="col-md-3 col-form-label justify-content-start">Database Name :</label>
+                        <div class="col-md-9 p-0">
+                            <input type="text" class="form-control input-full" id="Name" name="DataBase[Name]" value="<%=Settings.DataBase.Name%>" required>
+                        </div>
+                    </div>
+                    <div class="form-group form-inline">
+                        <label for="URI" class="col-md-3 col-form-label justify-content-start File-Selector">DataBase URI :</label>
+                        <div class="col-md-9 p-0">
+                            <input type="text" class="form-control input-full" id="URI" name="DataBase[URI]" value="<%=Settings.DataBase.URI%>" required>
+                        </div>
+                    </div>
+                    <div class="form-group form-inline">
+                        <label for="UserName" class="col-md-3 col-form-label justify-content-start">DataBase UserName :</label>
+                        <div class="col-md-9 p-0">
+                            <input type="text" class="form-control input-full" id="UserName" name="DataBase[UserName]" value="<%=Settings.DataBase.UserName%>" required>
+                        </div>
+                    </div>
+                    <div class="form-group form-inline">
+                        <label for="Password" class="col-md-3 col-form-label justify-content-start">DataBase Password :</label>
+                        <div class="col-md-9 p-0">
+                            <input type="password" class="form-control input-full" id="Password" name="DataBase[Password]" value="<%=Settings.DataBase.Password%>" required>
+                        </div>
+                    </div>
+                </div>
+                <h1 class="ml-4 d-none">Security</h1>
+                <div class="ml-5 d-none">
+                    <div class="form-group form-inline">
+                        <label for="SECRET_KEY" class="col-md-3 col-form-label justify-content-start">SECRET_KEY :</label>
+                        <div class="col-md-9 p-0">
+                            <input disabled type="password" class="form-control input-full" id="SECRET_KEY" name="Security[SECRET_KEY]" value="<%=Settings.Security.SECRET_KEY%>" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group form-inline">
+                    <label for="Enabled" class="col-lg-3 col-md-4 col-6 col-form-label justify-content-start"><h1>Api Manager</h1></label>
+                    <label class="switch">
+                        <input id="Enabled" type="checkbox" name="ApiManager[Enabled]" <%=Settings.ApiManager.Enabled?"checked":""%>>
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+                <div class="ml-5">
+                    <div class="form-group form-inline">
+                        <label for="ApiPost" class=" col-lg-4 col-md-5 col-9 col-form-label justify-content-start"><h1>Api PostContent</h1></label>
+                        <label class="switch">
+                            <input id="ApiPost" type="checkbox" name="ApiManager[ApiPostContent][Enabled]" <%=Settings.ApiManager.Enabled?"":"disabled"%> <%=Settings.ApiManager.ApiPostContent.Enabled?"checked":""%>>
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    <div class="ml-5 form-group form-inline">
+                        <label for="reference" class="col-md-4 col-form-label justify-content-start">Collection Reference :</label>
+                        <div class="col-md-8 p-0">
+                            <select class="form-control input-full" id="reference" name="ApiManager[ApiPostContent][reference]" <%=Settings.ApiManager.ApiPostContent.Enabled?"":"disabled"%> data-value="<%=Settings.ApiManager.ApiPostContent.reference%>">
+                                <option value></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <input type="submit" class="btn btn-success btn-border ml-auto mr-2">
+            </form>
+        </div>
+    </div>
+    <link rel="stylesheet" href="/Admin/files/stylesheets/Admin/DataBaseSettings.css">
+</div>

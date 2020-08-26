@@ -103,11 +103,13 @@ body[data-background-color="dark"] .breadcrumbs .nav-item.btn:hover {
     background-color: #eee;
     color: #666!important;
 }
-.content-view{height: calc(100% - 3.5em);width: 100%}
+
 .content-view.is-loading:after{top: calc(50% - 5em/2);}
 /*  view */
-.content-view{ align-items: start; width: 100%; }
 .content-view{
+    height: calc(100% - 3.5em);
+    align-items: start;
+    width: 100%;
     display: flex;
     flex-wrap: wrap;
     justify-content: start;

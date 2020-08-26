@@ -62,7 +62,6 @@ mongoose.set("debug", true);
 app.use(require("morgan")("tiny"));
 // </editor-fold>
 // <editor-fold desc="Routes">
-
 const userMethods = require("./handler/user");
 app.post("/signup", userMethods.createUser);
 app.route("/login")
@@ -70,8 +69,6 @@ app.route("/login")
     .post(passport.authenticate("Vinland Strategy", {failureRedirect: "/login", failureFlash: true}),
         (req, res) => {res.redirect(req.body.to);});
 app.route("/logout").get(userMethods.logout);
-
-
 // </editor-fold>
 module.exports = app;
 require("./Classes/WebSite");
