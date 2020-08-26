@@ -246,4 +246,4 @@
         return new RolesList(this);
     };
 })();
-let rolesList = $("#Roles div.card-body ul").RolesList();
+$("#Roles div.card-body ul").RolesList();
