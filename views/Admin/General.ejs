@@ -1,4 +1,5 @@
-<div class="content" plugin-scripts="/Admin/files/javascripts/Assets/plugin/TagInput/bootstrap-tagsinput.js,/Admin/files/javascripts/Assets/plugin/bootstrap-notify/bootstrap-notify.min.js" loading-script="/Admin/Files/javascripts/Admin/General.js">
+<div class="content" plugin-scripts="/Admin/files/javascripts/Assets/plugin/TagInput/bootstrap-tagsinput.js,/Admin/files/javascripts/Assets/plugin/bootstrap-notify/bootstrap-notify.min.js,/Admin/files/javascripts/Assets/core/FormAjax.js,/Admin/files/javascripts/Assets/core/FileSelector.js"
+     loading-script="/Admin/Files/javascripts/Admin/General.js">
     <div class="page-inner row py-5 bg-secondary-gradient">
         <div class="ml-5 text-white pb-2">
             <h1>General Settings</h1>
@@ -17,24 +18,30 @@
                         </div>
                     </div>
                     <div class="form-group form-inline">
+                        <label for="Type" class="col-md-3 col-form-label justify-content-start">Type :</label>
+                        <div class="col-md-9 p-0">
+                            <select disabled type="text" class="form-control input-full" id="Type" name="Type" required>
+                                <option value="Blog" <%=WebSite.Type==="Blog"?"selected":""%>>Blog</option>
+                            </select>
+                            <small class="form-text text-muted">The Website type.</small>
+                        </div>
+                    </div>
+                    <div class="form-group form-inline">
                         <label for="Logo" class="col-md-3 col-form-label justify-content-start File-Selector">Logo :</label>
-                        <div class="col-md-9 p-0" selector-file="Image">
-                            <div class="d-flex">
-                                <input readonly type="text" class="form-control input-full" id="Logo" name="Logo" value="<%=WebSite.Logo%>">
-                                <a class="btn btn-secondary btn-border ml-3">Select Image</a>
-                            </div>
+                        <div class="col-md-9 p-0">
+                            <input type="text" class="form-control input-full" id="Logo" name="Logo" value="<%=WebSite.Logo%>" selector-file="Image">
                         </div>
                     </div>
                     <div class="form-group form-inline">
                         <label for="Icon" class="col-md-3 col-form-label justify-content-start">Icon :</label>
                         <div class="col-md-9 p-0">
-                            <input type="text" class="form-control input-full" id="Icon" name="Icon" value="<%=WebSite.Icon%>">
+                            <input type="text" class="form-control input-full" id="Icon" name="Icon" value="<%=WebSite.Icon%>" selector-file="Icon">
                         </div>
                     </div>
                     <div class="form-group form-inline">
                         <label for="Description" class="col-md-3 col-form-label justify-content-start">Description :</label>
                         <div class="col-md-9 p-0">
-                            <input type="text" class="form-control input-full" id="Description" name="Description" value="<%=WebSite.Description%>" required>
+                            <textarea class="form-control input-full" id="Description" name="Description" required><%=WebSite.Description%></textarea>
                             <small class="form-text text-muted">In a few words, describe what this website is about.</small>
                         </div>
                     </div>
@@ -121,16 +128,5 @@
         </div>
     </div>
     <link rel="stylesheet" href="/Admin/files/stylesheets/Assets/TagInput/bootstrap-tagsinput.css">
-    <style>
-        .bootstrap-tagsinput{width:100%;}
-        body[data-background-color="dark"] .bootstrap-tagsinput input{color: white;}
-        .bootstrap-tagsinput{border-color: #2f374b; background-color: #1a2035!important; padding: .7em;}
-        body:not([data-background-color="dark"]) .bootstrap-tagsinput .tag{color: #495057}
-        .form-control[readonly]{background-color: transparent!important; border-color: #2f374b!important;}
-        .FileSelector .modal-dialog{width: 75%;max-width: 75%;}
-        .FileSelector .modal-body{min-height: 50vh;}
-        .FileSelector .modal-header,.FileSelector .modal-footer{border-color: #4d585f; }
-        body[data-background-color="dark"] .FileSelector .modal-content{ background-color:#202940; }
-        body[data-background-color="dark"] .FileSelector .nav-item:not(.active) .nav-link:not(:hover):not(:focus){color: white;}
-    </style>
+    <link rel="stylesheet" href="/Admin/files/stylesheets/Admin/General.css">
 </div>

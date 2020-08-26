@@ -1,0 +1,60 @@
+.bootstrap-tagsinput{width:100%;}
+body[data-background-color="dark"] .bootstrap-tagsinput input{color: white;}
+body[data-background-color=dark] .bootstrap-tagsinput{border-color: #2f374b; background-color: #1a2035!important; }
+.bootstrap-tagsinput{padding: .7em;}
+body:not([data-background-color="dark"]) .bootstrap-tagsinput .tag{color: #495057}
+.form-control[readonly],.form-control:disabled{background-color: transparent!important; border-color: #2f374b!important;}
+.FileSelector .modal-dialog{width: 75%;max-width: 75%; color: white;}
+body:not([data-background-color=dark]) .FileSelector .modal-dialog{color:#3b3b3b;}
+.FileSelector .modal-body{min-height: 50vh; flex-wrap: wrap; display: flex;}
+.FileSelector .modal-header,.FileSelector .modal-footer{border-color: #4d585f; }
+body[data-background-color="dark"] .FileSelector .modal-content{ background-color:#202940; }
+body[data-background-color="dark"] .FileSelector .nav-item:not(.active) .nav-link:not(:hover):not(:focus){color: white;}
+.file-item{
+    position: relative;
+    flex: 0 0 13%;
+    max-width: 13%;
+    max-height: 12em;
+    overflow: hidden;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: .2em 1.733%;
+    text-align: center;
+    border: .1em solid transparent;
+    list-style: none;
+    padding: 0;
+}
+.file-item *{max-width: 100%}
+.file-item:hover,.file-item.selected{
+    border: .1em solid rgba(187,187,187,.2);
+    cursor: pointer;
+    background-color: rgba(187,187,187,.2);
+}
+.nav-view{
+    display: flex;
+    align-items: center;}
+.file-item input{
+    position: absolute;
+    left: 10%;
+    top:.5em;
+    width: 1.2em;
+    height: 1.2em;
+    z-index: 10;
+    opacity: 0;
+}
+.file-item input:checked,.file-item:hover input{opacity: 1;}
+.icon{margin-top: 1.5em; height: 8em; margin-bottom: 0.5em; display: flex; align-items: center; justify-content: center}
+.icon i{ font-size: 4em; margin: auto!important; }
+.icon img{max-width: 100%; max-height: 100%;}
+.breadcrumbs{padding: 0;border: 0;}
+body:not([data-background-color=dark]) .btn-outline-light{
+    border-color: #3b3b3b;
+    color: #3b3b3b;
+}
+.close,.close:hover{color: white!important;}
+body:not([data-background-color=dark]) .close,body:not([data-background-color=dark]) .close:hover{color: #3b3b3b!important;}
+body:not([data-background-color=dark]) .btn-outline-light:hover{
+    background-color: #3b3b3b;
+    color: white;
+}

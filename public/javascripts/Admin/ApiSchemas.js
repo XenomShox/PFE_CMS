@@ -540,7 +540,7 @@
         GetDataI(index) {
             return JSON.parse(JSON.stringify(this.#Data[index]));
         }
-        async SaveDataI(index, data) {
+        SaveDataI(index, data) {
             let $this = this;
             return Swal.queue([
                 {

@@ -41,8 +41,7 @@ router.route('/*')
         else{
             formidable({ multiples: true }).parse(req, (err, fields, files) => {
                 if (err || !files["file"]) return res.status(401).send("Bad Request");
-                FilesManager.UploadFiles((files["file"] instanceof Array),req.URL+"/",files["file"],
-                    (status,result)=>{
+                FilesManager.UploadFiles((files["file"] instanceof Array),req.URL+"/",files["file"], (status,result)=>{
                         res.status(status).send(result);
                     });
             });
