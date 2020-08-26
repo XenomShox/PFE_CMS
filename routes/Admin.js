@@ -15,11 +15,13 @@ router
     .get((req, res) => {
         if (req.query.f !== undefined)
             res.render("Admin/" + req.params.Admin, (err, html) => {
-                if (err)
+                if (err){
+                    console.log(err);
                     res.status(404).render("Admin/error", {
                         pageName: req.params.Admin,
                         path: req.URL,
                     });
+                }
                 else res.send(html);
             });
         else res.render("Admin/index", { url: "/Admin" + req.URL });

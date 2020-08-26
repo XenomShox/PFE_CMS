@@ -22,6 +22,10 @@ const statistics=mongoose.Schema({
         };
 
  */
+/**
+ * Lunch The CMS WebSite
+ * @class WebSite
+ */
 class WebSite {
     /*----------------Attributes------------*/
     #WebSiteDetails={
@@ -124,6 +128,9 @@ class WebSite {
         }
     }
     /*----------------constructor------------*/
+    /**
+     * @constructor
+     */
     constructor() {
         app.set("WebSite",this);
         this.LoadJsonFile(this.#WebSiteDetails.File).then(file=>{
