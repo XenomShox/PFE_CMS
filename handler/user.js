@@ -42,7 +42,16 @@ class UserMethods {
             let users = await User.find({});
             console.log(users);
 
-            res.send(users);
+            res.status(200).json(users);
+        } catch (err) {
+            next(err);
+        }
+    };
+
+    getUser = async function (req, res, next) {
+        try {
+            let user = await User.findById(req.params.user_id);
+            res.status(200).json(user);
         } catch (err) {
             next(err);
         }
@@ -74,8 +83,8 @@ class UserMethods {
     };
 
     profile = async function (req, res) {
-        let user = await User.findById(req.params.user_id)
-        if(user) res.render("Blog(vinlandCMS)/Profile", {user});
+        let user = await User.findById(req.params.user_id);
+        if (user) res.render("Blog(vinlandCMS)/Profile", { user });
         else res.redirect("/");
     };
 }

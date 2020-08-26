@@ -157,21 +157,27 @@
                 e.preventDefault();
                 let rowUser = datatable.row($(this)).data();
                 let menu = $(".Context-Menu");
-                menu.empty()
-                    .append($('<h4 class="text-center">Roles</h4>'))
-                    .append($('<hr class="w-75 rounded mb-2 mt-1">'))
-                    .append($this.createRolesElems(rowUser));
-                console.log($(e.target).parent().offset().left);
-                console.log(menu.height());
-                menu.css({
-                    display: "block",
-                    left: $(e.target).parent().offset().left - 220,
-                    top:
-                        $(e.target).offset().top +
-                        $(e.target).height() / 2 -
-                        menu.height() / 2 -
-                        10,
-                }).show();
+                menu.empty();
+                $.ajax({
+                    url: `/user/${rowUser._id}`,
+                    type: "GET",
+                    success: function (res) {
+                        console.log(res);
+                        menu.append($('<h4 class="text-center">Roles</h4>'))
+                            .append($('<hr class="w-75 rounded mb-2 mt-1">'))
+                            .append($this.createRolesElems(res));
+
+                        menu.css({
+                            display: "block",
+                            left: $(e.target).parent().offset().left - 220,
+                            top:
+                                $(e.target).offset().top +
+                                $(e.target).height() / 2 -
+                                menu.height() / 2 -
+                                10,
+                        }).show();
+                    },
+                });
             });
             $(document).click(function (e) {
                 if ($(e.target).parents(".Context-Menu").length === 0) {
