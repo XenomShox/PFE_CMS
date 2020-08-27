@@ -48,11 +48,8 @@ router
 // User Profile
 router.get("/profile/:user_id", userMethods.profile);
 
-router.get(
-    "/:user_id",
-    isLoggedIn,
-    hasPermission(["owner", "admin_privillage"]),
-    userMethods.getUser
-);
+router.all("/:user_id", isLoggedIn, hasPermission(["owner", "admin_privillage"]))
+    .get(userMethods.getUser)
+    .put(userMethods.updateUser);
 
 module.exports = router;
