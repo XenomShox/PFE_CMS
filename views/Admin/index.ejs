@@ -22,12 +22,12 @@
         <link rel="stylesheet" href="/Admin/Files/stylesheets/Assets/atlantis.min.css">
         <link rel="stylesheet" href="/Admin/Files/stylesheets/Admin/index.css">
     </head>
-    <body data-background-color="<%=currentUser.Admin?currentUser.Admin.Background:"dark"%>">
-        <div class="wrapper <%=currentUser.Admin?currentUser.Admin.layout:"compact-wrapper"%>">
+    <body data-background-color="<%=currentUser.Admin.Background?currentUser.Admin.Background:"dark"%>">
+        <div class="wrapper <%=currentUser.Admin.layout || currentUser.Admin.layout==="" ?currentUser.Admin.layout:"compact-wrapper"%>">
             <!-- Navbar -->
             <div class="main-header">
                 <!-- Logo Header -->
-                <div class="logo-header" data-background-color="<%=currentUser.Admin?currentUser.Admin.LogoHeader:"dark"%>">
+                <div class="logo-header" data-background-color="<%=currentUser.Admin.LogoHeader?currentUser.Admin.LogoHeader:"dark"%>">
 
                     <a href="/" class="logo" >
                         <svg class="navbar-brand" style="width:7em;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 558.16 99.72">
@@ -63,7 +63,7 @@
                 </div>
                 <!-- End Logo Header -->
                 <!-- Navbar Header -->
-                <nav class="navbar navbar-header navbar-expand-lg" data-background-color="<%=currentUser.Admin?currentUser.Admin.NavbarHeader:"dark"%>">
+                <nav class="navbar navbar-header navbar-expand-lg" data-background-color="<%=currentUser.Admin.NavbarHeader?currentUser.Admin.NavbarHeader:"dark"%>">
                     <div class="container-fluid">
                         <ul class="navbar-nav topbar-nav ml-md-auto align-items-center">
                             <li class="nav-item toggle-nav-search hidden-caret">
@@ -226,7 +226,7 @@
                 <!-- End Navbar -->
             </div>
             <!-- Sidebar -->
-            <div class="sidebar sidebar-style-2" data-background-color="<%=currentUser.Admin?currentUser.Admin.Sidebar:"dark"%>">
+            <div class="sidebar sidebar-style-2" data-background-color="<%=currentUser.Admin.Sidebar?currentUser.Admin.Sidebar:"dark"%>">
                 <div class="sidebar-wrapper scrollbar scrollbar-inner">
                     <div class="sidebar-content">
                         <div class="user">

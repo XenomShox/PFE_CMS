@@ -21,7 +21,6 @@ class UserMethods {
     getUser = async function (req, res, next) {
         try {
             let user = await User.findById(req.params.user_id);
-
             res.status(200).json(user);
         } catch (err) {
             next(err);
@@ -29,7 +28,6 @@ class UserMethods {
     };
 
     createUser = function (req, res) {
-        console.log(req.body);
         let { password, ...body } = req.body;
 
         User.register(new User({ ...body }), password, (err, user) => {

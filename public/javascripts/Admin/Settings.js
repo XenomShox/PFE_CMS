@@ -22,10 +22,8 @@
             values[field.name] = field.value;
         });
         $.ajax(settings.attr("action"),{method:"PUT",data:values})
-            .then(data=>{
-                $.notify({message: `${type} is saved`,},{type: 'success',placement:{from:"bottom"}});
-            })
-            .catch(reason => {$.notify({message: reason.responseText},{type: 'danger',placement:{from:"bottom"}});})
+            .then(data=>{$.notify({message: `${type} is saved`,},{type: 'success',placement:{from:"bottom"}});})
+            .catch(reason => {$.notify({message: `Couldn't save ${type}`},{type: 'danger',placement:{from:"bottom"}});})
     }
     (function SelectedLayout(){
         var classList=$(".wrapper")[0].classList;

@@ -38,7 +38,7 @@ router
 // User Profile
 router.get("/profile/:user_id", userMethods.profile);
 
-router.all("/:user_id", isLoggedIn, hasPermission(["owner", "admin_privillage"]))
+router.route("/:user_id").all( isLoggedIn, hasPermission(["admin_privillage"]))
     .get(userMethods.getUser)
     .put(userMethods.updateUser);
 

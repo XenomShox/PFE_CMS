@@ -55,11 +55,11 @@ let userSchema = new mongoose.Schema({
         },
     ],
     Admin:{
-        LogoHeader:{type:String},
-        NavbarHeader:{type:String},
-        Background:{type:String},
-        Sidebar:{type:String},
-        layout:{type:String}
+        LogoHeader:{type:String,default:"dark"},
+        NavbarHeader:{type:String,default:"dark"},
+        Background:{type:String,default:"dark"},
+        Sidebar:{type:String,default:"dark"},
+        layout:{type:String,default:"dark"}
     }
 });
 
