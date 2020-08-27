@@ -9,7 +9,7 @@ class PostManager {
             date:{type:Date,default:new Date()},
             content:String,
             category:{type:mongoose.Schema.ObjectId,ref:"Vinland_Category"},
-            comments:{type: [mongoose.Schema.ObjectId],ref:"comments"},
+            comments:{type: [mongoose.Schema.ObjectId],ref:"Vinland_Comments"},
             comments_status:{
                 type: String,
                 enum : ["ALLOW" ,"HOLD","DISABLE"],

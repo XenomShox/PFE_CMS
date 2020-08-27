@@ -48,7 +48,7 @@ router.route('/Categories/*')
             req.body.tags=req.body.tags.split(" ")
             if( !(req.body.covers instanceof Array) ) req.body.covers=[req.body.covers];
             if(req.query.post) {
-                CommentManager.Create(req.query.post,req.query.comment,(status,result)=>{
+                CommentManager.Create(req.query.post,req.query.commentId,req.query.comment,(status,result)=>{
                     res.status(status).send(result);
                 })
             }
