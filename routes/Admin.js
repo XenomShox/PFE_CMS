@@ -19,7 +19,7 @@ router
                     console.log(err);
                     res.status(404).render("Admin/error", {
                         pageName: req.params.Admin,
-                        path: req.URL,
+                        path: "/Admin/",
                     });
                 }
                 else res.send(html);

@@ -30,6 +30,13 @@ class UserMethods {
             });
         });
     };
+    updateUser = function (req,res){
+        console.log(req.body,req.params);
+        User.updateOne({_id:req.params.user_id},req.body,(err,result)=>{
+            if(err) return res.status(400).send(err.message);
+            res.status(201).send("User Updated");
+        })
+    }
 
     logout = function (req, res) {
         req.logout();

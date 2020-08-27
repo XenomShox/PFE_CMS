@@ -54,6 +54,13 @@ let userSchema = new mongoose.Schema({
             ref: "User",
         },
     ],
+    Admin:{
+        LogoHeader:{type:String},
+        NavbarHeader:{type:String},
+        Background:{type:String},
+        Sidebar:{type:String},
+        layout:{type:String}
+    }
 });
 
 userSchema.pre("save", async function (next) {

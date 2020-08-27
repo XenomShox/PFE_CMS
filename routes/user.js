@@ -107,6 +107,7 @@ router.delete("/role/delete/:user_id/:role_id", async (req, res, next) => {
 });
 
 // User Profile
-router.route("/:user_id").get(userMethods.profile);
+router.route("/:user_id").get(userMethods.profile)
+    .put(userMethods.updateUser);
 
 module.exports = router;

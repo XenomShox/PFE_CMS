@@ -1,404 +1,387 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>Admin Dashboard</title>
-    <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
-    <link rel="icon" href="/Admin/Files/images/icon.ico" type="image/x-icon"/>
-    <!-- Fonts and icons -->
-    <script src="/Admin/Files/javascripts/Assets/plugin/webfont/webfont.min.js"></script>
-    <script>
-      WebFont.load({
-        custom: {"families":["Flaticon", "Font Awesome 5 Solid", "Font Awesome 5 Regular", "Font Awesome 5 Brands", "simple-line-icons"],
-          urls: ['/Admin/Files/stylesheets/Assets/fonts.min.css']},
-        active: function() {
-          sessionStorage.fonts = true;
-        }
-      });
-    </script>
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>Vinland Admin</title>
+        <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
+        <link rel="icon" href="/Admin/Files/images/icon.ico" type="image/x-icon"/>
+        <!-- Fonts and icons -->
+        <script src="/Admin/Files/javascripts/Assets/plugin/webfont/webfont.min.js"></script>
+        <script>
+            WebFont.load({
+                custom: {"families":["Flaticon", "Font Awesome 5 Solid", "Font Awesome 5 Regular", "Font Awesome 5 Brands", "simple-line-icons"],
+                    urls: ['/Admin/Files/stylesheets/Assets/fonts.min.css']},
+                active: function() {
+                    sessionStorage.fonts = true;
+                }
+            });
+        </script>
 
-    <!-- CSS Files -->
-    <link rel="stylesheet" href="/Admin/Files/stylesheets/Assets/bootstrap.min.css">
-    <link rel="stylesheet" href="/Admin/Files/stylesheets/Assets/atlantis.min.css">
-    <link rel="stylesheet" href="/Admin/Files/stylesheets/Admin/index.css">
+        <!-- CSS Files -->
+        <link rel="stylesheet" href="/Admin/Files/stylesheets/Assets/bootstrap.min.css">
+        <link rel="stylesheet" href="/Admin/Files/stylesheets/Assets/atlantis.min.css">
+        <link rel="stylesheet" href="/Admin/Files/stylesheets/Admin/index.css">
+    </head>
+    <body data-background-color="<%=currentUser.Admin?currentUser.Admin.Background:"dark"%>">
+        <div class="wrapper <%=currentUser.Admin?currentUser.Admin.layout:"compact-wrapper"%>">
+            <!-- Navbar -->
+            <div class="main-header">
+                <!-- Logo Header -->
+                <div class="logo-header" data-background-color="<%=currentUser.Admin?currentUser.Admin.LogoHeader:"dark"%>">
 
-  </head>
-  <body data-background-color="dark">
-  <div class="wrapper">
-    <!-- Navbar -->
-    <div class="main-header">
-      <!-- Logo Header -->
-      <div class="logo-header" data-background-color="dark">
-
-        <a href="/" class="logo" >
-          <!--img src="/Admin/Files/images/Assets/logo.svg" alt="navbar brand" class="navbar-brand"-->
-          Vinland
-        </a>
-        <button class="navbar-toggler sidenav-toggler ml-auto" type="button" data-toggle="collapse" data-target="collapse" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon">
-                <i class="icon-menu"></i>
-            </span>
-        </button>
-        <button class="topbar-toggler more"><i class="icon-options-vertical"></i></button>
-        <div class="nav-toggle">
-          <button class="btn btn-toggle toggle-sidebar">
-            <i class="icon-menu"></i>
-          </button>
-        </div>
-      </div>
-      <!-- End Logo Header -->
-
-      <!-- Navbar Header -->
-      <nav class="navbar navbar-header navbar-expand-lg" data-background-color="dark">
-        <div class="container-fluid">
-          <ul class="navbar-nav topbar-nav ml-md-auto align-items-center">
-            <li class="nav-item toggle-nav-search hidden-caret">
-              <a class="nav-link" data-toggle="collapse" href="#search-nav" role="button" aria-expanded="false" aria-controls="search-nav">
-                <i class="fa fa-search"></i>
-              </a>
-            </li>
-            <li class="nav-item dropdown hidden-caret">
-              <a class="nav-link dropdown-toggle" href="#" id="messageDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fa fa-envelope"></i>
-              </a>
-              <ul class="dropdown-menu messages-notif-box animated fadeIn" aria-labelledby="messageDropdown">
-                <li>
-                  <div class="dropdown-title d-flex justify-content-between align-items-center">
-                    Messages
-                    <a href="#" class="small">Mark all as read</a>
-                  </div>
-                </li>
-                <li>
-                  <div class="message-notif-scroll scrollbar-outer">
-                    <div class="notif-center">
-                      <a href="#">
-                        <div class="notif-img">
-                          <img src="/Admin/Files/images/Assets/Larbi.JPG" alt="Img Profile">
-                        </div>
-                        <div class="notif-content">
-                          <span class="subject">L<>rbi</span>
-                          <span class="block">How are you ?</span>
-                          <span class="time">5 minutes ago</span>
-                        </div>
-                      </a>
-                      <a href="#">
-                        <div class="notif-img">
-                          <img src="/Admin/Files/images/Assets/Lakhder.JPG" alt="Img Profile">
-                        </div>
-                        <div class="notif-content">
-                          <span class="subject">Lakhder</span>
-                          <span class="block">Ok, Thanks !</span>
-                          <span class="time">12 minutes ago</span>
-                        </div>
-                      </a>
-                      <a href="#">
-                        <div class="notif-img">
-                          <img src="/Admin/Files/images/Assets/Safouan.JPG" alt="Img Profile">
-                        </div>
-                        <div class="notif-content">
-                          <span class="subject">Safouan</span>
-                          <span class="block">Hi, Apa Kabar ?</span>
-                          <span class="time">12 minutes ago</span>
-                        </div>
-                      </a>
-                      <a href="#">
-                        <div class="notif-img">
-                          <img src="/Admin/Files/images/Assets/Alla.JPG" alt="Img Profile">
-                        </div>
-                        <div class="notif-content">
-                          <span class="subject">Alla</span>
-                          <span class="block">Ready for the meeting today...</span>
-                          <span class="time">17 minutes ago</span>
-                        </div>
-                      </a>
+                    <a href="/" class="logo" >
+                        <svg class="navbar-brand" style="width:7em;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 558.16 99.72">
+                            <defs><style>
+                                    .logo-header:not([data-background-color=white]) .navbar-brand{fill:white;}
+                                    .logo-header[data-background-color=white] .navbar-brand{fill:#000000bf;}
+                                </style></defs>
+                            <g id="Layer" data-name="Layer">
+                                <path id="V" class="cls-1" d="M0,3H7.73L26.67,72.6,42.44,14.52H22.88L19.72,3H53.5L26.67,99.72Z"/>
+                                <path id="I" class="cls-1" d="M57.06,96.76V85.07H67.88V14.52H57.06V3H85.82V14.52H75V85.07H85.82V96.76Z"/>
+                                <path id="N" class="cls-1" d="M102.52,51.78v45H95.41V.39l39,47.28V3h7.12V99.33Zm31.93,10L102.52,23.26V37.78l31.93,38.55Z"/>
+                                <path id="L" class="cls-1" d="M155.49,3h7.11V63.35h32.47V74.27H162.6V85.84h32.47V96.76H155.49Z"/>
+                                <path id="A" class="cls-1" d="M226.62,0l28,96.76H198.78ZM210.15,85.19h32.93L226.62,26.47Z"/>
+                                <path id="N-2" class="cls-1" d="M268.6,51.78v45h-7.11V.39l39,47.28V3h7.11V99.33Zm31.93,10L268.6,23.26V37.78l31.93,38.55Z"/>
+                                <path id="D" class="cls-1" d="M319.79,96.76V50.11h7.11v35H338c12.91,0,22.65-14.14,22.65-35.34,0-20.95-9.74-35.08-22.65-35.08H320V3h18.17C355,3,368.34,22.1,368.34,49.73s-13.07,47-29.69,47Z"/>
+                                <path id="C" class="cls-1" d="M425.48,98.69c-17.86,0-31.24-20.82-31.24-48.83S407.62,1,425.48,1c8.5,0,15.85,4.75,21.26,12.85l-4.72,9c-3.4-5.39-8-9-13.22-10V32.51c4.1,2.31,7,8.35,7,16.83s-3,14.39-7,16.71V86.74c5.34-1,9.82-4.63,13.22-10l5.11,8.36C441.79,93.93,434.14,98.69,425.48,98.69Zm-3.79-12V66.18c-4.17-2.06-7.34-8.23-7.34-16.84s3.09-14.65,7.34-16.83V13c-11.83,2.57-20.1,16.83-20.1,36.88S409.86,84.17,421.69,86.74Zm-.62-37.4c0,4,1.63,6.69,4,6.69s4-2.7,4-6.69-1.62-6.68-3.94-6.68C422.7,42.66,421.07,45.36,421.07,49.34Z"/>
+                                <path id="M" class="cls-1" d="M478.06,14.52H463V96.76h-7.11V3h51.49v93.8h-7.12V14.52H485.17V96.76h-7.11Z"/>
+                                <path id="S" class="cls-1" d="M517.88,87.12,523.06,79c3.48,5.52,7.5,8.09,13.06,8.09,7.35,0,13.61-7.07,14.85-19.53-3.25,3-7,4.75-10.75,4.75-12.68,0-22-15.16-22-35.33,0-20.82,9.35-36,22-36C546.71,1,552.13,5.4,556.46,12l-5,9c-3.25-5.15-6.73-8.36-11.21-8.36-7.27,0-13.68,7.07-14.84,20.05,3.32-3.34,7.19-5.27,10.74-5.27,12.68,0,22,14.91,22,35.34s-9.36,36-22,36C528.78,98.69,522.44,94.57,517.88,87.12Zm32.7-31.87c-1.86-10.66-7.81-16.32-14.46-16.32-4,0-7.42,1.8-10.36,5.79,1.94,10.41,7.66,16.06,14.46,16.06C544.55,60.78,547.72,58.85,550.58,55.25Z"/>
+                            </g>
+                        </svg>
+                    </a>
+                    <button class="navbar-toggler sidenav-toggler ml-auto" type="button" data-toggle="collapse" data-target="collapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon">
+                        <i class="icon-menu"></i>
+                    </span>
+                    </button>
+                    <button class="topbar-toggler more"><i class="icon-options-vertical"></i></button>
+                    <div class="nav-toggle">
+                        <button class="btn btn-toggle toggle-sidebar">
+                            <i class="icon-menu"></i>
+                        </button>
                     </div>
-                  </div>
-                </li>
-                <li>
-                  <a class="see-all" href="javascript:void(0);">See all messages<i class="fa fa-angle-right"></i> </a>
-                </li>
-              </ul>
-            </li>
-            <li class="nav-item dropdown hidden-caret">
-              <a class="nav-link dropdown-toggle" href="#" id="notifDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fa fa-bell"></i>
-                <span class="notification">4</span>
-              </a>
-              <ul class="dropdown-menu notif-box animated fadeIn" aria-labelledby="notifDropdown">
-                <li>
-                  <div class="dropdown-title">You have 4 new notification</div>
-                </li>
-                <li>
-                  <div class="notif-scroll scrollbar-outer">
-                    <div class="notif-center">
-                      <a href="#">
-                        <div class="notif-icon notif-primary"> <i class="fa fa-user-plus"></i> </div>
-                        <div class="notif-content">
-													<span class="block">
-														New user registered
-													</span>
-                          <span class="time">5 minutes ago</span>
-                        </div>
-                      </a>
-                      <a href="#">
-                        <div class="notif-icon notif-success"> <i class="fa fa-comment"></i> </div>
-                        <div class="notif-content">
-													<span class="block">
-														Micro Club commented on Assets
-													</span>
-                          <span class="time">12 minutes ago</span>
-                        </div>
-                      </a>
-                      <a href="#">
-                        <div class="notif-img">
-                          <img src="/Admin/Files/images/Assets/profile2.jpg" alt="Img Profile">
-                        </div>
-                        <div class="notif-content">
-													<span class="block">
-														Admin2 sent a messages to you
-													</span>
-                          <span class="time">12 minutes ago</span>
-                        </div>
-                      </a>
-                      <a href="#">
-                        <div class="notif-icon notif-danger"> <i class="fa fa-heart"></i> </div>
-                        <div class="notif-content">
-													<span class="block">
-														Farrah liked Admin
-													</span>
-                          <span class="time">17 minutes ago</span>
-                        </div>
-                      </a>
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <a class="see-all" href="javascript:void(0);">See all notifications<i class="fa fa-angle-right"></i> </a>
-                </li>
-              </ul>
-            </li>
-            <li class="nav-item dropdown hidden-caret">
-              <a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#" aria-expanded="false">
-                <div class="avatar-sm">
-                  <img src=<%= currentUser.profileImage %> alt="..." class="avatar-img rounded-circle">
                 </div>
-              </a>
-              <ul class="dropdown-menu dropdown-user animated fadeIn">
-                <div class="dropdown-user-scroll scrollbar-outer">
-                  <li>
-                    <div class="user-box">
-                      <div class="avatar-lg"><img src=<%= currentUser.profileImage %> alt="image-profile" class="avatar-img rounded"></div>
-                      <div class="u-text">
-                        <h4><%= currentUser.username %></h4>
-                        <p class="text-muted"><%= currentUser.email %></p><a href="/user/<%= currentUser.id %>" class="btn btn-xs btn-secondary btn-sm">View Profile</a>
-                      </div>
+                <!-- End Logo Header -->
+                <!-- Navbar Header -->
+                <nav class="navbar navbar-header navbar-expand-lg" data-background-color="<%=currentUser.Admin?currentUser.Admin.NavbarHeader:"dark"%>">
+                    <div class="container-fluid">
+                        <ul class="navbar-nav topbar-nav ml-md-auto align-items-center">
+                            <li class="nav-item toggle-nav-search hidden-caret">
+                                <a class="nav-link" data-toggle="collapse" href="#search-nav" role="button" aria-expanded="false" aria-controls="search-nav">
+                                    <i class="fa fa-search"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item dropdown hidden-caret">
+                                <a class="nav-link dropdown-toggle" href="#" id="messageDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fa fa-envelope"></i>
+                                </a>
+                                <ul class="dropdown-menu messages-notif-box animated fadeIn" aria-labelledby="messageDropdown">
+                                    <li>
+                                        <div class="dropdown-title d-flex justify-content-between align-items-center">
+                                            Messages
+                                            <a href="#" class="small">Mark all as read</a>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="message-notif-scroll scrollbar-outer">
+                                            <div class="notif-center">
+                                                <a href="#">
+                                                    <div class="notif-img">
+                                                        <img src="/Admin/Files/images/Assets/Larbi.JPG" alt="Img Profile">
+                                                    </div>
+                                                    <div class="notif-content">
+                                                        <span class="subject">L<>rbi</span>
+                                                        <span class="block">How are you ?</span>
+                                                        <span class="time">5 minutes ago</span>
+                                                    </div>
+                                                </a>
+                                                <a href="#">
+                                                    <div class="notif-img">
+                                                        <img src="/Admin/Files/images/Assets/Lakhder.JPG" alt="Img Profile">
+                                                    </div>
+                                                    <div class="notif-content">
+                                                        <span class="subject">Lakhder</span>
+                                                        <span class="block">Ok, Thanks !</span>
+                                                        <span class="time">12 minutes ago</span>
+                                                    </div>
+                                                </a>
+                                                <a href="#">
+                                                    <div class="notif-img">
+                                                        <img src="/Admin/Files/images/Assets/Safouan.JPG" alt="Img Profile">
+                                                    </div>
+                                                    <div class="notif-content">
+                                                        <span class="subject">Safouan</span>
+                                                        <span class="block">Hi, Apa Kabar ?</span>
+                                                        <span class="time">12 minutes ago</span>
+                                                    </div>
+                                                </a>
+                                                <a href="#">
+                                                    <div class="notif-img">
+                                                        <img src="/Admin/Files/images/Assets/Alla.JPG" alt="Img Profile">
+                                                    </div>
+                                                    <div class="notif-content">
+                                                        <span class="subject">Alla</span>
+                                                        <span class="block">Ready for the meeting today...</span>
+                                                        <span class="time">17 minutes ago</span>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <a class="see-all" href="javascript:void(0);">See all messages<i class="fa fa-angle-right"></i> </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown hidden-caret">
+                                <a class="nav-link dropdown-toggle" href="#" id="notifDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fa fa-bell"></i>
+                                    <span class="notification">4</span>
+                                </a>
+                                <ul class="dropdown-menu notif-box animated fadeIn" aria-labelledby="notifDropdown">
+                                    <li>
+                                        <div class="dropdown-title">You have 4 new notification</div>
+                                    </li>
+                                    <li>
+                                        <div class="notif-scroll scrollbar-outer">
+                                            <div class="notif-center">
+                                                <a href="#">
+                                                    <div class="notif-icon notif-primary"> <i class="fa fa-user-plus"></i> </div>
+                                                    <div class="notif-content">
+                                                            <span class="block">
+                                                                New user registered
+                                                            </span>
+                                                        <span class="time">5 minutes ago</span>
+                                                    </div>
+                                                </a>
+                                                <a href="#">
+                                                    <div class="notif-icon notif-success"> <i class="fa fa-comment"></i> </div>
+                                                    <div class="notif-content">
+                                                            <span class="block">
+                                                                Micro Club commented on Assets
+                                                            </span>
+                                                        <span class="time">12 minutes ago</span>
+                                                    </div>
+                                                </a>
+                                                <a href="#">
+                                                    <div class="notif-img">
+                                                        <img src="/Admin/Files/images/Assets/profile2.jpg" alt="Img Profile">
+                                                    </div>
+                                                    <div class="notif-content">
+                                                            <span class="block">
+                                                                Admin2 sent a messages to you
+                                                            </span>
+                                                        <span class="time">12 minutes ago</span>
+                                                    </div>
+                                                </a>
+                                                <a href="#">
+                                                    <div class="notif-icon notif-danger"> <i class="fa fa-heart"></i> </div>
+                                                    <div class="notif-content">
+                                                            <span class="block">
+                                                                Farrah liked Admin
+                                                            </span>
+                                                        <span class="time">17 minutes ago</span>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <a class="see-all" href="javascript:void(0);">See all notifications<i class="fa fa-angle-right"></i> </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown hidden-caret">
+                                <a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#" aria-expanded="false">
+                                    <div class="avatar-sm">
+                                        <img src=<%= currentUser.profileImage %> alt="..." class="avatar-img rounded-circle">
+                                    </div>
+                                </a>
+                                <ul class="dropdown-menu dropdown-user animated fadeIn">
+                                    <div class="dropdown-user-scroll scrollbar-outer">
+                                        <li>
+                                            <div class="user-box">
+                                                <div class="avatar-lg"><img src=<%= currentUser.profileImage %> alt="image-profile" class="avatar-img rounded"></div>
+                                                <div class="u-text">
+                                                    <h4><%= currentUser.username %></h4>
+                                                    <p class="text-muted"><%= currentUser.email %></p><a href="/user/<%= currentUser.id %>" class="btn btn-xs btn-secondary btn-sm">View Profile</a>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="#">My Profile</a>
+                                            <a class="dropdown-item" href="#">Inbox</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="#">Account Setting</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="/logout">Logout</a>
+                                        </li>
+                                    </div>
+                                </ul>
+                            </li>
+                        </ul>
                     </div>
-                  </li>
-                  <li>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">My Profile</a>
-                    <a class="dropdown-item" href="#">Inbox</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Account Setting</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="/logout">Logout</a>
-                  </li>
+                </nav>
+                <!-- End Navbar -->
+            </div>
+            <!-- Sidebar -->
+            <div class="sidebar sidebar-style-2" data-background-color="<%=currentUser.Admin?currentUser.Admin.Sidebar:"dark"%>">
+                <div class="sidebar-wrapper scrollbar scrollbar-inner">
+                    <div class="sidebar-content">
+                        <div class="user">
+                            <div class="avatar-sm float-left mr-2">
+                                <img src=<%= currentUser.profileImage %> alt="..." class="avatar-img rounded-circle">
+                            </div>
+                            <div class="info">
+                                <a data-toggle="collapse" href="#collapseExample" aria-expanded="true">
+                                    <span>
+                                        <%= currentUser.username %>
+                                        <span class="user-level"><%= currentUser.owner?"Owner":"Admin" %></span>
+                                        <span class="caret"></span>
+                                    </span>
+                                </a>
+                                <div class="collapse in" id="collapseExample">
+                                    <ul class="nav">
+                                        <li><a href="#"><span class="link-collapse">My Profile</span></a></li>
+                                        <li><a href="#" loading-Link="/Admin/Settings"><span class="link-collapse">Settings</span></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <ul class="nav nav-primary">
+                            <li class="nav-item active">
+                                <a href="#" loading-Link="./dashboard" ><i class="fas fa-home"></i><p>Dashboard</p></a>
+                            </li>
+                            <li class="nav-section">
+                                <span class="sidebar-mini-icon"><i class="fa fa-ellipsis-h"></i></span><h4 class="text-section">Components</h4>
+                            </li>
+                            <li class="nav-item">
+                                <a data-toggle="collapse" href="#base"><i class="fas fa-layer-group"></i><p>API Manager</p><span class="caret"></span></a>
+                                <div class="collapse" id="base">
+                                    <ul class="nav nav-collapse">
+                                        <li>
+                                            <a href="#"  loading-Link="/Admin/ApiSchemas">
+                                                <span class="sub-item">API Schemas</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#"  loading-Link="/Admin/database">
+                                                <span class="sub-item">DataBase</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="nav-item">
+                                <a data-toggle="collapse" href="#UsersManager" >
+                                    <i class="fas fa-user-cog"></i>
+                                    <p>Users Managers</p>
+                                    <span class="caret"></span>
+                                </a>
+                                <div class="collapse" id="UsersManager">
+                                    <ul class="nav nav-collapse">
+                                        <li>
+                                            <a href="#"  loading-Link="/Admin/UsersList">
+                                                <span class="sub-item">Users List</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#"  loading-Link="/Admin/Roles">
+                                                <span class="sub-item">Roles</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" loading-Link="/Admin/FilesManager">
+                                    <i class="fas far fa-list"></i>
+                                    <p>Files Manager</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a data-toggle="collapse" href="#WebSiteSettings" >
+                                    <i class="fas fa-cog"></i>
+                                    <p>WebSite Settings</p>
+                                    <span class="caret"></span>
+                                </a>
+                                <div class="collapse" id="WebSiteSettings">
+                                    <ul class="nav nav-collapse">
+                                        <li>
+                                            <a href="#"  loading-Link="/Admin/General">
+                                                <span class="sub-item">General</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#"  loading-Link="/Admin/Writing">
+                                                <span class="sub-item">Writing</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#"  loading-Link="/Admin/Reading">
+                                                <span class="sub-item">Reading</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#"  loading-Link="/Admin/Templates">
+                                                <span class="sub-item">Templete</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-              </ul>
-            </li>
-          </ul>
-        </div>
-      </nav>
-      <!-- End Navbar -->
-    </div>
-    <!-- Sidebar -->
-    <div class="sidebar sidebar-style-2" data-background-color="dark">
-      <div class="sidebar-wrapper scrollbar scrollbar-inner">
-        <div class="sidebar-content">
-          <div class="user">
-            <div class="avatar-sm float-left mr-2">
-              <img src=<%= currentUser.profileImage %> alt="..." class="avatar-img rounded-circle">
             </div>
-            <div class="info">
-              <a data-toggle="collapse" href="#collapseExample" aria-expanded="true">
-								<span>
-									<%= currentUser.username %>
-									<span class="user-level"><%= currentUser.role %></span>
-									<span class="caret"></span>
-								</span>
-              </a>
-              <div class="clearfix"></div>
-
-              <div class="collapse in" id="collapseExample">
-                <ul class="nav">
-                  <li>
-                    <a href="#">
-                      <span class="link-collapse">My Profile</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <span class="link-collapse">Edit Profile</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" loading-Link="/Admin/Settings">
-                      <span class="link-collapse">Settings</span>
-                    </a>
-                  </li>
-                </ul>
-              </div>
+            <!-- main-panel -->
+            <div class="main-panel">
+                <div class="content"></div>
+                <footer class="footer">
+                    <div class="container-fluid">
+                        <nav class="pull-left">
+                            <ul class="nav">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/AboutUs" >
+                                        Vinland
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">
+                                        Help
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">
+                                        Licenses
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                        <div class="copyright ml-auto">
+                            2020, made by <a href="https://www.themekita.com">Vinland</a>
+                        </div>
+                    </div>
+                </footer>
             </div>
-          </div>
-          <ul class="nav nav-primary">
-            <li class="nav-item active">
-              <a href="#" loading-Link="./dashboard" >
-                <i class="fas fa-home"></i>
-                <p>Dashboard</p>
-              </a>
-            </li>
-            <li class="nav-section">
-							<span class="sidebar-mini-icon">
-								<i class="fa fa-ellipsis-h"></i>
-							</span>
-              <h4 class="text-section">Components</h4>
-            </li>
-            <li class="nav-item">
-              <a data-toggle="collapse" href="#base">
-                <i class="fas fa-layer-group"></i>
-                <p>API Manager</p>
-                <span class="caret"></span>
-              </a>
-              <div class="collapse" id="base">
-                <ul class="nav nav-collapse">
-                  <li>
-                    <a href="#"  loading-Link="/Admin/ApiSchemas">
-                      <span class="sub-item">API Schemas</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#"  loading-Link="/Admin/database">
-                      <span class="sub-item">DataBase</span>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </li>
-            <li class="nav-item">
-              <a data-toggle="collapse" href="#UsersManager" >
-                <i class="fas fa-user-cog"></i>
-                <p>Users Managers</p>
-                <span class="caret"></span>
-              </a>
-              <div class="collapse" id="UsersManager">
-                <ul class="nav nav-collapse">
-                  <li>
-                    <a href="#"  loading-Link="/Admin/UsersList">
-                      <span class="sub-item">Users List</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#"  loading-Link="/Admin/Roles">
-                      <span class="sub-item">Roles</span>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </li>
-            <li class="nav-item">
-              <a href="#" loading-Link="/Admin/FilesManager">
-                <i class="fas far fa-list"></i>
-                <p>Files Manager</p>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a data-toggle="collapse" href="#WebSiteSettings" >
-                <i class="fas fa-cog"></i>
-                <p>WebSite Settings</p>
-                <span class="caret"></span>
-              </a>
-              <div class="collapse" id="WebSiteSettings">
-                <ul class="nav nav-collapse">
-                  <li>
-                    <a href="#"  loading-Link="/Admin/General">
-                      <span class="sub-item">General</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#"  loading-Link="/Admin/DataBaseSettings">
-                      <span class="sub-item">DataBase</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#"  loading-Link="/Admin/Writing">
-                      <span class="sub-item">Writing</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#"  loading-Link="/Admin/Reading">
-                      <span class="sub-item">Reading</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#"  loading-Link="/Admin/Templates">
-                      <span class="sub-item">Templete</span>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </li>
-
-          </ul>
         </div>
-      </div>
-    </div>
-    <!-- main-panel -->
-    <div class="main-panel">
-      <div class="content"></div>
-      <footer class="footer">
-        <div class="container-fluid">
-          <nav class="pull-left">
-            <ul class="nav">
-              <li class="nav-item">
-                <a class="nav-link" href="/AboutUs" >
-                  Vinland
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">
-                  Help
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">
-                  Licenses
-                </a>
-              </li>
-            </ul>
-          </nav>
-          <div class="copyright ml-auto">
-            2020, made by <a href="https://www.themekita.com">Vinland</a>
-          </div>
-        </div>
-      </footer>
-    </div>
-  </div>
-  <div class="CoreScripts">
-    <!--   Core JS Files   -->
-    <script src="/Admin/Files/javascripts/Assets/core/jquery.3.2.1.min.js"></script>
-    <script src="/Admin/Files/javascripts/Assets/core/popper.min.js"></script>
-    <script src="/Admin/Files/javascripts/Assets/core/bootstrap.min.js"></script>
-    <!-- jQuery UI -->
-    <script src="/Admin/Files/javascripts/Assets/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
-    <script src="/Admin/Files/javascripts/Assets/plugin/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js"></script>
+        <div class="CoreScripts">
+            <!--   Core JS Files   -->
+            <script src="/Admin/Files/javascripts/Assets/core/jquery.3.2.1.min.js"></script>
+            <script src="/Admin/Files/javascripts/Assets/core/popper.min.js"></script>
+            <script src="/Admin/Files/javascripts/Assets/core/bootstrap.min.js"></script>
+            <!-- jQuery UI -->
+            <script src="/Admin/Files/javascripts/Assets/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
+            <script src="/Admin/Files/javascripts/Assets/plugin/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js"></script>
 
-    <!-- jQuery Scrollbar -->
-    <script src="/Admin/Files/javascripts/Assets/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
-    <script src="/Admin/Files/javascripts/Assets/atlantis.min.js"></script>
-    <script src="/Admin/Files/javascripts/Admin/Admin.js"></script>
-    <script>
-      clickHash("<%=url%>");
-    </script>
-  </div>
-  </body>
+            <!-- jQuery Scrollbar -->
+            <script src="/Admin/Files/javascripts/Assets/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
+            <script src="/Admin/Files/javascripts/Assets/atlantis.min.js"></script>
+            <script src="/Admin/Files/javascripts/Admin/Admin.js"></script>
+            <script>
+                clickHash("<%=url%>");
+            </script>
+        </div>
+    </body>
 </html>

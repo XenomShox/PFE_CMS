@@ -68,42 +68,28 @@ class WebSite {
         Schema:{
             "type": "object",
             "properties":{
-                "DataBase":{
-                    "type":"object",
-                    "properties":{
-                        "Name": {"type": "string"},
-                        "URI":{"type": "string"},
-                        "UserName":{"type": "string"},
-                        "Password":{"type": "string"}
-                    },
-                    "required":["Name","URI","UserName","Password"]
-                },
-                "Security":{
-                    "type":"object",
-                    "properties":{
-                        "SECRET_KEY":{"type": "string"}
-                    },
-                    "required":["SECRET_KEY"]
-                },
-                "ApiManager": {
-                    "type": "object",
-                    "properties": {
-                        "Enabled":  {"type": "boolean"},
-                        "ApiPostContent": {
-                            "type": "object",
-                            "properties":{
-                                "Enabled": {"type": "boolean"},
-                                "reference": {"type": "string, null"}
-                            },
-                            "required":["Enabled","reference"]
-                        },
-                    },
-                    "required":["Enabled" ,"ApiPostContent"]
-                }
+                "Enabled": {"type": "boolean"},
+                "reference": {"type": "string, null"}
             },
-            "required":["DataBase" ,"Security","ApiManager"]
+            "required":["Enabled","reference"]
         },
-        File:"../VinlandSystem.json"
+        File:"../ApiPost.json"
+    };
+    #Database={
+        Data:{},
+        Schema:{
+            "type":"object",
+            "properties":{
+                "Name": {"type": "string"},
+                "URI":{"type": "string"},
+                "UserName":{"type": "string"},
+                "Password":{"type": "string"},
+                "SECRET_KEY":{"type": "string"}
+
+            },
+            "required":["Name","URI","UserName","Password","SECRET_KEY"]
+        },
+        File:"../Database.json"
     };
     #WebSiteCategories;
     #EmailSettings={
@@ -151,48 +137,36 @@ class WebSite {
     StartUp(Details){
         console.log("Lunching The WebSite");
         this.#WebSiteDetails.Data=Details;
-        this.LoadJsonFile(this.#Settings.File)
-            .then((settings)=>{
-                if(Validator.validate(settings,this.#Settings.Schema).valid) {
-                    this.#Settings.Data=settings;
-                    return mongoose.connect(this.#Settings.Data.DataBase.URI, {
-                        useNewUrlParser: true,
-                        useCreateIndex: true,
-                        useUnifiedTopology: true,
-                        auth:{user:this.#Settings.Data.DataBase.UserName,password:this.#Settings.Data.DataBase.Password},
-                        dbName: this.#Settings.Data.DataBase.Name,
+        this.LoadJsonFile(this.#Database.File)
+            .then(async (Database)=>{
+                if(!Validator.validate(Database,this.#Database.Schema).valid) throw new Error("DataBase isn't valid");
+                this.#Database.Data=Database;
+                await this.StartDataBase();
+                this.LoadJsonFile(this.#Settings.File)
+                    .then((Settings)=>{
+                        if(!Validator.validate(Settings,this.#Settings.Schema).valid) throw new Error("Settings aren't valid");
+                        this.#Settings.Data=Settings;
+                        require("./ApiManager").StartApiManager();
+                        app.use("/Api", require("../routes/Api"));
+                        app.use("/files", require("../routes/Files"));
+                        app.use( (req,res,next) =>{
+                            res.locals.WebSite = this.#WebSiteDetails.Data;
+                            res.locals.Categories = this.#WebSiteCategories;
+                            res.locals.WebSite.Title = res.locals.WebSite.Name;
+                            next();
+                        })
+                        app.use("/Admin", (req,res,next)=>{
+                            res.locals.Settings=this.#Settings.Data;
+                            res.locals.Email=this.#EmailSettings.Data;
+                            next();
+                        },require("../routes/Admin"));
+                        switch (this.#WebSiteDetails.Data.Type) {
+                            case "Blog":
+                                return this.SetUpBlog();
+                        }
                     })
-                        .then((eve)=>{
-                            console.log("Db connected");
-                            eve.connection.on("disconnected",()=>{process.exit(100);});
-                            if(this.#Settings.Data.ApiManager.Enabled){
-                                // lunch the apiManager
-                                require("./ApiManager").StartApiManager();
-                                app.use("/Api", require("../routes/Api"));
-                            }
-                        })//Api System
-                        .then(()=>{
-                            app.use("/files", require("../routes/Files"));
-                            app.use( (req,res,next) =>{
-                                res.locals.WebSite = this.#WebSiteDetails.Data;
-                                res.locals.Categories = this.#WebSiteCategories;
-                                res.locals.WebSite.Title = res.locals.WebSite.Name;
-                                next();
-                            })
-                            app.use("/Admin", (req,res,next)=>{
-                                res.locals.Settings=this.#Settings.Data;
-                                res.locals.Email=this.#EmailSettings.Data;
-                                next();
-                            },require("../routes/Admin"));
-                            switch (this.#WebSiteDetails.Data.Type) {
-                                case "Blog":
-                                    return this.SetUpBlog();
-                            }
-                        })//Web Site Type
-                        .then(()=>{console.log("WebSite Lunched correctly")})
+                    .then(()=>{console.log("WebSite Lunched correctly")})
 
-                }
-                else throw new Error("Settings aren't valid");
             })
             .catch(reason => {
                 console.log("WebSite didn't lunch correctly ",reason)
@@ -208,6 +182,18 @@ class WebSite {
     Installation(){
         console.log("Installing the WebSite");
     }
+    StartDataBase(){
+        return mongoose.connect(this.#Database.Data.URI, {
+            useNewUrlParser: true,
+            useCreateIndex: true,
+            useUnifiedTopology: true,
+            auth:{user:this.#Database.Data.UserName,password:this.#Database.Data.Password},
+            dbName: this.#Database.Data.Name,
+        }).then((eve)=>{
+            console.log("Db connected");
+            eve.connection.on("disconnected",()=>{process.exit(100);});
+        });
+    }
     LoadCategories(categories){
         this.#WebSiteCategories=[]
         categories.forEach((category)=>{
@@ -221,9 +207,7 @@ class WebSite {
         console.log("Categories Loaded");
     }
     SaveSettings(settings,callback){
-        settings.ApiManager.Enabled=settings.ApiManager.Enabled==="true";
-        settings.ApiManager.ApiPostContent.Enabled=settings.ApiManager.ApiPostContent.Enabled==="true";
-
+        settings.Enabled=settings.Enabled==="true";
         if(Validator.validate(settings,this.#Settings.Schema).valid) {
             this.WriteJsonFile(this.#Settings.File,JSON.stringify(settings)).then(()=>{
                 this.#Settings.Data=settings;
@@ -259,6 +243,7 @@ class WebSite {
         else callback(400,"These Details aren't Valid");
     }
     SetUpBlog() {
+        require("./CategoriesManager");
         return this.LoadJsonFile("../views/Blog(vinlandCMS)/Schema.json").then((Data)=>{
             app.set("Schema", {path:"Blog(vinlandCMS)/",...Data.Structure});
             let additional={};

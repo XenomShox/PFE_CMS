@@ -687,7 +687,28 @@
     $.fn.Schema = function (DataUrl, option) {
         return new SchemaManager(this, DataUrl, option);
     };
+    let ApiPost=$("#ApiPost"),
+        reference=$("#reference");
+    ApiPost.change(function (){
+        if(ApiPost.is(":checked")) DisableReference(false);
+        else DisableReference(true);
+    });
+    function DisableReference(bool){
+        reference.prop("disabled",bool)
+    }
+    $.ajax("/Api",{
+        dataType:"json",
+        method:"GET"
+    })
+        .then(data=>{
+            let value=reference.attr("data-value")
+            data.forEach(dat=>{
+                reference.append(`<option value="${dat.Name}" ${dat.Name===value?"selected":""}>${dat.Name}</option>`);
+            })
+        })
+        .catch(reason => {console.log(reason)})
 })();
 var $Schemas = $("#Schemas");
+$("#DataBaseSettings").FormAjax();
 $Schemas.Schema("/Api/", $("#AddButton"));
 if(!window.matchMedia("(max-width: 767px)").matches)$Schemas.sortable();
