@@ -6,6 +6,7 @@
                 url: "/role",
                 type: "GET",
                 success: function (roles) {
+                    roles = roles.filter(role => role.name !== "Owner" && !role.owner)
                     roles.forEach((role) => {
                         container.append(
                             $(
@@ -86,6 +87,7 @@
                         delete permissions["__v"];
                         delete permissions["category"];
                         delete permissions["name"];
+                        delete permissions["owner"];
                         // console.log(permissions);
                         let permissionsContainer = $(
                             "div.role-permission-list"

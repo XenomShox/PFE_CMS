@@ -6,6 +6,8 @@ const mongoose =require("mongoose"),
     app=require("../app"),
     PostManager=require("./PostManager"),
     Validator=new (require("jsonschema").Validator)();
+
+const { isLoggedIn, hasPermission } = require("../middlewares/middleware");
 /*
 const statistics=mongoose.Schema({
     Total:{type:Number,default:0},
@@ -258,7 +260,7 @@ class WebSite {
                 next();
             });
             app.use("/user", require("../routes/user"))
-            app.use("/role", require("../routes/roles"));
+            app.use("/role", isLoggedIn, hasPermission(["owner", "admin_privillage"]), require("../routes/roles"));
             app.use("/message", require("../routes/message"));
             app.use(require("../routes/BlogRouting"));
         })
