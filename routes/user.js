@@ -1,21 +1,11 @@
 const router = require("express").Router();
-// const passport = require("passport");
-
-// const Message = require("../models/messages");
-// const User = require("../models/user");
-// const Role = require("../models/role");
 
 const userMethods = require("../handler/user");
 
 // Middlewares
 const { isLoggedIn, hasPermission } = require("../middlewares/middleware");
 
-router.get(
-    "/",
-    isLoggedIn,
-    hasPermission(["admin_privillage"]),
-    userMethods.getUsers
-);
+router.get("/", isLoggedIn, hasPermission(["admin_privillage"]), userMethods.getUsers);
 
 router
     .route("/ban/:user_id")
