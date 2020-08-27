@@ -3,17 +3,21 @@
         #roles;
         constructor(table, _url) {
             let $this = this;
+
             $.ajax({
                 url: "/role",
                 dataType: "json",
-                success: function (res) {
-                    $this.#roles = res;
+                success: function (roles) {
+                    $this.#roles = roles.filter(
+                        (role) => role.name !== "Owner" && !role.owner
+                    );
                     let menu = $(".Context-Menu");
                 },
                 error: function (xhr, err) {
                     console.log(xhr, err);
                 },
             });
+
             let datatable = table.DataTable({
                 ajax: { url: _url, dataSrc: "" },
                 lengthMenu: [20, 30, 40, 50],
@@ -48,6 +52,7 @@
                 bAutoWidth: false,
                 pageLength: 20,
             });
+
             table.on("click", "button", async function () {
                 let clickedButton = $(this);
                 var data = datatable.row(clickedButton.parents("tr")).data();
@@ -153,40 +158,37 @@
                 }
                 // location.reload();
             });
+
             table.on("contextmenu", "tr", function (e) {
                 e.preventDefault();
-                let rowUser = datatable.row($(this)).data();
+                let rowUser = datatable.row($(this));
                 let menu = $(".Context-Menu");
-                menu.empty();
-                $.ajax({
-                    url: `/user/${rowUser._id}`,
-                    type: "GET",
-                    success: function (res) {
-                        console.log(res);
-                        menu.append($('<h4 class="text-center">Roles</h4>'))
-                            .append($('<hr class="w-75 rounded mb-2 mt-1">'))
-                            .append($this.createRolesElems(res));
+                menu.empty()
+                    .append($('<h4 class="text-center">Roles</h4>'))
+                    .append($('<hr class="w-75 rounded mb-2 mt-1">'))
+                    .append($this.createRolesElems(rowUser));
 
-                        menu.css({
-                            display: "block",
-                            left: $(e.target).parent().offset().left - 220,
-                            top:
-                                $(e.target).offset().top +
-                                $(e.target).height() / 2 -
-                                menu.height() / 2 -
-                                10,
-                        }).show();
-                    },
-                });
+                menu.css({
+                    display: "block",
+                    left: $(e.target).parent().offset().left - 220,
+                    top:
+                        $(e.target).offset().top +
+                        $(e.target).height() / 2 -
+                        menu.height() / 2 -
+                        10,
+                }).show();
             });
+
             $(document).click(function (e) {
                 if ($(e.target).parents(".Context-Menu").length === 0) {
                     $(".Context-Menu").hide();
                 }
             });
         }
-        createRolesElems(user) {
+        createRolesElems(rowUser) {
             let list = $(`<ul class="navbar-nav not-selected-nav"></ul>`);
+            let user = rowUser.data();
+
             this.#roles.forEach((role, idx) => {
                 let checkbox = $(
                     `<input id="check${idx}" type="checkbox" ${
@@ -197,15 +199,17 @@
                         $.ajax({
                             url: `/user/role/${user._id}/${role._id}`,
                             type: "POST",
-                            success: () => {
+                            success: (newUser) => {
+                                rowUser.data(newUser);
                                 console.log("Role Added");
                             },
                         });
                     } else {
                         $.ajax({
-                            url: `/user/role/delete/${user._id}/${role._id}`,
+                            url: `/user/role/${user._id}/${role._id}`,
                             type: "DELETE",
-                            success: () => {
+                            success: (newUser) => {
+                                rowUser.data(newUser);
                                 console.log("Role Deleted");
                             },
                             error: function (xhr, err) {
@@ -215,6 +219,7 @@
                         });
                     }
                 });
+
                 list.append(
                     $(
                         `<li class="rounded p-1 my-1 d-flex justify-content-between align-items-center"></li>`

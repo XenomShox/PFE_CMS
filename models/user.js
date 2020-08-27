@@ -63,8 +63,6 @@ userSchema.pre("save", async function (next) {
                 this.profileImage =
                     "https://www.sackettwaconia.com/wp-content/uploads/default-profile.png";
 
-            // if (!this.role || this.role === "admin") this.role = "user";
-
             this.banned.isBanned = false;
             this.banned.dateOfBan = undefined;
             this.banned.duration = undefined;
