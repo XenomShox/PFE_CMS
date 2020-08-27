@@ -59,13 +59,6 @@ exports.stratV2 = async function (username, password, done) {
                 userDoc.unbanUser();
                 await userDoc.save();
             } else {
-                // console.log(
-                //     `${
-                //         userDoc.username
-                //     } is banned from ${userDoc.banned.dateOfBan.getFullYear()}-${userDoc.banned.dateOfBan.getMonth()}-${userDoc.banned.dateOfBan.getDate()} for ${
-                //         userDoc.banned.duration
-                //     } days`
-                // );
                 return done(null, false, {
                     message: `${
                         userDoc.username

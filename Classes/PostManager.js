@@ -88,6 +88,9 @@ class PostManager {
            else callback(200,res);
         });
     }
-
+    /**-------------Comments----------**/
+    async appendComment(commentId){
+        //findUser and add comment
+    }
 }
 module.exports = new PostManager();

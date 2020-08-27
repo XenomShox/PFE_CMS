@@ -1,6 +1,7 @@
 const router = require('express').Router(),
     CategoriesManager=require("../Classes/CategoriesManager"),
     PostManager=require("../Classes/PostManager"),
+    CommentManager=require("../Classes/CommentsManager"),
     app=require("../app"),
     Schema=app.get("Schema");
 router.get('/', function(req, res) {
@@ -46,8 +47,12 @@ router.route('/Categories/*')
         if(res.locals.currentUser){
             req.body.tags=req.body.tags.split(" ")
             if( !(req.body.covers instanceof Array) ) req.body.covers=[req.body.covers];
-            console.log(req.query.post)
-            PostManager.CreatePost({...req.body,category:res.locals.Category["_id"],author:res.locals.currentUser["_id"]},(status,post)=>{
+            if(req.query.post) {
+                CommentManager.Create(req.query.post,req.query.comment,(status,result)=>{
+                    res.status(status).send(result);
+                })
+            }
+            else PostManager.CreatePost({...req.body,category:res.locals.Category["_id"],author:res.locals.currentUser["_id"]},(status,post)=>{
                 if(status===201) res.redirect(res.locals.Category.Slug+"?post="+post._id);
                 else res.status(status).render(Schema.path+Schema.Error.path,{message:"Couldn't Create Post"});
             })
