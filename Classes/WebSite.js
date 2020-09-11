@@ -245,7 +245,46 @@ class WebSite {
             .then(cats=>{
                 this.LoadCategories(cats);
             }))
-        promises.push( TemplatesManager.getAppliedTemplate()
+        promises.push( this.LoadTemplate())
+
+        /*promises.push( this.LoadJsonFile(this.#ReadingSettings.File)
+            .then(file=>{
+                if(!Validator.validate(file,this.#ReadingSettings.Schema).valid) throw new SyntaxError("Template schema is wrong.");
+                this.#ReadingSettings.Data=file;
+            }) )*/
+        return Promise.all(promises)
+            .then(()=>{
+                app.use((req,res,next)=>{
+                        req.Schema={name:this.#Template.name,...this.#Template.structure};
+                        next();
+                    },
+                    require("../routes/BlogRouting"));
+            })
+            .catch(err=>{
+                console.error(err);
+            })
+
+    }
+    StartDataBase(database=this.#Database.Data){
+        return mongoose.connect(database.URI, {
+            useNewUrlParser: true,
+            useCreateIndex: true,
+            useUnifiedTopology: true,
+            auth:{user:database.UserName,password:database.Password},
+            dbName: database.Name,
+        })
+            .then((eve)=>{
+                console.log("Db connected");
+                eve.connection.on("disconnected",()=>{console.error("Database disconnected")});
+            });
+    }
+
+    LoadCategories(Categories){
+        this.#WebSiteDetails.Categories=Categories;
+        console.log("Categories Loaded");
+    }
+    LoadTemplate(){
+        TemplatesManager.getAppliedTemplate()
             .catch(reason => {
                 console.error(reason);
                 if(!(reason instanceof mongoose.Error)) return TemplatesManager.CreateTemplate({
@@ -283,43 +322,8 @@ class WebSite {
                 template=template.toObject();
                 this.#Template=template;
                 this.#Template.Data=await this.LoadDataForTemplate(template.data);
+                console.log(this.#Template);
             })
-        )
-        /*promises.push( this.LoadJsonFile(this.#ReadingSettings.File)
-            .then(file=>{
-                if(!Validator.validate(file,this.#ReadingSettings.Schema).valid) throw new SyntaxError("Template schema is wrong.");
-                this.#ReadingSettings.Data=file;
-            }) )*/
-        return Promise.all(promises)
-            .then(()=>{
-                app.use((req,res,next)=>{
-                        req.Schema={name:this.#Template.name,...this.#Template.structure};
-                        next();
-                    },
-                    require("../routes/BlogRouting"));
-            })
-            .catch(err=>{
-                console.error(err);
-            })
-
-    }
-    StartDataBase(database=this.#Database.Data){
-        return mongoose.connect(database.URI, {
-            useNewUrlParser: true,
-            useCreateIndex: true,
-            useUnifiedTopology: true,
-            auth:{user:database.UserName,password:database.Password},
-            dbName: database.Name,
-        })
-            .then((eve)=>{
-                console.log("Db connected");
-                eve.connection.on("disconnected",()=>{console.error("Database disconnected")});
-            });
-    }
-
-    LoadCategories(Categories){
-        this.#WebSiteDetails.Categories=Categories;
-        console.log("Categories Loaded");
     }
     async LoadDataForTemplate(data){
         try {

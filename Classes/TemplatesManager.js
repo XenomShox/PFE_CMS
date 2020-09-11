@@ -1,6 +1,5 @@
 const mongoose=require("mongoose"),
     path = require('path'),
-    WebSite=require("./WebSite"),
     FileManager=require("./FileManager");
 class TemplatesManager{
     Schema;
@@ -28,12 +27,7 @@ class TemplatesManager{
                 "Error": {type:String,default:"Error" ,minlength:1 }
             },
             created:{type:Date,default:Date.now},
-            applied : { type : Date }
-        })
-        this.Schema.pre("save", async function(next){
-            let count=await this.constructor.countDocuments({name:{$regex:this.name}});
-            if(count>0) this.name +=`(${count})`;
-            next();
+            applied : { type : Date , default:()=>new Date("1999")}
         })
         this.model=mongoose.model("Vinland_Templates",this.Schema);
     }
@@ -95,13 +89,14 @@ class TemplatesManager{
         return Promise.all(promises).catch(reason => {console.error("File exist",reason);});
     }
     getTemplates(){
-        return this.model.find({}).sort("-created").sort("-applied").exec();
+        return this.model.find({}).sort("-applied").exec();
     }
     async applyTemplate(id){
         let template = await this.model.findById(id);
         if(!template) throw new Error("there is no Template with this Id");
         template.applied=new Date();
-        template.save();
+        await template.save();
+        require("./WebSite").LoadTemplate();
     }
     async removeTemplate(id){
         let template = await this.model.findById(id);

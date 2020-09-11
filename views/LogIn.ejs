@@ -58,6 +58,9 @@
              .form-group input{
                 color:#495057!important;
             }
+             .form-group .placeholder{
+                 color: #495057!important;
+             }
         </style>
     </head>
     <body data-background-color="dark">
@@ -71,7 +74,7 @@
                         <div class="alert alert-success text-center" role="alert"><%= success %></div>
                     <% } %>
                 </div>
-                <h3 class="text-center">Sign In To Admin</h3>
+                <h3 class="text-center">Log In</h3>
                 <!-- <div class="login-form d-flex flex-column"> -->
                     <form class="login-form d-flex flex-column" action="/login/" method="POST">
                         <div class="form-group form-floating-label">
@@ -87,14 +90,6 @@
                         </div>
                         <div class="d-none form-group form-floating-label">
                             <input name="to" value="<%= to %>">
-                        </div>
-                        <div class="row form-sub m-0">
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="rememberme">
-                                <label class="custom-control-label" for="rememberme">Remember Me</label>
-                            </div>
-
-                            <a href="#" class="link float-right">Forget Password ?</a>
                         </div>
                         <div class="mx-auto form-action mb-3 px-2 pt-5">
                             <button class="btn btn-primary btn-rounded btn-login px-5">Sign In</button>
@@ -141,13 +136,9 @@
                                 <i class="flaticon-interface"></i>
                             </div>
                         </div>
-                        <div class="form-group form-floating-label">
-                            <input  id="birthday" name="birthday" type="date" class="form-control input-border-bottom" required>
+                        <div class="form-group">
                             <label for="birthday" class="placeholder">Birthday</label>
-                        </div>
-                        <div class="form-group form-floating-label">
-                            <input  id="profileImage" name="profileImage" type="text" class="form-control input-border-bottom">
-                            <label for="profileImage" class="placeholder">Profile Image URL</label>
+                            <input  id="birthday" name="birthday" type="date" class="form-control input-border-bottom" required>
                         </div>
                         <div class="form-group form-floating-label">
                             <input  id="phone" name="phone" type="text" class="form-control input-border-bottom">
