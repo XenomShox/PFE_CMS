@@ -95,9 +95,5 @@ class PostManager {
         post.save();
         return post;
     }
-    /**-------------Comments----------**/
-    async appendComment(commentId){
-        //findUser and add comment
-    }
 }
 module.exports = new PostManager();

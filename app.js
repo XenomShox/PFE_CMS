@@ -25,17 +25,21 @@ const passport = require("passport"),
     { stratV2 } = require("./handler/strategy");
 // </editor-fold>
 // <editor-fold desc="serialization of password and user">
-let expressSession = require("express-session")({secret: process.env.SECRET_KEY, resave: false, saveUninitialized: false}),
-    strategy = new LocalStrategy({},stratV2);
+let expressSession = require("express-session")({
+        secret: process.env.SECRET_KEY,
+        resave: false,
+        saveUninitialized: false,
+    }),
+    strategy = new LocalStrategy(stratV2);
 app.use(expressSession);
 app.use(passport.initialize({}));
-app.use(passport.session({}));
-passport.use("Vinland Strategy",strategy);
+app.use(passport.session());
+passport.use("Vinland Strategy", strategy);
 
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 // </editor-fold>
-// <editor-fold desc="flash and Cookies setting "
+// <editor-fold desc="flash and Cookies setting ">
 app.use(cookieParser());
 app.use(flash());
 app.use(function (req, res, next) {

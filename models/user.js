@@ -54,13 +54,13 @@ let userSchema = new mongoose.Schema({
             ref: "User",
         },
     ],
-    Admin:{
-        LogoHeader:{type:String,default:"dark"},
-        NavbarHeader:{type:String,default:"dark"},
-        Background:{type:String,default:"dark"},
-        Sidebar:{type:String,default:"dark"},
-        layout:{type:String,default:"dark"}
-    }
+    Admin: {
+        LogoHeader: { type: String, default: "dark" },
+        NavbarHeader: { type: String, default: "dark" },
+        Background: { type: String, default: "dark" },
+        Sidebar: { type: String, default: "dark" },
+        layout: { type: String, default: "dark" },
+    },
 });
 
 userSchema.pre("save", async function (next) {
@@ -113,6 +113,6 @@ userSchema.methods.banExpired = function () {
     return diffInDays >= this.banned.duration;
 };
 
-userSchema.plugin(passportLocalMongoose);
+userSchema.plugin(passportLocalMongoose, { populateFields: "roles contacts" });
 
 module.exports = mongoose.model("User", userSchema);

@@ -68,7 +68,9 @@ router.route('/Categories/*')
         catch (e) { ErrorHandler(req,res,e) }
     })
     .get(PostHandler,CreateHandler,CategoryHandler)
-    .post(CreatePost,AddComment);
+    .post(CreatePost,AddComment)
+    .delete(DeleteComment)
+    .put(UpdateComment)
 /*----------------Tag System-----------------*/
 router.route("/tags/:tag")
     .get(async (req, res) => {
@@ -149,6 +151,20 @@ function AddComment(req,res) {
     CommentManager.Create(req.query.post,req.body,(status,result)=>{
         res.status(status).send(result);
     })
+}
+function UpdateComment(req,res) {
+    if (req.query.comment) {
+        CommentManager.Modify(req.query.comment,req.body.text,(status, result) => {
+            res.status(status).json(result);
+        });
+    } else res.status(400).send("Bad request");
+}
+function DeleteComment(req,res){
+    if (req.query.comment) {
+        CommentManager.Delete(req.query.comment, (status, result) => {
+            res.status(status).json(result);
+        });
+    } else res.status(400).send("Bad request");
 }
 /*-------------------Error-------------*/
 function ErrorHandler(req,res,e) {

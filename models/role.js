@@ -9,6 +9,7 @@ roleSchema = new mongoose.Schema({
     },
     category: {
         type: String,
+        required: true,
     },
     owner: {
         type: Boolean,

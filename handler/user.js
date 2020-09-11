@@ -40,12 +40,20 @@ class UserMethods {
             });
         });
     };
-    updateUser = function (req,res){
-        User.updateOne({_id:req.params.user_id},req.body,(err,result)=>{
-            if(err) return res.status(400).send(err.message);
-            res.status(201).send("User Updated");
-        })
-    }
+    updateUser = function (req, res) {
+        console.log(req.body, req.params);
+        User.updateOne({ _id: req.params.user_id }, req.body, (err, result) => {
+            if (err) return res.status(400).send(err.message);
+            res.redirect(req.header("Referer") || "/");
+        });
+    };
+    updateUserTheme = function (req, res) {
+        console.log(req.body, req.params);
+        User.updateOne({ _id: req.params.user_id }, req.body, (err, result) => {
+            if (err) return res.status(400).send(err.message);
+            res.status(200).send("Success");
+        });
+    };
 
     logout = function (req, res) {
         req.logout();
@@ -136,6 +144,7 @@ class UserMethods {
                     profileImage: true,
                 }
             );
+            console.log(loggedUser);
             res.render("Blog(vinlandCMS)/Messenger.ejs", {
                 contacts: loggedUser.contacts,
             });
@@ -147,7 +156,7 @@ class UserMethods {
     renderChat = async (req, res, next) => {
         try {
             const { partner_id } = req.params;
-
+            
             let loggedUser = await User.findById(req.user._id).populate(
                 "messages",
                 {
@@ -164,6 +173,7 @@ class UserMethods {
                     message.receiver.equals(partner_id)
             );
 
+            console.log(loggedUser);
             res.status(200).render("Blog(vinlandCMS)/Messages.ejs", {
                 messages,
                 partnerUser,

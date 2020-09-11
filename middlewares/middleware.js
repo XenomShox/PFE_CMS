@@ -9,9 +9,10 @@ exports.isLoggedIn = function (req, res, next) {
 
 // ["admin", "create", "delete"]
 exports.hasPermission = (permissions) => {
+    if (!Array.isArray(permissions)) permissions = [permissions];
     return async (req, res, next) => {
         try {
-            let user = await User.findById(req.user.id).populate("roles");
+            let user = req.user;
             if (
                 user.roles.some((role) => role["owner"]) ||
                 user.roles.some((role) => role["admin_privillage"])

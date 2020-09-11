@@ -17,7 +17,6 @@ exports.stratV1 = async function (username, password, done) {
             if (err) {
                 console.log(`err: ${err}`);
                 return done(null, false);
-
             }
             console.log(`result: ${result}`);
             if (!result) {
@@ -69,7 +68,6 @@ exports.stratV2 = async function (username, password, done) {
         }
         return done(null, user);
     } catch (err) {
-        console.log(err);
         done(err);
     }
 };
