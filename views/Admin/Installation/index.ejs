@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Vinland Admin</title>
+    <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
+    <link rel="icon" href="/Admin/Files/images/icon.ico" type="image/x-icon"/>
+    <!-- Fonts and icons -->
+    <script src="/Admin/Files/javascripts/Assets/plugin/webfont/webfont.min.js"></script>
+    <script>
+        WebFont.load({
+            custom: {"families":["Flaticon", "Font Awesome 5 Solid", "Font Awesome 5 Regular", "Font Awesome 5 Brands", "simple-line-icons"],
+                urls: ['/Admin/Files/stylesheets/Assets/fonts.min.css']},
+            active: function() {
+                sessionStorage.fonts = true;
+            }
+        });
+    </script>
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="/Admin/Files/stylesheets/Assets/bootstrap.min.css">
+    <link rel="stylesheet" href="/Admin/Files/stylesheets/Assets/atlantis.min.css">
+</head>
+<body data-background-color="dark">
+    <div class="wrapper">
+        <div class="content"></div>
+        <footer class="footer">
+            <div class="container-fluid">
+                <nav class="pull-left">
+                    <ul class="nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/AboutUs" >
+                                Vinland
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                Help
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                Licenses
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+                <div class="copyright ml-auto">
+                    2020, made by <a href="https://www.themekita.com">Vinland</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+    <div class="CoreScripts">
+        <script src="/Admin/Files/javascripts/Assets/core/jquery.3.2.1.min.js"></script>
+        <script src="/Admin/Files/javascripts/Assets/core/bootstrap.min.js"></script>
+        <script src="/Admin/Files/javascripts/Admin/Install.js"></script>
+        <script>
+            Continue();
+        </script>
+    </div>
+</body>
+</html>

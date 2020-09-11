@@ -1,0 +1,45 @@
+<div class="content" plugin-scripts="/Admin/files/javascripts/Assets/plugin/bootstrap-notify/bootstrap-notify.min.js,/Admin/files/javascripts/Assets/plugin/codemirror/codemirror.js"
+     loading-script="/Admin/files/javascripts/Admin/EditTemplate.js">
+    <div class="modal fade" id="Modal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">You didn't save the file are you sure ?</h5>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary">Change file anyway</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page-inner row py-5 bg-secondary-gradient">
+        <div class="ml-5 text-white pb-2">
+            <h1>Website Template Editing</h1>
+            <p>You can Edit your templates from here.</p>
+        </div>
+    </div>
+    <div class="row align-items-start col-11 mx-auto mt--4">
+        <div template-data="<%=JSON.stringify(template)%>" class="card col-12 ">
+            <div class="card-body d-flex flex-wrap">
+                <div class="col-12 d-flex">
+                    <h2 class="mb-3">Template: <%=template.name%></h2>
+                    <a id="Save" href="#" class="btn btn-border btn-success ml-auto my-auto">Save</a>
+                </div>
+                <ul class="view col-3" id="TreeView" style="min-height:100%; border-right: .1em solid #666;"></ul>
+                <div id="Code" class="col-9 d-flex flex-column" >
+                    <h4 class="file">Select file</h4>
+                    <div class="code" style="min-height: 70vh; height: 100%; font-size: 1.5em;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <style>
+        #TreeView .file{ cursor: pointer; }
+        #TreeView .file:hover{ text-decoration: underline; }
+        #TreeView ul,#TreeView li{ list-style: none;font-size: 1rem }
+        body[data-background-color] .modal-content{ background-color: #202940;}
+    </style>
+    <link rel="stylesheet" href="/Admin/files/stylesheets/Assets/codemirror/codemirror.css">
+    <link rel="stylesheet" href="/Admin/files/stylesheets/Assets/codemirror/material.css">
+</div>

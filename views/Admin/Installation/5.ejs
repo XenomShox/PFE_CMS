@@ -1,0 +1,58 @@
+<div class="content" plugin-scripts="/Admin/files/javascripts/Assets/plugin/bootstrap-notify/bootstrap-notify.min.js,/Admin/files/javascripts/Assets/core/FormAjax.js"
+     loading-script="/Admin/Files/javascripts/Install/Continue&skip.js">
+    <div class="page-inner row py-5 bg-secondary-gradient mx-0">
+        <div class="ml-5 text-white pb-2">
+            <h1>Email Settings</h1>
+            <p>You must add smtp setting for email confirmations</p>
+        </div>
+    </div>
+    <div id="Settings" class="row align-items-start col-11 mx-auto mt--4">
+        <div class="card col-12">
+            <form class="card-body d-flex flex-column" method="post" action="/Install/Email" >
+                <h1 class="ml-4">Email Settings</h1>
+                <div class="ml-5">
+                    <div class="form-group form-inline">
+                        <label for="host" class="col-md-3 col-form-label justify-content-start">Host :</label>
+                        <div class="col-md-9 p-0">
+                            <input type="text" class="form-control input-full" id="host" name="host" placeholder="smtp.gmail.com" value="<%=Email?Email.host:""%>" required>
+                        </div>
+                    </div>
+                    <div class="form-group form-inline">
+                        <label for="port" class="col-md-3 col-form-label justify-content-start File-Selector">Port :</label>
+                        <div class="col-md-9 p-0">
+                            <input type="number" class="form-control" id="port" name="port" value="<%=Email?Email.port:""%>" placeholder="465" required>
+                        </div>
+                    </div>
+                    <div class="form-group form-inline">
+                        <label for="UserName" class="col-md-3 col-form-label justify-content-start">Secure :</label>
+                        <label class="switch">
+                            <input id="Enabled" type="checkbox" name="secure" <%=Email?Email.secure?"checked":"":""%>>
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+                <h1 class="ml-4">Authentication</h1>
+                <div class="ml-5">
+                    <div class="form-group form-inline">
+                        <label for="user" class="col-md-3 col-form-label justify-content-start">username/email :</label>
+                        <div class="col-md-9 p-0">
+                            <input type="text" class="form-control input-full" id="user" name="auth[user]" value="<%=Email?Email.auth?Email.auth.user:"":""%>" required>
+                        </div>
+                    </div>
+                    <div class="form-group form-inline">
+                        <label for="pass" class="col-md-3 col-form-label justify-content-start">password :</label>
+                        <div class="col-md-9 p-0">
+                            <input type="password" class="form-control input-full" id="pass" name="auth[pass]" value="<%=Email?Email.auth?Email.auth.pass:"":""%>" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <input type="submit" class="btn btn-success btn-border ml-auto mr-2">
+                    <a id="skip"  class="btn btn-info btn-border mr-2">skip</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    <link rel="stylesheet" href="/Admin/files/stylesheets/Admin/DataBaseSettings.css">
+</div>

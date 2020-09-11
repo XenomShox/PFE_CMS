@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<% include ./Partials/Header.ejs %>
+<body class="Category">
+<% include ./Partials/Navbar-light.ejs %>
+<div class="Content">
+    <div style="background-color: #fbfbfb">
+        <div class="container  pt-4">
+            <div class="row px-3">
+                <h4 class="font-weight-bold"><%=Category.Name%> Post</h4>
+                <ol class="breadcrumb ml-auto pt-0">
+                    <li class="breadcrumb-item active">
+                        <a href="/"><i class="fas fa-home"></i></a>
+                    </li>
+                    <%
+                    let Slugs=Category.Slug.split("/"),sslug="";
+                    for(let i=1 ;i<Slugs.length;i++){
+                        sslug+="/"+Slugs[i];
+                    %>
+                    <li class="breadcrumb-item">
+                        <a href="<%=sslug%>" class="font-weight-bold"><%=Slugs[i]%></a>
+                    </li>
+                    <%}
+                    %>
+                    <li class="breadcrumb-item ">
+                        <a href="" class="font-weight-bold"><%=Post.title%></a>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+    <div class="container d-flex flex-column">
+        <a class="btn btn-success ml-auto mr-5 my-3" href="<%= Category.Slug%>?post=<%=Post._id%>&edit=true"> <i class="far fa-edit"></i><span class="ml-1">Edit the Post</span></a>
+        <div class="Layout row ">
+            <% include ./Partials/PostContent.ejs %>
+            <% include ./Partials/SideBar1.ejs %>
+        </div>
+    </div>
+</div>
+<% include ./Partials/Footer.ejs %>
+
+</body>
+</html>

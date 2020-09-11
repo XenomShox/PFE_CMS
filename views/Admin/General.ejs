@@ -1,0 +1,132 @@
+<div class="content" plugin-scripts="/Admin/files/javascripts/Assets/plugin/TagInput/bootstrap-tagsinput.js,/Admin/files/javascripts/Assets/plugin/bootstrap-notify/bootstrap-notify.min.js,/Admin/files/javascripts/Assets/core/FormAjax.js,/Admin/files/javascripts/Assets/core/FileSelector.js"
+     loading-script="/Admin/Files/javascripts/Admin/General.js">
+    <div class="page-inner row py-5 bg-secondary-gradient">
+        <div class="ml-5 text-white pb-2">
+            <h1>General Settings</h1>
+            <p>You can manage your WebSite general details from here.</p>
+        </div>
+    </div>
+    <div id="Settings" class="row align-items-start col-11 mx-auto mt--4">
+        <div class="card col-12">
+            <form class="card-body d-flex flex-column" method="post" action="/Admin/General" >
+                <h1 class="ml-4">WebSite Details</h1>
+                <div class="ml-5">
+                    <div class="form-group form-inline">
+                        <label for="Name" class="col-md-3 col-form-label justify-content-start">Name :</label>
+                        <div class="col-md-9 p-0">
+                            <input type="text" class="form-control input-full" id="Name" name="Name" value="<%=WebSite.Name%>" required>
+                        </div>
+                    </div>
+                    <div class="form-group form-inline">
+                        <label for="Type" class="col-md-3 col-form-label justify-content-start">Type :</label>
+                        <div class="col-md-9 p-0">
+                            <select disabled type="text" class="form-control input-full" id="Type" name="Type" required>
+                                <option value="Blog" <%=WebSite.Type==="Blog"?"selected":""%>>Blog</option>
+                            </select>
+                            <small class="form-text text-muted">The Website type.</small>
+                        </div>
+                    </div>
+                    <div class="form-group form-inline">
+                        <label for="Logo" class="col-md-3 col-form-label justify-content-start File-Selector">Logo :</label>
+                        <div class="col-md-9 p-0">
+                            <input type="text" class="form-control input-full" id="Logo" name="Logo" value="<%=WebSite.Logo%>" selector-file="Image">
+                        </div>
+                    </div>
+                    <div class="form-group form-inline">
+                        <label for="Icon" class="col-md-3 col-form-label justify-content-start">Icon :</label>
+                        <div class="col-md-9 p-0">
+                            <input type="text" class="form-control input-full" id="Icon" name="Icon" value="<%=WebSite.Icon%>" selector-file="Icon">
+                        </div>
+                    </div>
+                    <div class="form-group form-inline">
+                        <label for="Description" class="col-md-3 col-form-label justify-content-start">Description :</label>
+                        <div class="col-md-9 p-0">
+                            <textarea class="form-control input-full" id="Description" name="Description" required><%=WebSite.Description%></textarea>
+                            <small class="form-text text-muted">In a few words, describe what this website is about.</small>
+                        </div>
+                    </div>
+                    <div class="form-group form-inline">
+                        <label for="KeyWords" class="col-md-3 col-form-label justify-content-start">KeyWords :</label>
+                        <div class="col-md-9 p-0">
+                            <input type="text" class="form-control input-full" id="KeyWords" name="Keywords[]" value="<%=WebSite.Keywords%>">
+                            <small class="form-text text-muted">press on space to add a new keyword.</small>
+                        </div>
+                    </div>
+                    <div class="form-group form-inline">
+                        <label for="Licence" class="col-md-3 col-form-label justify-content-start">Licence :</label>
+                        <div class="col-md-9 p-0">
+                            <input type="text" class="form-control input-full" id="Licence" name="Licence" value="<%=WebSite.Licence%>" required>
+                            <small class="form-text text-muted">Add your Copyrights</small>
+                        </div>
+                    </div>
+                </div>
+                <h1 class="ml-4">Social Media</h1>
+                <div class="ml-5">
+                    <div>
+                        <h2 class="ml-2">Facebook</h2>
+                        <div class="ml-2 form-group form-inline">
+                            <label for="FacebookName" class="col-md-3 col-form-label justify-content-start">Name :</label>
+                            <div class="col-md-9 p-0">
+                                <input type="text" class="form-control input-full" id="FacebookName" name="SocialMedia[Facebook][Name]" value="<%=WebSite.SocialMedia.Facebook.Name%>" placeholder="Page Name">
+                            </div>
+                        </div>
+                        <div class="ml-2 form-group form-inline">
+                            <label for="FacebookUrl" class="col-md-3 col-form-label justify-content-start">Url :</label>
+                            <div class="col-md-9 p-0">
+                                <input type="text" class="form-control input-full" id="FacebookUrl" name="SocialMedia[Facebook][Url]" value="<%=WebSite.SocialMedia.Facebook.Url%>" placeholder="https://www.facebook.com/PageName">
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h2 class="ml-2">Instagram</h2>
+                        <div class="ml-2 form-group form-inline">
+                            <label for="Instagram" class="col-md-3 col-form-label justify-content-start">Account Name :</label>
+                            <div class="col-md-9 p-0">
+                                <input type="text" class="form-control input-full" id="Instagram" name="SocialMedia[Instagram][Name]" value="<%=WebSite.SocialMedia.Instagram.Name%>" placeholder="@Account">
+                            </div>
+                        </div>
+                        <div class="ml-2 form-group form-inline">
+                            <label for="InstagramUrl" class="col-md-3 col-form-label justify-content-start">Account Url :</label>
+                            <div class="col-md-9 p-0">
+                                <input type="text" class="form-control input-full" id="InstagramUrl" name="SocialMedia[Instagram][Url]" value="<%=WebSite.SocialMedia.Instagram.Url%>" placeholder="https://www.instagram.com/AcountName">
+                            </div>
+                        </div>
+                    </div>
+                    <div >
+                        <h2 class="ml-2">Twitter</h2>
+                        <div class="ml-2 form-group form-inline">
+                            <label for="Twitter" class="col-md-3 col-form-label justify-content-start">Account Name :</label>
+                            <div class="col-md-9 p-0">
+                                <input type="text" class="form-control input-full" id="Twitter" name="SocialMedia[Twitter][Name]" value="<%=WebSite.SocialMedia.Twitter.Name%>" placeholder="@AccountName">
+                            </div>
+                        </div>
+                        <div class="ml-2 form-group form-inline">
+                            <label for="TwitterUrl" class="col-md-3 col-form-label justify-content-start">Account Url :</label>
+                            <div class="col-md-9 p-0">
+                                <input type="text" class="form-control input-full" id="TwitterUrl" name="SocialMedia[Twitter][Url]" value="<%=WebSite.SocialMedia.Twitter.Url%>" placeholder="https://twitter.com/AccountName">
+                            </div>
+                        </div>
+                    </div>
+                    <div >
+                        <h2 class="ml-2">LinkedIn</h2>
+                        <div class="form-group form-inline">
+                            <label for="LinkedIn" class="col-md-3 col-form-label justify-content-start">Account Name :</label>
+                            <div class="col-md-9 p-0">
+                                <input type="text" class="form-control input-full" id="LinkedIn" name="SocialMedia[LinkedIn][Name]" value="<%=WebSite.SocialMedia.LinkedIn.Name%>" placeholder="Account Name">
+                            </div>
+                        </div>
+                        <div class="form-group form-inline">
+                            <label for="LinkedInUrl" class="col-md-3 col-form-label justify-content-start">Account Url :</label>
+                            <div class="col-md-9 p-0">
+                                <input type="text" class="form-control input-full" id="LinkedInUrl" name="SocialMedia[LinkedIn][Url]" value="<%=WebSite.SocialMedia.LinkedIn.Url%>" placeholder="https://www.linkedin.com/in/AccountName">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <input type="submit" class="btn btn-success btn-border ml-auto mr-2">
+            </form>
+        </div>
+    </div>
+    <link rel="stylesheet" href="/Admin/files/stylesheets/Assets/TagInput/bootstrap-tagsinput.css">
+    <link rel="stylesheet" href="/Admin/files/stylesheets/Admin/General.css">
+</div>

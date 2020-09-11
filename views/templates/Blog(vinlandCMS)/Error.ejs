@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<% include ./Partials/Header.ejs %>
+<body class="Category">
+<% include ./Partials/Navbar-light.ejs %>
+<div class="Content">
+    <div style="background-color: #fbfbfb">
+        <div class="container  pt-4">
+            <h1 class="col-9 mx-auto pb-3"><%= message %></h1>
+        </div>
+    </div>
+    <div class="container">
+        <div class="Layout row mt-3">
+            <% include ./Partials/SideBar2 %>
+        </div>
+    </div>
+</div>
+<% include ./Partials/Footer.ejs %>
+
+</body>
+</html>

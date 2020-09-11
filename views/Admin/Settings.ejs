@@ -1,0 +1,110 @@
+<div class="content"
+     plugin-scripts="/Admin/files/javascripts/Assets/plugin/bootstrap-notify/bootstrap-notify.min.js"
+     loading-script="/Admin/Files/javascripts/Admin/Settings.js">
+    <div class="page-inner row py-5 bg-secondary-gradient">
+        <div class="ml-5 text-white pb-2">
+            <h2>Admin Settings</h2>
+            <p>You can manage your dashboard settings.</p>
+        </div>
+    </div>
+    <form id="Settings" action="/user/<%=currentUser._id%>" class="row align-items-start col-11 mx-auto mt--4">
+        <div class="card col-12  mx-auto">
+            <div class="card-header"><div class="card-title">Layout Settings</div></div>
+            <div class="card-body">
+                <div class="form-group">
+                    <div class="selectgroup w-100">
+                        <label class="selectgroup-item">
+                            <input type="radio" name="Admin[layout]" value="" class="selectgroup-input">
+                            <span class="selectgroup-button">Open Sidebar</span>
+                        </label>
+                        <label class="selectgroup-item">
+                            <input type="radio" name="Admin[layout]" value="overlay-sidebar" class="selectgroup-input">
+                            <span class="selectgroup-button">Overlay Sidebar</span>
+                        </label>
+                        <label class="selectgroup-item">
+                            <input type="radio" name="Admin[layout]" value="compact-wrapper" class="selectgroup-input">
+                            <span class="selectgroup-button">Compact Sidebar</span>
+                        </label>
+                        <label class="selectgroup-item">
+                            <input type="radio" name="Admin[layout]" value="static-sidebar" class="selectgroup-input">
+                            <span class="selectgroup-button">Static Sidebar</span>
+                        </label>
+                        <label class="selectgroup-item">
+                            <input type="radio" name="Admin[layout]" value="sidebar_minimize" class="selectgroup-input">
+                            <span class="selectgroup-button">Icon menu Sidebar</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card col-12 mx-auto ">
+            <div class="card-header"><div class="card-title">Color Settings</div></div>
+            <div class="card-body">
+                <div class="switcher">
+                    <div class="switch-block">
+                        <h4>Logo Header</h4>
+                        <div class="d-none"><input type="text" name="Admin[LogoHeader]"></div>
+                        <div class="btnSwitch">
+                            <button type="button" class="changeLogoHeaderColor" data-color="dark"></button>
+                            <button type="button" class="changeLogoHeaderColor" data-color="blue"></button>
+                            <button type="button" class="changeLogoHeaderColor" data-color="purple"></button>
+                            <button type="button" class="changeLogoHeaderColor" data-color="light-blue"></button>
+                            <button type="button" class="changeLogoHeaderColor" data-color="green"></button>
+                            <button type="button" class="changeLogoHeaderColor" data-color="orange"></button>
+                            <button type="button" class="changeLogoHeaderColor" data-color="red"></button>
+                            <button type="button" class="changeLogoHeaderColor" data-color="white"></button>
+                            <button type="button" class="changeLogoHeaderColor" data-color="dark2"></button>
+                            <button type="button" class="changeLogoHeaderColor" data-color="blue2"></button>
+                            <button type="button" class="changeLogoHeaderColor" data-color="purple2"></button>
+                            <button type="button" class="changeLogoHeaderColor" data-color="light-blue2"></button>
+                            <button type="button" class="changeLogoHeaderColor" data-color="green2"></button>
+                            <button type="button" class="changeLogoHeaderColor" data-color="orange2"></button>
+                            <button type="button" class="changeLogoHeaderColor" data-color="red2"></button>
+                        </div>
+                    </div>
+                    <div class="switch-block">
+                        <h4>Navbar Header</h4>
+                        <div class="d-none"><input type="text" name="Admin[NavbarHeader]"></div>
+                        <div class="btnSwitch">
+                            <button type="button" class="changeTopBarColor" data-color="dark"></button>
+                            <button type="button" class="changeTopBarColor" data-color="blue"></button>
+                            <button type="button" class="changeTopBarColor" data-color="purple"></button>
+                            <button type="button" class="changeTopBarColor" data-color="light-blue"></button>
+                            <button type="button" class="changeTopBarColor" data-color="green"></button>
+                            <button type="button" class="changeTopBarColor" data-color="orange"></button>
+                            <button type="button" class="changeTopBarColor" data-color="red"></button>
+                            <button type="button" class="changeTopBarColor" data-color="white"></button>
+                            <button type="button" class="changeTopBarColor" data-color="dark2"></button>
+                            <button type="button" class="changeTopBarColor" data-color="blue2"></button>
+                            <button type="button" class="changeTopBarColor" data-color="purple2"></button>
+                            <button type="button" class="changeTopBarColor" data-color="light-blue2"></button>
+                            <button type="button" class="changeTopBarColor" data-color="green2"></button>
+                            <button type="button" class="changeTopBarColor" data-color="orange2"></button>
+                            <button type="button" class="changeTopBarColor" data-color="red2"></button>
+                        </div>
+                    </div>
+                    <div class="switch-block">
+                        <h4>Sidebar</h4>
+                        <div class="d-none"><input type="text" name="Admin[Sidebar]"></div>
+                        <div class="btnSwitch">
+                            <button type="button" class="changeSideBarColor" data-color="white"></button>
+                            <button type="button" class="changeSideBarColor" data-color="dark"></button>
+                            <button type="button" class="changeSideBarColor" data-color="dark2"></button>
+                        </div>
+                    </div>
+                    <div class="switch-block">
+                        <h4>Background</h4>
+                        <div class="d-none"><input type="text" name="Admin[Background]"></div>
+                        <div class="btnSwitch">
+                            <button type="button" class="changeBackgroundColor" data-color="bg2"></button>
+                            <button type="button" class="changeBackgroundColor " data-color="bg1"></button>
+                            <button type="button" class="changeBackgroundColor" data-color="bg3"></button>
+                            <button type="button" class="changeBackgroundColor" data-color="dark"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <link rel="stylesheet" href="/Admin/Files/stylesheets/Admin/Settings.css">
+</div>

@@ -1,0 +1,56 @@
+<footer>
+    <div class="container row mx-auto pt-5">
+        <div id="AboutUs" class="col-md-7 p-md-4 d-flex flex-column">
+            <a class="brand" href="/"><%= WebSite.Name %></a>
+            <p><%= WebSite.Description%></p>
+            <li class="nav-item d-flex">
+                <a class="nav-link mr-3 mx-lg-0" href="<%= WebSite.SocialMedia.Facebook.Url%>"><i class="fab fa-facebook-square"></i></a>
+                <a class="nav-link mr-3 mx-lg-0" href="<%= WebSite.SocialMedia.Twitter.Url%>"><i class="fab fa-twitter-square"></i></a>
+                <a class="nav-link mr-3 mx-lg-0" href="<%= WebSite.SocialMedia.Instagram.Url%>"><i class="fab fa-instagram"></i></a>
+            </li>
+        </div>
+        <div class="col-md-5 p-md-4">
+            <%if(Additional.popular.length>0){%>
+            <div class="Latest">
+                <h5 class="font-weight-bold mb-4">Popular Posts</h5>
+                <div class="Post d-flex flex-column">
+                    <%Additional.popular.forEach(post=>{%>
+                        <div class="blog Latest row">
+                            <a href="#" class="blogImage p-0">
+                                <div class="img" style="background-image: url(<%=post.covers[0]%>)" alt=""></div>
+                                <div class="Comments"><%=post.comments.length%></div>
+                            </a>
+                            <div class="col ml-5 ml-lg-1">
+                                <a href="<%=post.category.Slug%>" class="Category text-muted"><%=post.category.Name%></a>
+                                <br>
+                                <a href="<%=post.category.Slug%>?post=<%=post._id%>" class="card-title"><%=post.title%></a>
+                            </div>
+                        </div>
+                    <%})%>
+                </div>
+            </div>
+            <%}%>
+        </div>
+
+    </div>
+    <div class="Theme d-flex w-100">
+        <h6 class="m-auto">Vinland CMS Theme</h6>
+    </div>
+</footer>
+<div class="Scripts">
+    <script src="/Admin/Files/javascripts/Assets/plugin/webfont/webfont.min.js"></script>
+    <script src="/Admin/Files/javascripts/Assets/core/jquery.3.2.1.min.js"></script>
+    <script src="/Admin/Files/javascripts/Assets/core/popper.min.js"></script>
+    <script src="/Admin/Files/javascripts/Assets/core/bootstrap.min.js"></script>
+    <script>
+        WebFont.load({
+            custom: {
+                'families':['Font Awesome 5 Solid', 'Font Awesome 5 Regular', 'Font Awesome 5 Brands'],
+                urls: ['/Admin/Files/stylesheets/Assets/fonts.min.css']
+            },
+            active: function() {
+                sessionStorage.fonts = true;
+            }
+        });
+    </script>
+</div>

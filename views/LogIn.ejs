@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>LogIn</title>
+        <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
+        <link rel="icon" href="/Admin/Files/images/icon.ico" type="image/x-icon"/>
+        <!-- Fonts and icons -->
+        <script src="/Admin/Files/javascripts/Assets/core/jquery.3.2.1.min.js"></script>
+        <script src="/Admin/Files/javascripts/Assets/core/popper.min.js"></script>
+        <script src="/Admin/Files/javascripts/Assets/core/bootstrap.min.js"></script>
+        <script src="/Admin/Files/javascripts/Assets/plugin/webfont/webfont.min.js"></script>
+        <script>
+            WebFont.load({
+                google: {"families":["Lato:300,400,700,900"]},
+                custom: {"families":["Flaticon", "Font Awesome 5 Solid", "Font Awesome 5 Regular", "Font Awesome 5 Brands", "simple-line-icons"],
+                    urls: ['/Admin/Files/stylesheets/Assets/fonts.min.css']},
+                active: function() {
+                    sessionStorage.fonts = true;
+                }
+            });
+        </script>
+
+        <!-- CSS Files -->
+        <link rel="stylesheet" href="/Admin/Files/stylesheets/Assets/bootstrap.min.css">
+        <link rel="stylesheet" href="/Admin/Files/stylesheets/Assets/atlantis.min.css">
+        <style>
+             .wrapper.wrapper-login .container-login,.wrapper.wrapper-login .container-signup{
+                width: 400px;
+                background: #fff;
+                padding: 60px 25px;
+                border-radius: 5px;
+                -webkit-box-shadow: 0 0.75rem 1.5rem rgba(18,38,63,.03);
+                -moz-box-shadow: 0 .75rem 1.5rem rgba(18,38,63,.03);
+                box-shadow: 0 0.75rem 1.5rem rgba(18,38,63,.03);
+                border: 1px solid #ebecec;
+            }
+             .wrapper.wrapper-login {
+                 display: flex;
+                 justify-content: center;
+                 align-items: center;
+                 height: unset;
+                 padding: 15px;
+             }
+             .show-password {
+                 position: absolute;
+                 right: 20px;
+                 top: 50%;
+                 transform: translateY(-50%);
+                 font-size: 22px;
+                 cursor: pointer;
+             }
+             .wrapper.wrapper-login .container-login .form-sub,.wrapper.wrapper-login .container-signup .form-sub {
+                 align-items: center;
+                 justify-content: space-between;
+                 padding: 8px 10px;
+             }
+             .form-group input{
+                color:#495057!important;
+            }
+        </style>
+    </head>
+    <body data-background-color="dark">
+        <div class="wrapper wrapper-login">
+            <div class="container container-login animated fadeIn">
+                <div class="container">
+                    <% if(error && error.length > 0) { %>
+                        <div class="alert alert-danger text-center" role="alert"><%= error %></div>
+                    <% } %>
+                    <% if(success && success.length > 0) { %>
+                        <div class="alert alert-success text-center" role="alert"><%= success %></div>
+                    <% } %>
+                </div>
+                <h3 class="text-center">Sign In To Admin</h3>
+                <!-- <div class="login-form d-flex flex-column"> -->
+                    <form class="login-form d-flex flex-column" action="/login/" method="POST">
+                        <div class="form-group form-floating-label">
+                            <input id="username" name="username" type="text" class="form-control input-border-bottom" required>
+                            <label for="username" class="placeholder">Username</label>
+                        </div>
+                        <div class="form-group form-floating-label">
+                            <input id="password" name="password" type="password" class="form-control input-border-bottom" required>
+                            <label for="password" class="placeholder">Password</label>
+                            <div class="show-password">
+                                <i class="flaticon-interface"></i>
+                            </div>
+                        </div>
+                        <div class="d-none form-group form-floating-label">
+                            <input name="to" value="<%= to %>">
+                        </div>
+                        <div class="row form-sub m-0">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="rememberme">
+                                <label class="custom-control-label" for="rememberme">Remember Me</label>
+                            </div>
+
+                            <a href="#" class="link float-right">Forget Password ?</a>
+                        </div>
+                        <div class="mx-auto form-action mb-3 px-2 pt-5">
+                            <button class="btn btn-primary btn-rounded btn-login px-5">Sign In</button>
+                        </div>
+                    <div class="mx-auto login-account">
+                        <span class="msg">Don't have an account yet ?</span>
+                        <a href="#" id="show-signup" class="link">Sign Up</a>
+                    </div>
+                </form>
+                <!-- </div> -->
+            </div>
+
+            <div class="container container-signup animated fadeIn">
+                <h3 class="text-center">Sign Up</h3>
+                <!-- <div class="login-form"> -->
+                    <form class="login-form" action="/signup" method="POST">
+                        <div class="form-group form-floating-label">
+                            <input  id="username1" name="username" type="text" class="form-control input-border-bottom" required>
+                            <label for="username1" class="placeholder">Username</label>
+                        </div>
+                        <div class="form-group form-floating-label">
+                            <input  id="First Name" name="firstName" type="text" class="form-control input-border-bottom" required>
+                            <label for="First Name" class="placeholder">First Name</label>
+                        </div>
+                        <div class="form-group form-floating-label">
+                            <input  id="Last Name" name="lastName" type="text" class="form-control input-border-bottom" required>
+                            <label for="Last Name" class="placeholder">Last Name</label>
+                        </div>
+                        <div class="form-group form-floating-label">
+                            <input  id="email" name="email" type="email" class="form-control input-border-bottom" required>
+                            <label for="email" class="placeholder">Email</label>
+                        </div>
+                        <div class="form-group form-floating-label">
+                            <input  id="passwordsignin" name="password" type="password" class="form-control input-border-bottom" required>
+                            <label for="passwordsignin" class="placeholder">Password</label>
+                            <div class="show-password">
+                                <i class="flaticon-interface"></i>
+                            </div>
+                        </div>
+                        <div class="form-group form-floating-label">
+                            <input  id="confirmpassword" type="password" class="form-control input-border-bottom" required>
+                            <label for="confirmpassword" class="placeholder">Confirm Password</label>
+                            <div class="show-password">
+                                <i class="flaticon-interface"></i>
+                            </div>
+                        </div>
+                        <div class="form-group form-floating-label">
+                            <input  id="birthday" name="birthday" type="date" class="form-control input-border-bottom" required>
+                            <label for="birthday" class="placeholder">Birthday</label>
+                        </div>
+                        <div class="form-group form-floating-label">
+                            <input  id="profileImage" name="profileImage" type="text" class="form-control input-border-bottom">
+                            <label for="profileImage" class="placeholder">Profile Image URL</label>
+                        </div>
+                        <div class="form-group form-floating-label">
+                            <input  id="phone" name="phone" type="text" class="form-control input-border-bottom">
+                            <label for="phone" class="placeholder">Phone NumberL</label>
+                        </div>
+                        <div class="form-action my-3 mx-2 row">
+                            <a href="#" id="show-signin" class="m-auto px-5  btn btn-danger btn-rounded btn-login mr-3">Cancel</a>
+                            <input type="submit" value="Sign Up" class="m-auto px-5  btn btn-primary btn-rounded btn-login"></input>
+                        </div>
+                    </form>
+                <!-- </div> -->
+            </div>
+        </div>
+    <script>
+
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+            $('[data-toggle="popover"]').popover();
+            layoutsColors();
+        });
+
+        function layoutsColors(){
+            if($('.sidebar').is('[data-background-color]')) {
+                $('html').addClass('sidebar-color');
+            } else {
+                $('html').removeClass('sidebar-color');
+            }
+
+            if($('.sidebar').is('[data-image]')) {
+                $('.sidebar').append("<div class='sidebar-background'></div>");
+                $('.sidebar-background').css('background-image', 'url("' + $('.sidebar').attr('data-image') + '")');
+            } else {
+                $(this).remove('.sidebar-background');
+                $('.sidebar-background').css('background-image', '');
+            }
+        }
+
+        function legendClickCallback(event) {
+            event = event || window.event;
+
+            var target = event.target || event.srcElement;
+            while (target.nodeName !== 'LI') {
+                target = target.parentElement;
+            }
+            var parent = target.parentElement;
+            var chartId = parseInt(parent.classList[0].split("-")[0], 10);
+            var chart = Chart.instances[chartId];
+            var index = Array.prototype.slice.call(parent.children).indexOf(target);
+
+            chart.legend.options.onClick.call(chart, event, chart.legend.legendItems[index]);
+            if (chart.isDatasetVisible(index)) {
+                target.classList.remove('hidden');
+            } else {
+                target.classList.add('hidden');
+            }
+        }
+
+        $(document).ready(function(){
+
+            $('.btn-refresh-card').on('click', function(){var e=$(this).parents(".card");e.length&&(e.addClass("is-loading"),setTimeout(function(){e.removeClass("is-loading")},3e3))})
+
+            var scrollbarDashboard = $('.sidebar .scrollbar-inner');
+            if (scrollbarDashboard.length > 0) {
+                scrollbarDashboard.scrollbar();
+            }
+
+            var messagesScrollbar = $('.messages-scroll.scrollbar-outer');
+            if (messagesScrollbar.length > 0) {
+                messagesScrollbar.scrollbar();
+            }
+
+            var tasksScrollbar = $('.tasks-scroll.scrollbar-outer');
+            if (tasksScrollbar.length > 0) {
+                tasksScrollbar.scrollbar();
+            }
+
+            var quickScrollbar = $('.quick-scroll');
+            if (quickScrollbar.length > 0) {
+                quickScrollbar.scrollbar();
+            }
+
+            var messageNotifScrollbar = $('.message-notif-scroll');
+            if (messageNotifScrollbar.length > 0) {
+                messageNotifScrollbar.scrollbar();
+            }
+
+            var notifScrollbar = $('.notif-scroll');
+            if (notifScrollbar.length > 0) {
+                notifScrollbar.scrollbar();
+            }
+
+
+            var toggle_sidebar = false,
+                toggle_topbar = false,
+                minimize_sidebar = false,
+                toggle_page_sidebar = false,
+                nav_open = 0,
+                topbar_open = 0,
+                mini_sidebar = 0,
+                page_sidebar_open =0;
+
+
+            if(!toggle_sidebar) {
+                var toggle = $('.sidenav-toggler');
+
+                toggle.on('click', function(){
+                    if (nav_open == 1){
+                        $('html').removeClass('nav_open');
+                        toggle.removeClass('toggled');
+                        nav_open = 0;
+                    }  else {
+                        $('html').addClass('nav_open');
+                        toggle.addClass('toggled');
+                        nav_open = 1;
+                    }
+                });
+                toggle_sidebar = true;
+            }
+
+            if(!toggle_topbar) {
+                var topbar = $('.topbar-toggler');
+
+                topbar.on('click', function() {
+                    if (topbar_open == 1) {
+                        $('html').removeClass('topbar_open');
+                        topbar.removeClass('toggled');
+                        topbar_open = 0;
+                    } else {
+                        $('html').addClass('topbar_open');
+                        topbar.addClass('toggled');
+                        topbar_open = 1;
+                    }
+                });
+                toggle_topbar = true;
+            }
+
+            if(!minimize_sidebar){
+                var minibutton = $('.btn-minimize');
+                if($('html').hasClass('sidebar_minimize')){
+                    mini_sidebar = 1;
+                    minibutton.addClass('toggled');
+                    minibutton.html('<i class="fa fa-ellipsis-v"></i>');
+                }
+
+                minibutton.on('click', function() {
+                    if (mini_sidebar == 1) {
+                        $('html').removeClass('sidebar_minimize');
+                        minibutton.removeClass('toggled');
+                        minibutton.html('<i class="fa fa-bars"></i>');
+                        mini_sidebar = 0;
+                    } else {
+                        $('html').addClass('sidebar_minimize');
+                        minibutton.addClass('toggled');
+                        minibutton.html('<i class="fa fa-ellipsis-v"></i>');
+                        mini_sidebar = 1;
+                    }
+                    $(window).resize();
+                });
+                minimize_sidebar = true;
+            }
+
+            if(!toggle_page_sidebar) {
+                var pageSidebarToggler = $('.page-sidebar-toggler');
+
+                pageSidebarToggler.on('click', function() {
+                    if (page_sidebar_open == 1) {
+                        $('html').removeClass('pagesidebar_open');
+                        pageSidebarToggler.removeClass('toggled');
+                        page_sidebar_open = 0;
+                    } else {
+                        $('html').addClass('pagesidebar_open');
+                        pageSidebarToggler.addClass('toggled');
+                        page_sidebar_open = 1;
+                    }
+                });
+
+                var pageSidebarClose = $('.page-sidebar .back');
+
+                pageSidebarClose.on('click', function() {
+                    $('html').removeClass('pagesidebar_open');
+                    pageSidebarToggler.removeClass('toggled');
+                    page_sidebar_open = 0;
+                });
+
+                toggle_page_sidebar = true;
+            }
+
+
+            $('.sidebar').hover(function() {
+                if ($('html').hasClass('sidebar_minimize')){
+                    $('html').addClass('sidebar_minimize_hover');
+                }
+            }, function(){
+                if ($('html').hasClass('sidebar_minimize')){
+                    $('html').removeClass('sidebar_minimize_hover');
+                }
+            });
+
+            // addClass if nav-item click and has subnav
+
+            $(".nav-item a").on('click', (function(){
+                if ( $(this).parent().find('.collapse').hasClass("show") ) {
+                    $(this).parent().removeClass('submenu');
+                } else {
+                    $(this).parent().addClass('submenu');
+                }
+            }));
+
+
+            //Chat Open
+            $('.messages-contact .user a').on('click', function(){
+                $('.tab-chat').addClass('show-chat')
+            });
+
+            $('.messages-wrapper .return').on('click', function(){
+                $('.tab-chat').removeClass('show-chat')
+            });
+
+            //select all
+            $('[data-select="checkbox"]').change(function(){
+                var target = $(this).attr('data-target');
+                $(target).prop('checked', $(this).prop("checked"));
+            })
+
+            //form-group-default active if input focus
+            $(".form-group-default .form-control").focus(function(){
+                $(this).parent().addClass("active");
+            }).blur(function(){
+                $(this).parent().removeClass("active");
+            })
+
+        });
+
+        // Input File Image
+
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $(input).parent('.input-file-image').find('.img-upload-preview').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $('.input-file-image input[type="file"]').change(function () {readURL(this);});
+
+        // Show Password
+
+        function showPassword(button) {
+            var inputPassword = $(button).parent().find('input');
+            if (inputPassword.attr('type') === "password") {
+                inputPassword.attr('type', 'text');
+            } else {
+                inputPassword.attr('type','password');
+            }
+        }
+
+        $('.show-password').on('click', function(){
+            showPassword(this);
+        })
+
+        // Sign In & Sign Up
+        var containerSignIn = $('.container-login'),
+            containerSignUp = $('.container-signup'),
+            showSignIn = true,
+            showSignUp = false;
+
+        function changeContainer(){
+            if(showSignIn == true){
+                containerSignIn.css('display', 'block')
+            } else {
+                containerSignIn.css('display', 'none')
+            }
+
+            if(showSignUp == true){
+                containerSignUp.css('display', 'block')
+            } else {
+                containerSignUp.css('display', 'none')
+            }
+        }
+
+        $('#show-signup').on('click', function(){
+            showSignUp = true;
+            showSignIn = false;
+            changeContainer();
+        })
+
+        $('#show-signin').on('click', function(){
+            showSignUp = false;
+            showSignIn = true;
+            changeContainer();
+        })
+
+        changeContainer();
+
+        //Input with Floating Label
+
+        $('.form-floating-label .form-control').keyup(function(){
+            if($(this).val() !== '') {
+                $(this).addClass('filled');
+            } else {
+                $(this).removeClass('filled');
+            }
+        })
+
+
+    </script>
+    </body>
+</html>

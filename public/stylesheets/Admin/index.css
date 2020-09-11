@@ -1,0 +1,21 @@
+.Hidden{
+    display: none;
+}
+.swal2-popup{
+    background-color: #1a2035!important;
+}
+.swal2-popup *{
+    color: white!important;
+}
+.swal2-validation-message,.swal2-popup input{
+    background-color: transparent!important;
+}
+.swal2-cancel{
+    background-color: #f25961!important;
+}
+.swal2-timer-progress-bar{
+    background-color: white!important;
+}
+.row.card-header,.row.card-footer{
+    margin: 0!important;
+}

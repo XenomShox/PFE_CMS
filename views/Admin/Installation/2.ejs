@@ -1,0 +1,58 @@
+<div class="content mb-5" plugin-scripts="/Admin/files/javascripts/Assets/plugin/bootstrap-notify/bootstrap-notify.min.js,/Admin/files/javascripts/Assets/core/FormAjax.js"
+     loading-script="/Admin/Files/javascripts/Install/Continue.js">
+    <div class="page-inner row py-5 bg-info-gradient mx-0">
+        <div class="ml-5 text-white pb-2">
+            <h1>Website Installation</h1>
+            <p>Creation of the owner account.</p>
+        </div>
+    </div>
+    <div id="Settings" class="row align-items-start col-11 mx-auto my--5">
+        <div class="card col-xl-4 col-lg-6 col-md-8 col-sm-10 col-12 mx-auto">
+            <form class="card-body d-flex flex-column" action="/Install/Signup" method="POST">
+                <h1>Sign Up</h1>
+                <div class="form-group form-floating-label">
+                    <input  id="username1" name="username" type="text" class="form-control input-border-bottom" required>
+                    <label for="username1" class="placeholder">Username</label>
+                </div>
+                <div class="form-group form-floating-label">
+                    <input  id="First Name" name="firstName" type="text" class="form-control input-border-bottom" required>
+                    <label for="First Name" class="placeholder">First Name</label>
+                </div>
+                <div class="form-group form-floating-label">
+                    <input  id="Last Name" name="lastName" type="text" class="form-control input-border-bottom" required>
+                    <label for="Last Name" class="placeholder">Last Name</label>
+                </div>
+                <div class="form-group form-floating-label">
+                    <input  id="email" name="email" type="email" class="form-control input-border-bottom" required>
+                    <label for="email" class="placeholder">Email</label>
+                </div>
+                <div class="form-group form-floating-label">
+                    <input  id="passwordsignin" name="password" type="password" class="form-control input-border-bottom" required>
+                    <label for="passwordsignin" class="placeholder">Password</label>
+                    <div class="show-password">
+                        <i class="flaticon-interface"></i>
+                    </div>
+                </div>
+                <div class="form-group form-floating-label">
+                    <input  id="confirmpassword" type="password" class="form-control input-border-bottom" required>
+                    <label for="confirmpassword" class="placeholder">Confirm Password</label>
+                    <div class="show-password">
+                        <i class="flaticon-interface"></i>
+                    </div>
+                </div>
+                <div class="form-group form-floating-label">
+                    <input  id="birthday" name="birthday" type="date" class="form-control input-border-bottom" required>
+                    <label for="birthday" class="placeholder">Birthday</label>
+                </div>
+                <div class="form-group form-floating-label">
+                    <input  id="phone" name="phone" type="text" class="form-control input-border-bottom">
+                    <label for="phone" class="placeholder">Phone NumberL</label>
+                </div>
+                <div class="form-action my-3 mx-2 row">
+                    <a href="#" id="back" class="m-auto px-5  btn btn-danger btn-rounded btn-login mr-3">Back</a>
+                    <button type="submit" value="Sign Up" class="m-auto px-5  btn btn-primary btn-rounded btn-login">Sign Up</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

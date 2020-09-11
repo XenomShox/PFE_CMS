@@ -1,0 +1,248 @@
+#FilesManager .dropdown-menu{ min-width: auto!important; }
+#FilesManager a{cursor: pointer;}
+body[data-background-color="dark"] .nav-link:not(:hover):not(.dropdown-item):not(:focus),
+body[data-background-color="dark"] .UploadList .btn,
+body[data-background-color="dark"] .breadcrumbs .nav-item,
+body[data-background-color="dark"] .form-control[readonly],
+body[data-background-color="dark"] .UploadList .Upload-file h4{ color: white!important; }
+body[data-background-color="dark"] .form-control[readonly]{background-color: transparent!important; border: none;}
+.nav-link,.UploadList .card-header btn{
+    display: flex!important;
+    align-items: baseline;
+    transition: color .4s ease-in-out,background-color .4s ease-in-out;
+}
+body[data-background-color="dark"]  .Context-Menu .nav-link:not(:hover):not(.dropdown-item):not(:focus){color: #666!important;}
+.Context-Menu .nav-link{padding: .2em 1em;}
+.Context-Menu{position: fixed;}
+body[data-background-color="dark"] .modal-content{
+    background-color: #202940;
+    color: white;
+}
+.modal-body{display: flex;flex-direction: column;}
+.modal-body p,.modal-title{font-size: 1.4em;}
+#Response .modal-body p{
+    text-align: center;
+    margin-top: 1em;
+}
+.modal-header{border-bottom: none;}
+#Preview .modal-dialog{max-width: 70vw;}
+#Preview .modal-body *{width: 100%;}
+#Preview .modal-body embed{min-height: 30vw;}
+body[data-background-color="dark"] .close{color: #bbb;opacity: 1; transition: color .2s ease-in, opacity .2s ease-in;}
+body[data-background-color="dark"] .close:not(:disabled):not(.disabled):focus,
+body[data-background-color="dark"] .close:not(:disabled):not(.disabled):hover{color: white; opacity: 1}
+#FilesManager i{margin: auto .4em;}
+#view{align-content: start;}
+.d-none + .fa-folder {margin-left: 2.1em!important;}
+#TreeView{ border-right: .1em solid rgba(181,181,181,.1)!important; margin: 0; overflow: auto;}
+i.fa-chevron-right,i.fa-chevron-down,i.fa-chevron-up{
+    border: 1px solid transparent;
+    padding: .2em .4em;
+    border-radius: 50%;
+    width: 1.5em;
+    height: 1.5em;
+}
+i.fa-chevron-down{padding: .2em;}
+i.fa-chevron-right:hover,i.fa-chevron-down:hover,i.fa-chevron-up:hover{border-color: rgba(187,187,187,.1);}
+ul.view ,.content-view ul{ list-style: none; padding: 0;}
+.view ul{list-style: none; padding-left: 1em;}
+.item{
+    display: flex;
+    min-width: fit-content;
+    padding: .5em;
+    flex-wrap: nowrap;
+}
+.item.active{ background-color: rgba(187,187,187,.1); }
+.item:hover{ color: #bbb; cursor: pointer}
+.dropdown-item:hover,.Context-Menu .nav-link:hover{background-color: #eee;}
+.dropdown-item{font-size: 1em;}
+.dropdown-item.active, .dropdown-item:active{background-color: #ddd;}
+.selected-nav,.selected-item,
+.selected .not-selected-nav,
+.selected.multi .ONO,.selected.Folder .Download,
+#FilesManager:not(.Copy) .Paste,
+#FilesManager:not(.Copy) .PasteClose,.selected.Copy .NPaste{ display: none!important; }
+.selected .selected-item{ display: list-item!important; }
+.selected .selected-nav,.not-selected-nav{ display: flex!important; }
+.breadcrumbs{border: none;}
+.breadcrumbs{margin: 0;}
+.breadcrumbs .nav-item{ padding: .5em .3em;}
+#SelectList span{margin-right: .3em; font-size: 1.2em;font-weight: bold;}
+#SelectList:not(:hover) i{display: none}
+#InfoModal table td{
+    word-wrap: break-word;
+    font-size: 1.2em;
+    min-width: 1em;
+    max-width: 10em;
+    text-overflow: unset;
+    padding-bottom: 1em;
+}
+#InfoModal table td input{
+    background: transparent;
+    border: none;
+    width: 100%;
+}
+#InfoModal table td input:hover{color: #666;}
+#InfoModal table tr{
+    vertical-align: text-top;
+}
+.breadcrumbs .separator{    top: -.5em;
+    position: relative;}
+.nav-view{border-bottom: .1em solid;min-height: 3.5em;}
+.breadcrumbs .nav-item.btn{
+    margin-bottom: 1em;
+    font-size: 1em;
+    font-weight: bold;
+    padding: .5rem 1rem;
+    transition: color .2s ease-in,background-color .2s ease-in;
+}
+.breadcrumbs .nav-item.btn:hover {
+    background-color: #ddd;
+}
+body[data-background-color="dark"] .breadcrumbs .nav-item.btn:hover {
+    background-color: #eee;
+    color: #666!important;
+}
+
+.content-view.is-loading:after{top: calc(50% - 5em/2);}
+/*  view */
+.content-view{
+    height: calc(100% - 3.5em);
+    align-items: start;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: start;
+}
+.file-item{
+    position: relative;
+    flex: 0 0 13%;
+    max-width: 13%;
+    max-height: 10em;
+    overflow: hidden;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: .2em 1.733%;
+    text-align: center;
+    border: .1em solid transparent;
+}
+.file-item *{max-width: 100%}
+.file-item:hover,.file-item.selected{
+    border: .1em solid rgba(187,187,187,.2);
+    cursor: pointer;
+    background-color: rgba(187,187,187,.2);
+}
+.file-item input{
+    position: absolute;
+    left: 10%;
+    top:.5em;
+    width: 1.2em;
+    height: 1.2em;
+    z-index: 10;
+    opacity: 0;
+}
+.file-item input:checked,.file-item:hover input{opacity: 1;}
+.icon{margin-top: 1.5em;}
+.icon i{ font-size: 3em; margin: auto!important; }
+.Large .file-item{
+    flex: 0 0 20%;
+    max-width: 20%;
+    max-height: 12em;
+    margin: .5em 2.5%;
+}
+.Large .Name{font-size: 1.4em; margin-top: .2em;}
+.Large .icon i{font-size: 4.5em;}
+
+@media (max-width: 992px)  {
+    .file-item{
+        flex: 0 0 20%;
+        max-width: 20%;
+        margin: .5em 2.5%;
+    }
+}
+@media (max-width: 992px)and (min-width: 768px) {
+    .card-header .nav-link:not(:hover):not(#SelectList) i{margin: auto 2em auto .3em!important;}
+    .card-header .nav-link:not(:hover):not(#SelectList) {
+        width: 4em;
+        overflow: hidden;
+        height: 3em;
+    }
+}
+@media (max-width: 768px) {
+    #view{margin: .5em auto!important;}
+    #FilesManager .card-body{
+        flex-wrap: nowrap;
+    }
+    .file-item{
+        flex: 0 0 20%;
+        max-width: 20%;
+        margin: .5em 2.5%;
+    }
+    .Large .file-item{
+        flex: 0 0 30%;
+        max-width: 30%;
+        margin: .5em 1.5%;
+    }
+}
+@media (max-width: 576px) {
+    .file-item{
+        flex: 0 0 30%;
+        max-width: 30%;
+        margin: .5em 1.5%;
+    }
+    .Large .file-item{
+        flex: 0 0 40%;
+        max-width: 40%;
+        margin: .5em 5%;
+    }
+}
+.dataTables_wrapper{padding-top: 1em}
+.table.table-hover tr.selected{background-color: rgba(0,0,0,.075);}
+.UploadList{
+    position: fixed;
+    bottom: 0;
+    z-index: 1;
+    right: 0;
+    padding: 0;
+    border: 1px solid white;
+    border-bottom-left-radius:0;
+    border-bottom-right-radius:0;
+    transition: transform 1s ease-in-out,opacity 1s ease-in-out;
+}
+.UploadList.hidden{transform: translateY(120%); opacity: 0;}
+.UploadList .card-body{ padding: 0; overflow: hidden;}
+.UploadList .card-header{padding: 0.7em 1em!important;}
+.UploadList .card-title{align-content: center;}
+.UploadList .card-title span{margin-left: .5em;}
+.UploadList i{padding: .25em!important;}
+body[data-background-color="dark"] .UploadList .btn:hover{ color: #666!important;background-color: white!important;}
+body[data-background-color="dark"] .UploadList .btn{ border-color: white!important;}
+.UploadList .Upload-file{
+    padding: 0 1em 0 0;
+    position: relative;
+    align-content: center;
+    display:flex;
+    height: 3.5em;
+    border-bottom: .1em solid rgba(187,187,187,.1);
+    overflow: hidden;
+}
+.UploadList .Upload-file .check:hover,
+.UploadList .Upload-file .check.isProgressing{background-color: #0d8010; transition: width .2s linear}
+.UploadList .Upload-file .check{
+    display: flex; transition: background-color .5s ease-in-out,color .5s ease-in-out; position: absolute;
+    height: 3.5em;
+    top:0; left: 1px;
+}
+.UploadList .Upload-file .check.isProgressing i,.UploadList .Upload-file .check.done:hover i,
+.UploadList .Upload-file .check:not(.isProgressing) h4,
+.UploadList .Upload-file .check.isProgressing:not(:hover) .minute,
+.UploadList .Upload-file .check.isProgressing:hover .percentage{display: none;}
+.UploadList .Upload-file .check.error:hover{background-color: #a01d24}
+.UploadList .Upload-file .check.done:hover .minute{display: block}
+.UploadList .Upload-file h4{
+    margin: auto .5em auto 4em;
+    z-index: 2;
+    overflow: hidden;
+    height: 50%;
+}

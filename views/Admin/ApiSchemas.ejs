@@ -1,0 +1,40 @@
+<div class="content"
+     plugin-scripts="/Admin/Files/javascripts/Assets/plugin/sweetalert2/dist/sweetalert2.all.min.js,/Admin/files/javascripts/Assets/plugin/bootstrap-notify/bootstrap-notify.min.js,/Admin/files/javascripts/Assets/core/FormAjax.js"
+     loading-script="/Admin/Files/javascripts/Admin/ApiSchemas.js">
+    <div class="page-inner row py-5 bg-secondary-gradient">
+        <div class="ml-5 text-white pb-2">
+            <h2>API Schemas</h2>
+            <p>You can manage your data-base Schema from here.</p>
+        </div>
+        <button id="AddButton" class="mr-5 ml-auto my-auto btn-round btn btn-success btn-border" disabled>Add New
+            Schema
+        </button>
+    </div>
+    <div class="row col-11 mx-auto mt-2 mb-0">
+        <div class="card col-12 mx-auto mt--4">
+            <form id="DataBaseSettings" class="card-body d-flex flex-column" method="post" action="/Admin/DataBaseSettings">
+                <div class="form-group form-inline">
+                    <label for="ApiPost" class=" col-lg-4 col-md-5 col-9 col-form-label justify-content-start"><h2>Api PostContent</h2></label>
+                    <label class="switch">
+                        <input id="ApiPost" type="checkbox" name="Enabled" <%=Settings.Enabled?"checked":""%>>
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+                <div class="ml-5 form-group form-inline">
+                    <label for="reference" class="col-md-4 col-form-label justify-content-start">Collection Reference :</label>
+                    <div class="col-md-8 p-0">
+                        <select class="form-control input-full" id="reference" name="reference" <%=Settings.Enabled?"":"disabled"%> data-value="<%=Settings.reference%>">
+                            <option value></option>
+                        </select>
+                    </div>
+                </div>
+                <input type="submit" class="btn btn-success btn-border ml-auto mr-2">
+            </form>
+        </div>
+    </div>
+
+    <div id="Schemas" class="row col-11 mx-auto mt-3">
+    </div>
+    <link rel="stylesheet" href="/Admin/Files/stylesheets/Admin/ApiSchemas.css">
+    <link rel="stylesheet" href="/Admin/Files/stylesheets/Admin/DataBaseSettings.css">
+</div>

@@ -1,0 +1,21 @@
+div.Context-Menu {
+    background-color: #1a2035;
+    color: white;
+}
+
+div.Context-Menu li,
+div.Context-Menu li input {
+    cursor: pointer;
+}
+
+div.Context-Menu li:hover {
+    background-color: #6059ca;
+}
+
+div.Context-Menu li input:checked {
+    background-color: black;
+}
+
+div.Context-Menu hr {
+    background-color: rgba(169, 175, 187, 0.82);
+}

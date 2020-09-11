@@ -1,0 +1,28 @@
+<div class="content" plugin-scripts="/Admin/files/javascripts/Assets/plugin/bootstrap-notify/bootstrap-notify.min.js,/Admin/files/javascripts/Assets/core/FormAjax.js,/Admin/files/javascripts/Assets/core/FileSelector.js"
+     loading-script="/Admin/Files/javascripts/Admin/Templates.js">
+    <div class="page-inner row py-5 bg-secondary-gradient">
+        <div class="ml-5 text-white pb-2">
+            <h1>Website Templates Settings</h1>
+            <p>You can manage your WebSite general details from here.</p>
+        </div>
+    </div>
+    <div id="Settings" class="row align-items-start col-11 mx-auto mt--4">
+        <div class="card col-12 ">
+            <div class="card-body d-flex flex-column">
+                <h1 class="ml-4">Upload Templates</h1>
+                <div class="ml-5">
+                    <div class="form-group form-inline">
+                        <label for="Template" class="col-md-3 col-form-label justify-content-start File-Selector">Template file :</label>
+                        <div class="col-md-9 p-0">
+                            <input type="text" class="form-control input-full" id="Template" name="Template" value="" placeholder="Select a compressed file" selector-file="Compressed">
+                        </div>
+                    </div>
+                </div>
+                <a id="Verify" class="btn btn-success btn-border ml-auto mr-2 disabled">Add Template</a>
+            </div>
+        </div>
+        <div id="Templates" class="col-12 row mx-auto">
+        </div>
+    </div>
+    <link rel="stylesheet" href="/Admin/files/stylesheets/Admin/General.css">
+</div>

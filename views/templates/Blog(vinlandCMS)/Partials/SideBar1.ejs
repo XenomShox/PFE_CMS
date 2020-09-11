@@ -1,0 +1,42 @@
+<div class="Sidebar col-12 col-lg-3 mb-4">
+    <%if(Additional.latest.length>0){%>
+    <div class="Latest">
+        <h5 class="font-weight-bold mb-4">Latest Posts</h5>
+        <div class="Post d-flex flex-column">
+            <%Additional.latest.forEach(post=>{%>
+                <div class="blog Latest row px-2 px-md-0">
+                    <a href="#" class="blogImage p-0">
+                        <div class="img" style="background-image: url(<%=post.covers[0]%>)" alt=""></div>
+                        <div class="Comments"><%=post.comments.length%></div>
+                    </a>
+                    <div class="col ml-5 ml-lg-1">
+                        <a href="<%=post.category.Slug%>" class="Category text-muted"><%=post.category.Name%></a>
+                        <br>
+                        <a href="#" class="card-title"><%=post.title%></a>
+                    </div>
+                </div>
+            <%})%>
+        </div>
+    </div>
+    <%}%>
+    <form class="Search my-2 my-lg-0" action="/search" Method="GET">
+        <div class="input-group mb-3">
+            <input type="search" name="search" class="form-control" placeholder="Search" aria-label="Search">
+            <div class="input-group-append">
+                <button class="btn" type="submit"><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+    </form>
+    <div class="Ads w-100 row mb-3 mx-auto">
+        <div class="AdsElement col-5 col-lg-12 my-3 mx-auto p-0">
+            <img src="https://cdn.jevelin.shufflehound.com/wp-content/uploads/sites/11/2016/11/ad.png" alt="">
+        </div>
+        <div class="AdsElement col-5 col-lg-12 my-3 mx-auto p-0">
+            <img src="https://cdn.jevelin.shufflehound.com/wp-content/uploads/sites/11/2016/11/ad.png" alt="">
+        </div>
+        <div class="AdsElement col-5 col-lg-12 my-3 mx-auto p-0">
+            <img src="https://cdn.jevelin.shufflehound.com/wp-content/uploads/sites/11/2016/11/ad.png" alt="">
+        </div>
+    </div>
+
+</div>
