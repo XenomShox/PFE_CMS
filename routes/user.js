@@ -5,7 +5,12 @@ const userMethods = require("../handler/user");
 // Middlewares
 const { isLoggedIn, hasPermission } = require("../middlewares/middleware");
 
-router.get("/", isLoggedIn, hasPermission(["admin_privillage"]), userMethods.getUsers);
+router.get(
+    "/",
+    isLoggedIn,
+    hasPermission(["admin_privillage"]),
+    userMethods.getUsers
+);
 
 router
     .route("/ban/:user_id")
@@ -38,8 +43,10 @@ router
 // User Profile
 router.get("/profile/:user_id", userMethods.profile);
 
-router.route("/:user_id").all( isLoggedIn, hasPermission(["admin_privillage"]))
-    .get(userMethods.getUser)
-    .put(userMethods.updateUser);
+router
+    .route("/:user_id")
+    .all(isLoggedIn)
+    .get(hasPermission(["admin_privillage"]), userMethods.getUser)
+    .post(userMethods.updateUser);
 
 module.exports = router;

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 class PostManager {
     /*----------------Attributes------------*/
-    #Model;
+    Model;
     /*------------------Methods-------------*/
     constructor() {
         let schema=mongoose.Schema({
@@ -41,17 +41,17 @@ class PostManager {
             },
         });
 
-        this.#Model=mongoose.model('Vinland_Post',schema);
+        this.Model=mongoose.model('Vinland_Post',schema);
     }
     CreatePost(post,callback){
-        this.#Model.create(post,(err,res)=>{
+        this.Model.create(post,(err,res)=>{
             console.log(err)
             if(err) callback(500,"Internal Error");
             else callback(201,res);
         });
     }
     UpdatePost(Id,Post,callback){
-        this.#Model.findOneAndUpdate(Id,Post,(err,res)=>{
+        this.Model.findOneAndUpdate(Id,Post,(err,res)=>{
             if(err) callback(500,"Internal Error");
             else callback(200,res);
         })
@@ -59,17 +59,17 @@ class PostManager {
     GetPosts(options,callback){
         let query;
         if(options){
-            if(options.title) query=this.#Model.find({title:{ "$regex": options.title, "$options": "i" }});
-            else if(options.category) query=this.#Model.find({category:options.category._id})
-            else if(options.tag) query=this.#Model.find({tags:options.tag});
-            else query=this.#Model.find({})
+            if(options.title) query=this.Model.find({title:{ "$regex": options.title, "$options": "i" }});
+            else if(options.category) query=this.Model.find({category:options.category._id})
+            else if(options.tag) query=this.Model.find({tags:options.tag});
+            else query=this.Model.find({})
             if(options.sort) query.sort(options.sort);
             else query.sort("-date");
             if(options.limit) query.limit(options.limit);
             if(options.skip) query.skip(options.skip);
         }
         else{
-            query=this.#Model.find({});
+            query=this.Model.find({});
             callback=options;
         }
         query.select("-content")
@@ -81,7 +81,7 @@ class PostManager {
             })
     }
     GetPost(id,callback){
-        this.#Model.findOneAndUpdate({_id:id},{$inc : {'visited' : 1}})
+        this.Model.findOneAndUpdate({_id:id},{$inc : {'visited' : 1}})
             .populate("author")
             .exec((err,res)=>{
            if(err)  callback(404,"Post Not Found");

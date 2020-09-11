@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<% include ./Partials/Header %>
+<body class="Category">
+<% include ./Partials/Navbar-light.ejs %>
+<div class="Content">
+    <div style="background-color: #fbfbfb">
+        <div class="container  pt-4">
+            <div class="row px-3">
+                <h3 class="font-weight-bold">Tag: <%=tag%></h3>
+                <ol class="breadcrumb ml-auto pt-2">
+                    <li class="breadcrumb-item active">
+                        <a href="/"><i class="fas fa-home"></i></a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="/tags/<%=tag%>" class="font-weight-bold">#<%=tag%></a>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+    <div class="container d-flex flex-column">
+        <div class="form-inline row">
+            <div class="input-group mr-5 ml-auto my-1">
+                <div class="input-group-prepend">
+                    <label class="input-group-text" for="form">Sort</label>
+                </div>
+                <select class="custom-select" id="form" onchange="location = this.value;">
+                    <option value="/tags/<%= tag%>?sort=title">Title A-Z</option>
+                    <option value="/tags/<%= tag%>?sort=-title">Title Z-A</option>
+                    <option value="/tags/<%= tag%>?sort=date">Oldest</option>
+                    <option value="/tags/<%= tag%>?sort=-date" selected>Newest</option>
+                    <option value="/tags/<%= tag%>?sort=rating.likes">Most Liked</option>
+                    <option value="/tags/<%= tag%>?sort=rating.dislikes">Most Disliked</option>
+                </select>
+            </div>
+        </div>
+        <div class="Layout row mt-3">
+            <% if(Posts.length>0){%>
+                <% include ./Partials/Posts.ejs %>
+                <% include ./Partials/SideBar1.ejs %>
+            <%}else{%>
+                <h1 class="text-center my-5 mx-auto">There is no Post yet.</h1>
+                <% include ./Partials/SideBar2.ejs %>
+            <%}%>
+        </div>
+    </div>
+</div>
+<% include ./Partials/Footer.ejs %>
+
+</body>
+</html>

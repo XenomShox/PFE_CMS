@@ -1,43 +1,62 @@
 <!DOCTYPE html>
 <html>
-<% include ./Partials/Header.ejs %>
-<body class="Category">
-<% include ./Partials/Navbar-light.ejs %>
-<div class="Content">
-    <div style="background-color: #fbfbfb">
-        <div class="container  pt-4">
-            <div class="row px-3">
-                <h4 class="font-weight-bold"><%=Category.Name%> Post</h4>
-                <ol class="breadcrumb ml-auto pt-0">
-                    <li class="breadcrumb-item active">
-                        <a href="/"><i class="fas fa-home"></i></a>
-                    </li>
-                    <%
-                    let Slugs=Category.Slug.split("/"),sslug="";
-                    for(let i=1 ;i<Slugs.length;i++){
-                        sslug+="/"+Slugs[i];
-                    %>
-                    <li class="breadcrumb-item">
-                        <a href="<%=sslug%>" class="font-weight-bold"><%=Slugs[i]%></a>
-                    </li>
-                    <%}
-                    %>
-                    <li class="breadcrumb-item ">
-                        <a href="" class="font-weight-bold"><%=Post.title%></a>
-                    </li>
-                </ol>
+    <% include ./partials/header.ejs %>
+    <body class="Category">
+        <% include ./partials/navbar.ejs %>
+        <div class="slider_area">
+            <div
+                    style="background-image: url(<%=Post.covers[0]%>)"
+                    class="single_slider d-flex align-items-center"
+                >
+                <div class="container">
+                    <div class="row align-items-center justify-content-center">
+                        <div class="col-xl-8">
+                            <div class="slider_text text-center">
+                                <div class="text">
+                                    <h3><%= Post.title %></h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="container d-flex flex-column">
-        <a class="btn btn-success ml-auto mr-5 my-3" href="<%= Category.Slug%>?post=<%=Post._id%>&edit=true"> <i class="far fa-edit"></i><span class="ml-1">Edit the Post</span></a>
-        <div class="Layout row ">
-            <% include ./Partials/PostContent.ejs %>
-            <% include ./Partials/SideBar1.ejs %>
-        </div>
-    </div>
-</div>
-<% include ./Partials/Footer.ejs %>
+        <div class="Content">
+            <div>
+                <div class="container  pt-4">
+                    <div class="row px-3 ">
+                        <ol style="background-color: white;" class="breadcrumb pt-0 my-auto">
+                            <li class="breadcrumb-item active">
+                                <a href="/"><i class="fas fa-home"></i></a>
+                            </li>
+                            <%
+                            let Slugs=Category.Slug.split("/"),sslug="";
+                            for(let i=1 ;i<Slugs.length;i++){
+                                sslug+="/"+Slugs[i];
+                            %>
+                            <li class="breadcrumb-item">
+                                <a href="<%=sslug%>" class="font-weight-bold"><%=Slugs[i]%></a>
+                            </li>
+                            <%}%>
+                            <li class="breadcrumb-item ">
+                                <a href="" class="font-weight-bold"><%=Post.title%></a>
+                            </li>
+                        </ol>
+                        <% if(currentUser && currentUser._id.equals(Post.author._id)) { %>
+                            <a class="btn btn-warning ml-auto my-auto" href="<%= Category.Slug%>?post=<%=Post._id%>&edit=true"> <i class="far fa-edit"></i><span class="ml-1">Edit</span></a>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
 
-</body>
+            <section class="blog_area section-padding">
+                    <div class="container">
+                        <div class="row">
+                            <% include ./partials/postContent.ejs %> <%include ./partials/sideBar.ejs%>
+                        </div>
+                    </div>
+            </section>
+        </div>
+        <% include ./partials/footer.ejs %>
+    </body>
 </html>

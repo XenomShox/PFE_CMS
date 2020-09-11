@@ -3,7 +3,12 @@ exports.stratV1 = async function (username, password, done) {
     try {
         console.log(username);
         console.log(password);
-        let user = await User.findOne({ username });
+        let user = await User.findOne({ username }).populate("roles", {
+            owner: true,
+            admin_privillage: true,
+            create_post: true,
+            delete_post: true,
+        });
         if (!user) {
             console.log("User does not exist");
             return done(null, false);
@@ -17,7 +22,6 @@ exports.stratV1 = async function (username, password, done) {
             if (err) {
                 console.log(`err: ${err}`);
                 return done(null, false);
-
             }
             console.log(`result: ${result}`);
             if (!result) {

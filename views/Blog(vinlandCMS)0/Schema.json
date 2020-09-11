@@ -1,0 +1,57 @@
+{
+    "Type": "Blog",
+    "Data": [
+        {
+            "name": "latest",
+            "sort": "-date",
+            "limit": 6
+        },
+        {
+            "name": "popular",
+            "sort": "-visited",
+            "limit": 4
+        }
+    ],
+    "Structure": {
+        "Index": {
+            "path":"Index",
+            "data": null
+        },
+        "Categories": {
+            "path":"Categories",
+            "data": null
+        },
+        "Post": {
+            "path":"Post",
+            "data": null
+        },
+        "CreatePost": {
+            "path":"Create",
+            "data":  null
+        },
+        "EditPost": {
+            "path":"Edit",
+            "data": null
+        },
+        "Tags": {
+            "path":"Tags",
+            "data": null
+        },
+        "Search": {
+            "path":"Search",
+            "data": null
+        },
+        "Messenger": {
+            "path":"Messenger",
+            "data": null
+        },
+        "Profile": {
+            "path":"Profile",
+            "data": null
+        },
+        "Error": {
+            "path":"Error",
+            "data": null
+        }
+    }
+}

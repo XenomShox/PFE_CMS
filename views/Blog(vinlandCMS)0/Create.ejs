@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<% include ./Partials/Header.ejs %>
+<body class="Category">
+<header class="position-relative">
+    <div class="container d-flex flex-column">
+        <% include ./Partials/Navbar-light.ejs %>
+    </div>
+</header>
+<div class="Content">
+    <div style="background-color: #fbfbfb">
+        <div class="container  pt-4">
+            <div class="row px-3">
+                <h3 class="font-weight-bold">Creating a <%=Category.Name%> Post</h3>
+                <ol class="breadcrumb ml-auto pt-2">
+                    <li class="breadcrumb-item active">
+                        <a href="/"><i class="fas fa-home"></i></a>
+                    </li>
+                    <%
+                        let Slugs=Category.Slug.split("/"),sslug="";
+                        for(let i=1 ;i<Slugs.length;i++){
+                            sslug+="/"+Slugs[i];
+                        %>
+                        <li class="breadcrumb-item">
+                            <a href="<%=sslug%>" class="font-weight-bold"><%=Slugs[i]%></a>
+                        </li>
+                        <%}
+                    %>
+                </ol>
+            </div>
+        </div>
+    </div>
+    <div class="container d-flex flex-column">
+        <div class="Layout row mt-3">
+            <form action="<%=Category.Slug%>" method="post" class="PageContent col-12 col-lg-9  d-flex flex-column align-items-start">
+                <div class="form-group w-100">
+                    <label for="title">Title of the Post</label>
+                    <input name="title" type="text" class="form-control w-75" id="title" aria-describedby="title" required>
+                </div>
+                <div class="form-group w-100">
+                    <label for="excerpt">Excerpt of the Post</label>
+                    <textarea name="excerpt" class="form-control w-75" id="excerpt" aria-describedby="description" maxlength="150" required></textarea>
+                    <small class="form-text text-muted">this description is gonna be used to help for search optimisation.</small>
+                </div>
+                <div class="form-group w-100">
+                    <label for="covers">Covers for the Post</label>
+                    <input name="covers" multiple type="text" class="form-control-file w-75" id="covers" aria-describedby="post covers">
+                    <small class="form-text text-muted">the selected images are gonna be used as cover for the post.</small>
+                </div>
+                <div class="form-group w-100">
+                    <label for="tags">Tags of the Post</label>
+                    <input name="tags" type="text" class="form-control w-75" id="tags" aria-describedby="title">
+                </div>
+                <div class="form-group w-100">
+                    <label for="content">The content of the Post</label>
+                    <textarea name="content" class="w-75" id="content" aria-describedby="description" required></textarea>
+                </div>
+                <input type="submit" class="btn btn-success" value="Post it">
+            </form>
+            <% include ./Partials/SideBar1.ejs %>
+        </div>
+    </div>
+</div>
+<% include ./Partials/Footer.ejs %>
+<link href="/admin/files/javascripts/Assets/plugin/summernote/summernote-bs4.min.css" rel="stylesheet">
+<script src="/admin/files/javascripts/Assets/plugin/summernote/summernote-bs4.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#content').summernote();
+    });
+
+</script>
+</body>
+</html>

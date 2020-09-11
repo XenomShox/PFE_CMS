@@ -1,100 +1,88 @@
-<header class="position-relative">
-    <div class="container d-flex flex-column">
-        <nav class="navbar navbar-expand-lg navbar-light bg-transparent my-md-4 pr-5 px-md-2">
-            <a class="navbar-brand" href="/"><%= WebSite.Name %></a>
-            <button
-                    class="navbar-toggler mr-5"
-                    type="button"
-                    data-toggle="collapse"
-                    data-target="#navbar"
-                    aria-controls="navbar"
-                    aria-expanded="false"
-                    aria-label="Toggle navigation"
-            >
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse mr-5" id="navbar">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="/">Home</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="CategoriesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">categories</a>
-                        <div class="dropdown-menu" aria-labelledby="CategoriesDropdown">
-                            <% function DropDown(elm) {%>
-                                <% elm.forEach( category => { %>
-                                <%if(!category.SubClass){%>
-                                    <a class="dropdown-item" href="<%= category.Slug %>"><%= category.Name %></a>
-                                <%} else {%>
-                                    <a class="dropdown-item dropdown-toggle" href="#" id="<%= category.Slug %>>" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <%= category.Name %>
-                                    </a>
-                                    <div class="dropdown-menu position-static" aria-labelledby="<%= category.Slug %>">
-                                        <% DropDown(category.SubClass);%>
-                                    </div>
-                                <%}})%>
-                            <%}%>
-                            <% DropDown(Categories) %>
+<header>
+    <div class="header-area">
+        <div id="sticky-header" class="main-header-area">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-xl-3 col-lg-2">
+                        <div class="logo">
+                            <a href="index.html">
+                                <img
+                                    src="/files/images/tasty/logo.png"
+                                    alt=""
+                                />
+                            </a>
                         </div>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#AboutUs">About us</a>
-                    </li>
-                    <li class="nav-item d-flex">
-                        <a
-                                class="nav-link mr-3 mx-lg-0"
-                                href="<%= WebSite.SocialMedia.Facebook.Url%>"
-                        ><i class="fab fa-facebook-square"></i
-                            ></a>
-                        <a
-                                class="nav-link mr-3 mx-lg-0"
-                                href="<%= WebSite.SocialMedia.Twitter.Url%>"
-                        ><i class="fab fa-twitter-square"></i
-                            ></a>
-                        <a
-                                class="nav-link mr-3 mx-lg-0"
-                                href="<%= WebSite.SocialMedia.Instagram.Url%>"
-                        ><i class="fab fa-instagram"></i
-                            ></a>
-                    </li>
-                    <li class="user nav-item dropdown">
-                        <a
-                                class="nav-link dropdown-toggle"
-                                href="#"
-                                id="UserDropdown"
-                                role="button"
-                                data-toggle="dropdown"
-                                aria-haspopup="true"
-                                aria-expanded="false"
-                        >
-                            <i class="fa fa-user"></i>
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="UserDropdown">
-                            <% if (!currentUser) { %>
-                                <a class="dropdown-item" href="/login">Log In</a>
-                            <% } else { %>
-                                <div
-                                        class="dropdown-item d-flex justify-content-between align-items-center"
-                                >
-                                    <img
-                                            class="profile-pic mr-2"
-                                            src="<%= currentUser.profileImage %>"
-                                            alt=""
-                                    />
-                                    <div>
-                                        <p class="m-0 p-0"><%= currentUser.username %></p>
-                                        <p style="font-size: 0.8rem;" class="m-0 p-0">
-                                            <%= currentUser.email %>
-                                        </p>
-                                    </div>
-                                </div>
-                                <a class="dropdown-item" href="/user/Profile">Profile</a>
-                                <a class="dropdown-item" href="/logout">Log Out</a>
-                            <% } %>
+                    </div>
+                    <div class="col-xl-6 col-lg-7">
+                        <div class="main-menu d-none d-lg-block">
+                            <nav>
+                                <ul id="navigation">
+                                    <li>
+                                        <a style="color: white;" href="/">home</a>
+                                    </li>
+                                    <li>
+                                        <a style="color: white;" href="#"
+                                            >Categories
+                                            <i class="fas fa-angle-down"></i
+                                        ></a>
+                                        <% function DropDown(elm) {%> <% elm.forEach( category => { %>
+                                            <%if(!category.SubClass){%>
+                                                <li><a href="<%= category.Slug %>"><%= category.Name %></a></li>
+                                            <%} else {%>
+                                                <li data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <%= category.Name %>
+                                                    <ul class="submenu" aria-labelledby="<%= category.Slug %>">
+                                                        <% DropDown(category.SubClass);%>
+                                                    </ul>
+                                                </li>
+                                                
+                                        <%}})%> <%}%> 
+                                        <ul class="submenu">
+                                            <% DropDown(Categories) %>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a style="color: white;" href="#" role="button"><span class="fa fa-user mr-1"></span> <i class="fas fa-angle-down"></i></a>
+                                        <ul class="submenu pb-2">
+                                            <% if (!currentUser) { %>
+                                            <li><a href="/login">Login</a></li>
+                                            <% } else { %>
+                                            <li class="p-2">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <img class="profile-pic mr-2" src="<%= currentUser.profileImage %>" alt=""/>
+                                                    <div>
+                                                        <p class="m-0 p-0"><%= currentUser.username %></p>
+                                                        <p style="font-size: 0.8rem;" class="m-0 p-0"><%= currentUser.email %></p>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <% if (currentUser.roles.some((role) => role["owner"]) ||currentUser.roles.some((role) => role["admin_privillage"])) { %>
+                                                <li><a class="dropdown-item" href="/admin">Admin Dashboard</a></li>
+                                            <% } %>
+                                            <li><a class="dropdown-item" href="/user/profile/<%= currentUser._id %>">Profile</a></li>
+                                            <li><a class="dropdown-item" href="/logout">Log Out</a></li>
+                                            <% } %>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </nav>
                         </div>
-                    </li>
-                </ul>
+                    </div>
+                    <div class="col-xl-3 col-lg-3 d-none d-lg-block">
+                        <div class="search_icon">
+                            <a href="#">
+                                <i class="fas fa-search"></i>
+                            </a>
+                        </div>
+                        
+                    </div>
+                    <div class="col-12">
+                        <div
+                            class="mobile_menu d-block d-lg-none"
+                        ></div>
+                    </div>
+                </div>
             </div>
-        </nav>
+        </div>
     </div>
 </header>

@@ -1,57 +1,73 @@
 <!DOCTYPE html>
 <html>
-<% include ./Partials/Header.ejs %>
-<body class="Category">
-<% include ./Partials/Navbar-light.ejs %>
-<div class="Content">
-    <div style="background-color: #fbfbfb">
-        <div class="container  pt-4">
-            <div class="row px-3">
-                <h3 class="font-weight-bold">Category: <%=Category.Name%></h3>
-                <ol class="breadcrumb ml-auto pt-2">
-                    <li class="breadcrumb-item active">
-                        <a href="/"><i class="fas fa-home"></i></a>
-                    </li>
-                    <%  let Slugs=Category.Slug.split("/"),sslug="";
+    <% include ./partials/header.ejs %>
+    <body class="Category">
+        <% include ./partials/navbar.ejs %>
+        <div class="slider_area">
+            <div
+                    style="background-image: url(<%=Posts.length>0?Posts[0].covers[0]:"/files/images/tasty/banner/bradcam.png"%>);"
+                    class="single_slider d-flex align-items-center"
+                >
+                <div class="container">
+                    <div class="row align-items-center justify-content-center">
+                        <div class="col-xl-8">
+                            <div class="slider_text text-center">
+                                <div class="text">
+                                    <h3><%= Posts.length > 0? Posts[0].title : "There are no posts yet" %></h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="Content">
+            <div class="container my-5">
+                <div class="row ">
+                    <ol style="background-color: white;" class="breadcrumb pt-0 my-auto">
+                        <li class="breadcrumb-item active">
+                            <a href="/"><i class="fas fa-home"></i></a>
+                        </li>
+                        <%
+                        let Slugs=Category.Slug.split("/"),sslug="";
                         for(let i=1 ;i<Slugs.length;i++){
-                            sslug+="/"+Slugs[i]; %>
+                            sslug+="/"+Slugs[i];
+                        %>
                         <li class="breadcrumb-item">
                             <a href="<%=sslug%>" class="font-weight-bold"><%=Slugs[i]%></a>
                         </li>
-                    <%  }%>
-                </ol>
-            </div>
-        </div>
-    </div>
-    <div class="container d-flex flex-column">
-        <div class="form-inline row">
-            <div class="input-group mr-3 ml-auto">
-                <div class="input-group-prepend">
-                    <label class="input-group-text" for="form">Sort</label>
+                        <%}
+                        %>
+                    </ol>
+                    <div class="form-inline row ml-auto my-auto">
+                        <div class="input-group mr-3 ml-auto">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" for="form">Sort</label>
+                            </div>
+                            <select class="custom-select" id="form" onchange="location = this.value;">
+                                <option value="<%= Category.Slug %>?sort=title">Title A-Z</option>
+                                <option value="<%= Category.Slug %>?sort=-title">Title Z-A</option>
+                                <option value="<%= Category.Slug %>?sort=date">Oldest</option>
+                                <option value="<%= Category.Slug %>?sort=-date" selected>Newest</option>
+                                <option value="<%= Category.Slug %>?sort=rating.likes">Most Liked</option>
+                                <option value="<%= Category.Slug %>?sort=rating.dislikes">Most Disliked</option>
+                            </select>
+                        </div>
+                        <a  class="btn btn-success mr-5" href="<%= Category.Slug%>?create=true"> <i style="color: white;" class="far fa-edit"></i><span style="color: white;" class="ml-1">Write an article</span></a>
+                    </div>
                 </div>
-                <select class="custom-select" id="form" onchange="location = this.value;">
-                    <option value="<%= Category.Slug%>?sort=title">Title A-Z</option>
-                    <option value="<%= Category.Slug%>?sort=-title">Title Z-A</option>
-                    <option value="<%= Category.Slug%>?sort=date">Oldest</option>
-                    <option value="<%= Category.Slug%>?sort=-date" selected>Newest</option>
-                    <option value="<%= Category.Slug%>?sort=rating.likes">Most Liked</option>
-                    <option value="<%= Category.Slug%>?sort=rating.dislikes">Most Disliked</option>
-                </select>
             </div>
-            <a class="btn btn-success mr-5 my-3" href="<%= Category.Slug%>?create=true"> <i class="far fa-edit"></i><span class="ml-1">Write an article</span></a>
-        </div>
-        <div class="Layout row mt-3">
-            <% if(Posts.length>0){%>
-                <% include ./Partials/Posts.ejs %>
-                <% include ./Partials/SideBar1.ejs %>
-            <%}else{%>
-                <h1 class="text-center my-5 mx-auto">There is no Post yet.</h1>
-                <% include ./Partials/SideBar2.ejs %>
-            <%}%>
-        </div>
-    </div>
-</div>
-<% include ./Partials/Footer.ejs %>
 
-</body>
+            <section class="blog_area section-padding p-0">
+                    <div class="container">
+                        <div class="row">
+                            <% include ./partials/posts.ejs %> <% include
+                            ./partials/sideBar.ejs %>
+                        </div>
+                    </div>
+            </section>
+        </div>
+        <% include ./partials/footer.ejs %>
+
+    </body>
 </html>

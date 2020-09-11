@@ -1,52 +1,80 @@
 <!DOCTYPE html>
 <html>
-<% include ./Partials/Header %>
-<body class="Category">
-<% include ./Partials/Navbar-light.ejs %>
-<div class="Content">
-    <div style="background-color: #fbfbfb">
-        <div class="container  pt-4">
-            <div class="row px-3">
-                <h3 class="font-weight-bold">Tag: <%=tag%></h3>
-                <ol class="breadcrumb ml-auto pt-2">
-                    <li class="breadcrumb-item active">
-                        <a href="/"><i class="fas fa-home"></i></a>
-                    </li>
-                    <li class="breadcrumb-item">
-                        <a href="/tags/<%=tag%>" class="font-weight-bold">#<%=tag%></a>
-                    </li>
-                </ol>
-            </div>
-        </div>
-    </div>
-    <div class="container d-flex flex-column">
-        <div class="form-inline row">
-            <div class="input-group mr-5 ml-auto my-1">
-                <div class="input-group-prepend">
-                    <label class="input-group-text" for="form">Sort</label>
+    <% include ./partials/header.ejs %>
+    <body class="Category">
+        <% include ./partials/navbar.ejs %>
+        <div
+            class="slider_area"
+            style="height: 20vh; background-color: #e9e9e9"
+        ></div>
+        <div class="Content">
+            <div class="container my-5">
+                <div class="row">
+                    <ol
+                        style="background-color: white"
+                        class="breadcrumb pt-2 my-auto"
+                    >
+                        <li class="breadcrumb-item active">
+                            <a href="/"><i class="fas fa-home"></i></a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="/tags/<%=tag%>" class="font-weight-bold"
+                                >#<%=tag%></a
+                            >
+                        </li>
+                    </ol>
+                    <div class="form-inline row ml-auto my-auto">
+                        <div class="input-group mr-3 ml-auto">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" for="form"
+                                    >Sort</label
+                                >
+                            </div>
+                            <select
+                                class="custom-select"
+                                id="form"
+                                onchange="location = this.value;"
+                            >
+                                <option value="/tags/<%= tag%>?sort=title">
+                                    Title A-Z
+                                </option>
+                                <option value="/tags/<%= tag%>?sort=-title">
+                                    Title Z-A
+                                </option>
+                                <option value="/tags/<%= tag%>?sort=date">
+                                    Oldest
+                                </option>
+                                <option
+                                    value="/tags/<%= tag%>?sort=-date"
+                                    selected
+                                >
+                                    Newest
+                                </option>
+                                <option
+                                    value="/tags/<%= tag%>?sort=rating.likes"
+                                >
+                                    Most Liked
+                                </option>
+                                <option
+                                    value="/tags/<%= tag%>?sort=rating.dislikes"
+                                >
+                                    Most Disliked
+                                </option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
-                <select class="custom-select" id="form" onchange="location = this.value;">
-                    <option value="/tags/<%= tag%>?sort=title">Title A-Z</option>
-                    <option value="/tags/<%= tag%>?sort=-title">Title Z-A</option>
-                    <option value="/tags/<%= tag%>?sort=date">Oldest</option>
-                    <option value="/tags/<%= tag%>?sort=-date" selected>Newest</option>
-                    <option value="/tags/<%= tag%>?sort=rating.likes">Most Liked</option>
-                    <option value="/tags/<%= tag%>?sort=rating.dislikes">Most Disliked</option>
-                </select>
             </div>
-        </div>
-        <div class="Layout row mt-3">
-            <% if(Posts.length>0){%>
-                <% include ./Partials/Posts.ejs %>
-                <% include ./Partials/SideBar1.ejs %>
-            <%}else{%>
-                <h1 class="text-center my-5 mx-auto">There is no Post yet.</h1>
-                <% include ./Partials/SideBar2.ejs %>
-            <%}%>
-        </div>
-    </div>
-</div>
-<% include ./Partials/Footer.ejs %>
 
-</body>
+            <section class="blog_area section-padding p-0">
+                <div class="container">
+                    <div class="row">
+                        <% include ./partials/posts.ejs %> <% include
+                        ./partials/sideBar.ejs %>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <% include ./partials/footer.ejs %>
+    </body>
 </html>

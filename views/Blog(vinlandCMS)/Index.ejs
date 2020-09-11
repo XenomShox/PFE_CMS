@@ -1,47 +1,31 @@
 <!DOCTYPE html>
-<html>
-    <% include ./Partials/Header.ejs %>
+<html lang="en">
+    <% include ./partials/header.ejs %>
     <body>
-        <header class="position-relative" style="background-image: url(<%=Additional.popular[0].covers[0]%>);"><div class="container d-flex flex-column">
-                    <% include ./Partials/Navbar-Dark.ejs %>
-                    <div class="my-4 my-md-5"></div>
-                    <div class="row align-items-center mb-3 mb-md-3">
-                        <div class="col-6">
-                            <a class="text-muted font-weight-bold" href="<%=Additional.popular[0].category.Slug%>"><%=Additional.popular[0].category.Name.toUpperCase()%></a>
-                            <h1 class="text-white"><%=Additional.popular[0].title%></h1>
-                            <p class="text-light"><%=Additional.popular[0].excerpt%></p>
-                            <a href="<%=Additional.popular[0].category.Slug%>?post=<%=Additional.popular[0]._id%>" class="readMore btn btn-outline-info btn-round">Read more</a>
-                        </div>
-                        <div class="Topics col-4 col-lg-3 ml-auto">
-                            <div class="TopicsInner">
-                                <%Additional.popular.forEach(post=>{%>
-                                    <div class="Topic">
-                                        <a href="#" class="text-muted">
-                                            <a class="text-muted" href="<%=post.category.Slug%>"><%=post.category.Name%></a>
-                                            <h4 class="text-white"><%=post.title%></h4>
-                                        </a>
-                                    </div>
-                                <%})%>
+        <% include ./partials/navbar.ejs %>
+
+        <!-- slider_area_start -->
+        <div class="slider_area">
+            <div
+                style="
+                    background-image: url(/files/images/tasty/banner/banner.png);
+                "
+                class="single_slider d-flex align-items-center"
+            >
+                <div class="container">
+                    <div class="row align-items-center justify-content-center">
+                        <div class="col-xl-8">
+                            <div class="slider_text text-center">
+                                <div class="text">
+                                    <h3>Chicken dish with per boiled egg</h3>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-        </header>
-        <div class="Content">
-            <div class="container">
-                <div class="row CatNav justify-content-center my-5">
-                    <a href="#" class="btn btn-round btn-info m-1">Hot</a>
-                    <% Categories.forEach(category=>{%>
-                        <a href="/Categories/<%=category.Slug%>" class="readMore btn btn-outline-info btn-round m-1"><%=category.Name%></a>
-                    <%})%>
-                </div>
-                <div class="Layout row">
-                    <% include ./Partials/Posts.ejs %>
-                    <% include ./Partials/SideBar1.ejs %>
-                </div>
             </div>
         </div>
-        <% include ./Partials/Footer.ejs %>
 
+        <%include ./partials/recepies.ejs%> <%include ./partials/footer.ejs%>
     </body>
 </html>
