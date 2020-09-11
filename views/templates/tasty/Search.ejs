@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+    <% include ./partials/header.ejs %>
+    <body class="Category">
+        <% include ./partials/navbar.ejs %>
+        <div
+            class="slider_area"
+            style="height: 20vh; background-color: #919191"
+        ></div>
+        <div class="Content">
+            <div style="background-color: #fbfbfb">
+                <div style="height: 15vh" class="container">
+                    <div class="row h-100 align-items-center px-3">
+                        <p style="font-size: 1.2rem" class="font-weight-bold">
+                            Search: "<%=search%>"
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <section class="blog_area section-padding p-0">
+                <div class="container">
+                    <div class="form-inline row my-3">
+                        <div class="input-group mr-3 ml-auto">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" for="form"
+                                    >Sort</label
+                                >
+                            </div>
+                            <select
+                                class="custom-select"
+                                id="form"
+                                onchange="location = this.value;"
+                            >
+                                <option
+                                    value="/search/?search=<%=search%>&sort=title"
+                                >
+                                    Title A-Z
+                                </option>
+                                <option
+                                    value="/search/?search=<%=search%>&sort=-title"
+                                >
+                                    Title Z-A
+                                </option>
+                                <option
+                                    value="/search/?search=<%=search%>&sort=date"
+                                >
+                                    Oldest
+                                </option>
+                                <option
+                                    value="/search/?search=<%=search%>&sort=-date"
+                                    selected
+                                >
+                                    Newest
+                                </option>
+                                <option
+                                    value="/search/?search=<%=search%>&sort=rating.likes"
+                                >
+                                    Most Liked
+                                </option>
+                                <option
+                                    value="/search/?search=<%=search%>&sort=rating.dislikes"
+                                >
+                                    Most Disliked
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <% include ./partials/posts.ejs %> <% include
+                        ./partials/sideBar.ejs %>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <% include ./partials/footer.ejs %>
+    </body>
+</html>
