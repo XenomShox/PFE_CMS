@@ -9,11 +9,11 @@ messageSchema = new mongoose.Schema(
         },
         sender: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "User",
+            ref: "Vinland_User",
         },
         receiver: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "User",
+            ref: "Vinland_User",
         },
     },
     {

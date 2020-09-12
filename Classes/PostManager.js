@@ -6,7 +6,7 @@ class PostManager {
     /*------------------Methods-------------*/
     constructor() {
         let schema=mongoose.Schema({
-            author:{type:mongoose.Schema.ObjectId,ref:"User"},
+            author:{type:mongoose.Schema.ObjectId,ref:"Vinland_User"},
             date:{type:Date,default:new Date()},
             content:String,
             category:{type:mongoose.Schema.ObjectId,ref:"Vinland_Category"},

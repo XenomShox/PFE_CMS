@@ -11,5 +11,5 @@ class ApiManager {
             });
         });
     }
-};
+}
 module.exports = new ApiManager();

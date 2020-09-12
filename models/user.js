@@ -23,7 +23,7 @@ let userSchema = new mongoose.Schema({
     roles: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "Role",
+            ref: "Vinland_Role",
         },
     ],
     password: {
@@ -45,13 +45,13 @@ let userSchema = new mongoose.Schema({
     messages: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "Message",
+            ref: "Vinland_Message",
         },
     ],
     contacts: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "User",
+            ref: "Vinland_User",
         },
     ],
     Admin: {

@@ -8,7 +8,7 @@ class CommentsManager {
             text: String,
             user: {
                 type: mongoose.Schema.ObjectId,
-                ref: "User",
+                ref: "Vinland_User",
             },
             post: {
                 type: mongoose.Schema.ObjectId,

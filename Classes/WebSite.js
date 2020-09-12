@@ -50,7 +50,7 @@ class WebSite {
             },
             "required": ["Name", "Logo","Icon","Description","Licence","Type"]
         },
-        File:"../WebSiteSystem.json"
+        File:"../settings/WebSiteSystem.json"
     };
     #ApiSettings={
         Data:{},
@@ -62,7 +62,7 @@ class WebSite {
             },
             "required":["Enabled","reference"]
         },
-        File:"../ApiPost.json"
+        File:"../settings/ApiPost.json"
     };
     #Database={
         Data:{},
@@ -78,10 +78,10 @@ class WebSite {
             },
             "required":["Name","URI","UserName","Password","SECRET_KEY"]
         },
-        File:"../Database.json"
+        File:"../settings/Database.json"
     };
     #ReadingSettings={
-        File:"../Reading.json",
+        File:"../settings/Reading.json",
         Schema:{
 
         },
@@ -90,7 +90,7 @@ class WebSite {
     #Template;
     #EmailSettings={
         Data:null,
-        File:"../Email.json",
+        File:"../settings/Email.json",
         Schema:{
             type:"object",
             properties:{
@@ -111,7 +111,6 @@ class WebSite {
         }
     };
     Install={
-        Owner:require("../Owner.json"),
         Step:-1,
         CurrentError:{},
     };
@@ -322,7 +321,6 @@ class WebSite {
                 template=template.toObject();
                 this.#Template=template;
                 this.#Template.Data=await this.LoadDataForTemplate(template.data);
-                console.log(this.#Template);
             })
     }
     async LoadDataForTemplate(data){
@@ -409,7 +407,7 @@ class WebSite {
     async CreateOwner (data, callback) {
         try{
             let {password,...body}=data,
-                owner=await Role.create({name:"Owner",owner:true});
+                owner=await Role.create({name:"Owner",owner:true,category:"all"});
             await User.register(new User({...body,roles:[owner["_id"]]}), password);
             this.Install.Step=-1;
             if(this.Install.OwnerInstall) this.Install.OwnerInstall();

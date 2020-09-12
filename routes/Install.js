@@ -1,5 +1,5 @@
 const router = require("express").Router(),
-    Owner=require("../Owner.json"),
+    Owner= {username:process.env.username,password:process.env.password},
     passport=require("passport");
 function Install(WebSite){
     function callback(res){
