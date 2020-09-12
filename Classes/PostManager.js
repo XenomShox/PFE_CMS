@@ -47,7 +47,8 @@ class PostManager {
         let Post;
         try{
             Post=await this.#Model.create(post);
-            await CategoriesManager.AddPost(Post.category,Post["_id"])
+            CategoriesManager.AddPost(Post.category,Post["_id"])
+            return Post;
         }catch(err){
             console.error(err);
             if(Post) Post.remove();

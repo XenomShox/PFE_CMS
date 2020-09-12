@@ -174,7 +174,7 @@ class UserMethods {
             );
 
             console.log(loggedUser);
-            res.status(200).render("Blog(vinlandCMS)/Messages.ejs", {
+            res.status(200).render(`templates/${req.Schema.name}/${req.Schema.Messenger}`, {
                 messages,
                 partnerUser,
             });
@@ -185,7 +185,7 @@ class UserMethods {
 
     profile = async function (req, res) {
         let user = await User.findById(req.params.user_id);
-        if (user) res.render("Blog(vinlandCMS)/Profile", { user });
+        if (user) res.render(`templates/${req.Schema.name}/${req.Schema.Profile}`, { user });
         else res.redirect("/");
     };
 }

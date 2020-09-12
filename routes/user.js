@@ -19,8 +19,8 @@ router
     );
 
 // Chat Section
-router.get("/chat", isLoggedIn, userMethods.renderContacts);
-router.get("/chat/:partner_id", userMethods.renderChat);
+// router.get("/chat", isLoggedIn, userMethods.renderContacts);
+router.get("/chat/:partner_id", isLoggedIn, userMethods.renderChat);
 
 router
     .route("/role/:user_id/:role_id")

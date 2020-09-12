@@ -214,7 +214,7 @@ class WebSite {
         app.use( (req,res,next) =>{
             res.locals.WebSite = {...this.#WebSiteDetails.Data,Categories:this.#WebSiteDetails.Categories}
             res.locals.WebSite.Title = res.locals.WebSite.Name;
-            res.locals.Additional=this.#Template.Data;
+            if(this.#Template) res.locals.Additional=this.#Template.Data;
             next();
         })
         app.use("/Admin", (req,res,next)=>{
@@ -224,7 +224,6 @@ class WebSite {
             next();
         },isLoggedIn, hasPermission(["admin_privillage"]),require("../routes/Admin"));
         app.use("/role", isLoggedIn, hasPermission(["owner", "admin_privillage"]), require("../routes/roles"));
-        app.use("/user", require("../routes/user"))
         app.use("/message", require("../routes/message"));
         try {
             switch (this.#WebSiteDetails.Data.Type) {
@@ -244,7 +243,7 @@ class WebSite {
             .then(cats=>{
                 this.LoadCategories(cats);
             }))
-        promises.push( this.LoadTemplate())
+        promises.push(this.LoadTemplate())
 
         /*promises.push( this.LoadJsonFile(this.#ReadingSettings.File)
             .then(file=>{
@@ -256,8 +255,9 @@ class WebSite {
                 app.use((req,res,next)=>{
                         req.Schema={name:this.#Template.name,...this.#Template.structure};
                         next();
-                    },
-                    require("../routes/BlogRouting"));
+                    })
+                app.use("/user", require("../routes/user"))
+                app.use(require("../routes/BlogRouting"));
             })
             .catch(err=>{
                 console.error(err);
@@ -286,7 +286,8 @@ class WebSite {
         TemplatesManager.getAppliedTemplate()
             .catch(reason => {
                 console.error(reason);
-                if(!(reason instanceof mongoose.Error)) return TemplatesManager.CreateTemplate({
+                // if(!(reason instanceof mongoose.Error)) 
+                return TemplatesManager.CreateTemplate({
                     "name":"Blog(vinlandCMS)",
                     "description":"the default template for vinland CMS",
                     "type":"Blog",
@@ -318,6 +319,7 @@ class WebSite {
                 })
             })
             .then(async template=>{
+                console.log(template)
                 template=template.toObject();
                 this.#Template=template;
                 this.#Template.Data=await this.LoadDataForTemplate(template.data);

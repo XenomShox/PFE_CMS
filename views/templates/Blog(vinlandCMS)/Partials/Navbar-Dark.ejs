@@ -56,7 +56,10 @@
                             <p style="font-size: 0.8rem;" class="m-0 p-0"><%= currentUser.email %></p>
                         </div>
                     </div>
-                    <a class="dropdown-item" href="/user/Profile">Profile</a>
+                    <% if (currentUser.roles.some((role) => role["owner"]) ||currentUser.roles.some((role) => role["admin_privillage"])) { %>
+                        <a class="dropdown-item" href="/admin">Admin Dashboard</a>
+                    <% } %>
+                    <a class="dropdown-item" href="/user/Profile/<%= currentUser._id %>">Profile</a>
                     <a class="dropdown-item" href="/logout">Log Out</a>
                     <% } %>
                 </div>

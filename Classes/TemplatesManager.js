@@ -37,7 +37,7 @@ class TemplatesManager{
         return template;
     }
     CreateTemplate(data){
-        return this.model(data).exec()
+        return this.model.create(data).exec()
             .catch(reason => {console.error(reason);})
     }
     async getAppliedTemplate(){
