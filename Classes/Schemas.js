@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 module.exports = class Schemas {
     /*----------------------------attribute-------------------------*/
-    static #SchemaModel=mongoose.model('Schemas',mongoose.Schema({
+    static #SchemaModel=mongoose.model('Vinland_Schemas',mongoose.Schema({
         Name: {
             type:mongoose.Schema.Types.String,
             unique:true,

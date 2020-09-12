@@ -38,4 +38,4 @@ messageSchema.pre("remove", async function (next) {
     }
 });
 
-module.exports = mongoose.model("Message", messageSchema);
+module.exports = mongoose.model("Vinland_Message", messageSchema);

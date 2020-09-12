@@ -48,7 +48,6 @@ class CommentsManager {
             callback(500, err.message);
         }
     }
-
     async Delete(commentId, callback) {
         try {
             console.log(commentId);
@@ -78,7 +77,6 @@ class CommentsManager {
             callback(500, err.message);
         }
     }
-
     async Modify(commentId, text, callback) {
         try {
             let commentToUpdate = await this.model.findById(commentId);

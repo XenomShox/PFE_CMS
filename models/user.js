@@ -115,4 +115,4 @@ userSchema.methods.banExpired = function () {
 
 userSchema.plugin(passportLocalMongoose, { populateFields: "roles contacts" });
 
-module.exports = mongoose.model("User", userSchema);
+module.exports = mongoose.model("Vinland_User", userSchema);

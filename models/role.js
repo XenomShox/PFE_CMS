@@ -43,4 +43,4 @@ roleSchema.pre("remove", async (next) => {
     }
 });
 
-module.exports = mongoose.model("Role", roleSchema);
+module.exports = mongoose.model("Vinland_Role", roleSchema);
