@@ -3,7 +3,7 @@ const mongoose          = require( 'mongoose' ) ,
 
 class PostManager {
     /*----------------Attributes------------*/
-    #Model;
+    Model;
     #Schema = {
         author          : { type : mongoose.Schema.ObjectId , ref : 'Vinland_User' } ,
         date            : { type : Date , default : new Date() } ,
@@ -46,19 +46,18 @@ class PostManager {
     }
 
     UpdateModel (api) {
-
         let Api = api ? api : require( './WebSite' ).getApiSettings(),
             content= { type : String , required:true };
         console.log(Api,!!api)
         if ( Api.Enabled ) content = { type : mongoose.Schema.ObjectId , ref : Api.reference , required:true };
         delete mongoose.connection.models['Vinland_Post'];
-        this.#Model = mongoose.model( 'Vinland_Post' , { ...this.#Schema , content } );
+        this.Model = mongoose.model( 'Vinland_Post' , { ...this.#Schema , content } );
     }
 
     async CreatePost ( post ) {
         let Post;
         try {
-            Post = await this.#Model.create( post );
+            Post = await this.Model.create( post );
             CategoriesManager.AddPost( Post.category , Post[ '_id' ] )
             return Post;
         }
@@ -70,7 +69,7 @@ class PostManager {
     }
 
     UpdatePost ( Id , Post , callback ) {
-        this.#Model.findOneAndUpdate( Id , Post , ( err , res ) => {
+        this.Model.findOneAndUpdate( Id , Post , ( err , res ) => {
             if ( err ) {
                 callback( 500 , 'Internal Error' );
             }
@@ -81,7 +80,7 @@ class PostManager {
     }
 
     GetData ( options ) {
-        return this.#Model.find( {} )
+        return this.Model.find( {} )
             .sort( options.sort )
             .limit( options.limit )
             .populate( 'category' )
@@ -91,12 +90,12 @@ class PostManager {
     GetPosts ( options ) {
         let query;
         if ( options ) {
-            if ( options.title ) query = this.#Model.find( { title : { '$regex' : options.title , '$options' : 'i' } } );
-            else if ( options.category ) query = this.#Model.find( { category : options.category._id } )
-            else if ( options.tag ) query = this.#Model.find( { tags : options.tag } );
-            else if( options.date ) query = this.#Model.find( { date : new Date( options.date ) } )
+            if ( options.title ) query = this.Model.find( { title : { '$regex' : options.title , '$options' : 'i' } } );
+            else if ( options.category ) query = this.Model.find( { category : options.category._id } )
+            else if ( options.tag ) query = this.Model.find( { tags : options.tag } );
+            else if( options.date ) query = this.Model.find( { date : new Date( options.date ) } )
             else {
-                query = this.#Model.find( {} )
+                query = this.Model.find( {} )
             }
             if ( options.sort ) {
                 query.sort( options.sort );
@@ -113,10 +112,9 @@ class PostManager {
     }
 
     async GetPost ( id ) {
-        //console.log(this.#Model.schema);
         let post;
         try {
-            post = await this.#Model.findById( id ).populate( 'author' ).exec()
+            post = await this.Model.findById( id ).populate( 'author' ).exec()
             post.visited += 1;
             await post.save();
         }

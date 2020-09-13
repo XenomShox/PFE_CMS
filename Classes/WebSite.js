@@ -1,19 +1,16 @@
-const mongoose          = require( 'mongoose' ) ,
-      path              = require( 'path' ) ,
-      fs                = require( 'fs' ).promises ,
-      app               = require( '../app' ) ,
-      TemplatesManager  = require( './TemplatesManager' ) ,
-      CategoriesManager = require( './CategoriesManager' ) ,
-      Validator         = new ( require( 'jsonschema' ).Validator )() ,
-      User              = require( '../models/user' ) ,
-      Role              = require( '../models/role' );
-
-function UnderConstruct ( req , res ) {
-    res.status( 404 ).render( 'Construct' , { Title : process.env.Website } );
-}
-
-const { isLoggedIn , hasPermission } = require( '../middlewares/middleware' );
-
+// <editor-fold desc="Dependencies">
+const mongoose                       = require( 'mongoose' ) ,
+      path                           = require( 'path' ) ,
+      fs                             = require( 'fs' ).promises ,
+      app                            = require( '../app' ) ,
+      TemplatesManager               = require( './TemplatesManager' ) ,
+      CategoriesManager              = require( './CategoriesManager' ) ,
+      Validator                      = new ( require( 'jsonschema' ).Validator )() ,
+      User                           = require( '../models/user' ) ,
+      { isLoggedIn , hasPermission } = require( '../middlewares/middleware' ) ,
+      Role                           = require( '../models/role' );
+function UnderConstruct ( req , res ) { res.status( 404 ).render( 'Construct' , { Title : process.env.Website } ) }
+// </editor-fold>
 class WebSite {
     /*----------------Attributes------------*/
     #WebSiteDetails  = {
@@ -25,10 +22,10 @@ class WebSite {
                     'type'       : 'object' ,
                     'properties' : {
                         'Name' : { 'type' : 'string' } ,
-                        'Url'  : { 'type' : 'string' },
+                        'Url'  : { 'type' : 'string' } ,
                     } ,
-                    'required'   : [ 'Name' , 'Url' ],
-                },
+                    'required'   : [ 'Name' , 'Url' ] ,
+                } ,
             } ,
             'type'        : 'object' ,
             'properties'  : {
@@ -44,13 +41,13 @@ class WebSite {
                         'Instagram' : { '$ref' : '#/definitions/SocialMedia' } ,
                         'Twitter'   : { '$ref' : '#/definitions/SocialMedia' } ,
                         'LinkedIn'  : { '$ref' : '#/definitions/SocialMedia' } ,
-                    },
+                    } ,
                 } ,
-                'Type'        : { 'type' : 'string' },
+                'Type'        : { 'type' : 'string' } ,
             } ,
-            'required'    : [ 'Name' , 'Logo' , 'Icon' , 'Description' , 'Licence' , 'Type' ],
+            'required'    : [ 'Name' , 'Logo' , 'Icon' , 'Description' , 'Licence' , 'Type' ] ,
         } ,
-        File       : '../settings/WebSiteSystem.json',
+        File       : '../settings/WebSiteSystem.json' ,
     };
     #ApiSettings     = {
         Data   : {} ,
@@ -58,11 +55,11 @@ class WebSite {
             'type'       : 'object' ,
             'properties' : {
                 'Enabled'   : { 'type' : 'boolean' } ,
-                'reference' : { 'type' : 'string, null' },
+                'reference' : { 'type' : 'string, null' } ,
             } ,
-            'required'   : [ 'Enabled' , 'reference' ],
+            'required'   : [ 'Enabled' , 'reference' ] ,
         } ,
-        File   : '../settings/ApiPost.json',
+        File   : '../settings/ApiPost.json' ,
     };
     #Database        = {
         Data   : {} ,
@@ -73,19 +70,18 @@ class WebSite {
                 'URI'        : { 'type' : 'string' } ,
                 'UserName'   : { 'type' : 'string' } ,
                 'Password'   : { 'type' : 'string' } ,
-                'SECRET_KEY' : { 'type' : 'string' },
+                'SECRET_KEY' : { 'type' : 'string' } ,
 
             } ,
-            'required'   : [ 'Name' , 'URI' , 'UserName' , 'Password' , 'SECRET_KEY' ],
+            'required'   : [ 'Name' , 'URI' , 'UserName' , 'Password' , 'SECRET_KEY' ] ,
         } ,
-        File   : '../settings/Database.json',
+        File   : '../settings/Database.json' ,
     };
     #ReadingSettings = {
         File   : '../settings/Reading.json' ,
         Schema : {} ,
-        Data   : {},
+        Data   : {} ,
     };
-    #Template;
     #EmailSettings   = {
         Data   : null ,
         File   : '../settings/Email.json' ,
@@ -100,18 +96,19 @@ class WebSite {
                     type       : 'object' ,
                     properties : {
                         'user' : { type : 'string' } ,
-                        'pass' : { type : 'string' },
+                        'pass' : { type : 'string' } ,
                     } ,
-                    required   : [ 'user' , 'pass' ],
-                },
+                    required   : [ 'user' , 'pass' ] ,
+                } ,
             } ,
-            required   : [ 'enabled' , 'host' , 'port' , 'secure' , 'auth' ],
-        },
+            required   : [ 'enabled' , 'host' , 'port' , 'secure' , 'auth' ] ,
+        } ,
     };
     Install          = {
         Step         : -1 ,
         CurrentError : {} ,
     };
+    #Template;
 
     /*----------------constructor------------*/
     constructor () {
@@ -224,12 +221,12 @@ class WebSite {
     }
 
     LoadApiSettings () {
-        console.log("Retrieving Api settings")
-        return this.LoadJsonFile(this.#ApiSettings.File)
-            .then(file=> {
-                if ( !Validator.validate( file , this.#ApiSettings.Schema ).valid ) throw new SyntaxError( "Email Settings aren't valid" )
+        console.log( 'Retrieving Api settings' )
+        return this.LoadJsonFile( this.#ApiSettings.File )
+            .then( file => {
+                if ( !Validator.validate( file , this.#ApiSettings.Schema ).valid ) throw new SyntaxError( 'Email Settings aren\'t valid' )
                 this.#ApiSettings.Data = file
-            })
+            } )
     }
 
     getApiSettings () { return this.#ApiSettings.Data; }
@@ -270,7 +267,7 @@ class WebSite {
 
     SetUpBlog () {
         let promises = [];
-        promises.push( CategoriesManager.GetCategories().then( cats => this.LoadCategories( cats )  ) )
+        promises.push( CategoriesManager.GetCategories().then( cats => this.LoadCategories( cats ) ) )
         promises.push( this.LoadTemplate() )
 
         /*promises.push( this.LoadJsonFile(this.#ReadingSettings.File)
@@ -316,36 +313,38 @@ class WebSite {
         TemplatesManager.getAppliedTemplate()
             .catch( reason => {
                 console.error( reason );
-                if(!(reason instanceof mongoose.Error)) return TemplatesManager.CreateTemplate( {
-                'name'        : 'Blog(vinlandCMS)' ,
-                'description' : 'the default template for vinland CMS' ,
-                'type'        : 'Blog' ,
-                'data'        : [
-                    {
-                        'name'  : 'latest' ,
-                        'sort'  : '-date' ,
-                        'limit' : 6,
-                    } ,
-                    {
-                        'name'  : 'popular' ,
-                        'sort'  : '-visited' ,
-                        'limit' : 4,
-                    },
-                ] ,
-                'structure'   : {
-                    'Index'      : 'Index' ,
-                    'Categories' : 'Categories' ,
-                    'Post'       : 'Post' ,
-                    'CreatePost' : 'Create' ,
-                    'EditPost'   : 'Edit' ,
-                    'Tags'       : 'Tags' ,
-                    'Search'     : 'Search' ,
-                    'Messenger'  : 'Messenger' ,
-                    'Profile'    : 'Profile' ,
-                    'Error'      : 'Error',
-                } ,
-                applied       : Date.now(),
-            } );
+                if ( !( reason instanceof mongoose.Error ) ) {
+                    return TemplatesManager.CreateTemplate( {
+                                                                'name'        : 'Blog(vinlandCMS)' ,
+                                                                'description' : 'the default template for vinland CMS' ,
+                                                                'type'        : 'Blog' ,
+                                                                'data'        : [
+                                                                    {
+                                                                        'name'  : 'latest' ,
+                                                                        'sort'  : '-date' ,
+                                                                        'limit' : 6 ,
+                                                                    } ,
+                                                                    {
+                                                                        'name'  : 'popular' ,
+                                                                        'sort'  : '-visited' ,
+                                                                        'limit' : 4 ,
+                                                                    } ,
+                                                                ] ,
+                                                                'structure'   : {
+                                                                    'Index'      : 'Index' ,
+                                                                    'Categories' : 'Categories' ,
+                                                                    'Post'       : 'Post' ,
+                                                                    'CreatePost' : 'Create' ,
+                                                                    'EditPost'   : 'Edit' ,
+                                                                    'Tags'       : 'Tags' ,
+                                                                    'Search'     : 'Search' ,
+                                                                    'Messenger'  : 'Messenger' ,
+                                                                    'Profile'    : 'Profile' ,
+                                                                    'Error'      : 'Error' ,
+                                                                } ,
+                                                                applied       : Date.now() ,
+                                                            } );
+                }
             } )
             .then( async template => {
                 template            = template.toObject();
@@ -374,7 +373,7 @@ class WebSite {
         if ( Validator.validate( settings , this.#ApiSettings.Schema ).valid ) {
             this.WriteJsonFile( this.#ApiSettings.File , JSON.stringify( settings ) ).then( () => {
                 this.#ApiSettings.Data = settings;
-                require("./PostManager").UpdateModel(settings);
+                require( './PostManager' ).UpdateModel( settings );
                 callback( 200 , 'Api Settings Successfully changed' );
             } ).catch( reason => {
                 callback( 500 , reason.message );
@@ -472,7 +471,7 @@ class WebSite {
             .then( ( file ) => JSON.parse( file ) )
     }
 
-    WriteJsonFile ( filename , json ) { return fs.writeFile( path.join( __dirname , filename ) , json , "utf-8" )}
+    WriteJsonFile ( filename , json ) { return fs.writeFile( path.join( __dirname , filename ) , json , 'utf-8' )}
 
 
 }
