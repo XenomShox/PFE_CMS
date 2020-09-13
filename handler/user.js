@@ -33,7 +33,7 @@ class UserMethods {
         User.register(new User({ ...body }), password, (err, user) => {
             if (err) {
                 console.error(err);
-                return res.render("LogIn");
+                return res.redirect("/login");
             }
             passport.authenticate("Vinland strategy")(req, res, () => {
                 res.redirect("/Admin");

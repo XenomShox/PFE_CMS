@@ -21,8 +21,7 @@ app.use('/files', express.static(path.join(__dirname, 'files'))); //Files
 const User = require("./models/user");
 // <editor-fold desc="Security Setup">
 const passport = require("passport"),
-    LocalStrategy = require("passport-local"),
-    { stratV2 } = require("./handler/strategy");
+    LocalStrategy = require("passport-local");
 // </editor-fold>
 // <editor-fold desc="serialization of password and user">
 let expressSession = require("express-session")({
@@ -30,7 +29,7 @@ let expressSession = require("express-session")({
         resave: false,
         saveUninitialized: false,
     }),
-    strategy = new LocalStrategy(stratV2);
+    strategy = new LocalStrategy({},require("./handler/strategy"));
 app.use(expressSession);
 app.use(passport.initialize({}));
 app.use(passport.session());

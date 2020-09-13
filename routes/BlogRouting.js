@@ -136,12 +136,12 @@ function CreateHandler(req,res,next){
     try {res.render(`templates/${req.Schema.name}/${req.Schema.CreatePost}`);}
     catch (e) { ErrorHandler(req,res,e) }
 }
-function CreatePost(req,res,next){
+async function CreatePost(req,res,next){
     if(req.query.post) return next();
     req.body.tags=req.body.tags.split(" ")
     if( !(req.body.covers instanceof Array) ) req.body.covers=[req.body.covers];
     try{
-        let post = PostManager.CreatePost({...req.body,category:res.locals.Category["_id"],author:req.user["_id"]})
+        let post = await PostManager.CreatePost({...req.body,category:res.locals.Category["_id"],author:req.user["_id"]})
         res.redirect(res.locals.Category.Slug+"?post="+post._id);
     }
     catch (e) { ErrorHandler(req,res,e) }
