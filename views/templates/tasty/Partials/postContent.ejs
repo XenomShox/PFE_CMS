@@ -65,4 +65,57 @@
             <div id="Share" class="collapse">fzzesdgf</div>
         </div>
     </div>
+    <div class="comments-area">
+        <% if(currentUser) { %>
+        <form
+            action="/Categories/ass?post=<%= Post._id %>"
+            class="comment-form d-flex justify-content-between"
+        >
+            <input
+                type="text"
+                class="form-control mr-5"
+                name="text"
+                placeholder="Comment ..."
+            />
+            <button class="btn btn-outline-warning" type="submit">
+                <i class="far fa-paper-plane"></i>
+            </button>
+        </form>
+        <% } %> <% Post.comments.forEach(comment => { %>
+        <div class="comment-list mt-4" data-id="<%= comment._id %>">
+            <div class="single-comment justify-content-between d-flex">
+                <div class="user justify-content-start d-flex w-100">
+                    <div class="thumb">
+                        <a href="/user/profile/<%= comment.user._id %>"
+                            ><img src="<%= comment.user.profileImage %>" alt=""
+                        /></a>
+                    </div>
+                    <div class="desc w-100">
+                        <p class="comment"><%= comment.text %></p>
+                        <div class="d-flex justify-content-between w-100">
+                            <div class="d-flex align-items-center">
+                                <h5>
+                                    <a
+                                        href="/user/profile/<%= comment.user._id %>"
+                                        ><%= comment.user.username %></a
+                                    >
+                                </h5>
+                            </div>
+                            <% if(currentUser &&
+                            currentUser._id.equals(comment.user._id)) { %>
+                            <div class="reply-btn">
+                                <button
+                                    class="delete-comment btn btn-outline-danger btn-sm"
+                                >
+                                    DELETE
+                                </button>
+                            </div>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <% }) %>
+    </div>
 </div>
