@@ -1,7 +1,6 @@
 const router = require("express").Router(),
     Owner= {username:process.env.usernameVinland,password:process.env.passwordVinland},
     passport=require("passport");
-    console.log(Owner)
 function Install(WebSite){
     function callback(res){
         return (status,result)=>{

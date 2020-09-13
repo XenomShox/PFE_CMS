@@ -1,68 +1,48 @@
-<div class="col-lg-8 mb-5 mb-lg-0">
-    <div class="blog_left_sidebar">
-        <img class="w-100" src="<%=Post.covers[0]%>" />
-        <h3 class="font-weight-bold mt-4"><%=Post.title%></h3>
-        <div class="row ml-2 border-bottom align-items-center">
-            <span
-                >by
-                <a href="/user/profile/<%=Post.author._id%>" class="text-muted"
-                    ><%=Post.author.username%></a
-                ></span
-            >
-            <span class="ml-2">
-                -
-                <a
-                    href="/search?date=<%=new Date(Post.modified_date).toLocaleDateString(undefined,{ weekday: undefined, year: 'numeric', month: 'numeric', day: undefined })%>"
-                    class="text-muted"
-                    ><%=new
-                    Date(Post.modified_date).toLocaleDateString(undefined,{
-                    weekday: undefined, year: 'numeric', month: 'long', day:
-                    undefined })%></a
-                ></span
-            >
-            <a
-                href="/Categories/<%=Category.Slug%>"
-                class="text-muted font-weight-bold ml-auto mr-2"
-                ><%=Category.Name%></a
-            >
-            <a href="#comments" class="btn"
-                ><i class="far fa-comment-dots"></i>
-                <%=Post.comments.length%></a
-            >
-            <a href="#" class="btn"
-                ><i class="far fa-thumbs-up"></i> <%=Post.rating.likes%></a
-            >
-            <a href="#" class="btn"
-                ><i class="far fa-thumbs-down"></i> <%=Post.rating.dislikes%></a
-            >
-            <a href="#" class="btn"
-                ><i class="fas fa-eye"></i> <%=Post.visited%></a
-            >
-        </div>
-        <div class="mt-2"><%-Post.content%></div>
-        <div class="border-bottom w-100 mt-5 pb-3">
-            <h5 class="font-weight-bold mb-4">Tags In</h5>
-            <div class="row ml-1">
-                <%Post.tags.forEach(tag=>{%>
-                <a href="/tags/<%=tag%>" class="btn btn-outline-dark ml-2"
-                    >#<%=tag%></a
-                >
-                <%})%>
-            </div>
-        </div>
-        <div class="Share row">
-            <a
-                href="#"
-                class="btn btn-outline-dark my-4 ml-2"
-                type="button"
-                data-toggle="collapse"
-                data-target="#Share"
-                aria-controls="Share"
-                aria-expanded="false"
-                aria-label="Toggle navigation"
-                ><i class="fa fa-share"></i>Share</a
-            >
-            <div id="Share" class="collapse">fzzesdgf</div>
-        </div>
-    </div>
-</div>
+<div class = "col-lg-8 mb-5 mb-lg-0" >
+    <div class = "blog_left_sidebar" >
+        <img class = "w-100" src = "<%= Post.covers[ 0 ] %>" />
+        <h3 class = "font-weight-bold mt-4" ><%= Post.title %></h3 >
+        <div class = "row ml-2 border-bottom align-items-center" >
+            <span >
+                by<a href = "/user/profile/<%= Post.author._id %>" class = "text-muted" ><%= Post.author.username %></a >
+            </span >
+            <span class = "ml-2" >-
+                <a href = "/search?date=<%= new Date( Post.modified_date ).toLocaleDateString( undefined , {
+                        weekday : undefined ,
+                        year    : 'numeric' ,
+                        month   : 'numeric' ,
+                        day     : undefined
+                    } ) %>"
+                   class = "text-muted" ><%= new Date( Post.modified_date ).toLocaleDateString( undefined , {
+                        weekday : undefined ,
+                        year    : 'numeric' ,
+                        month   : 'long' ,
+                        day     : undefined
+                    } ) %>
+                </a >
+            </span >
+            <a href = "/Categories/<%= Category.Slug %>"
+               class = "text-muted font-weight-bold ml-auto mr-2" ><%= Category.Name %></a >
+            <a href = "#comments" class = "btn" ><i class = "far fa-comment-dots" ></i ><%= Post.comments.length %></a >
+            <a href = "#" class = "btn" ><i class = "far fa-thumbs-up" ></i > <%= Post.rating.likes %></a >
+            <a href = "#" class = "btn" ><i class = "far fa-thumbs-down" ></i > <%= Post.rating.dislikes %></a >
+            <a href = "#" class = "btn" ><i class = "fas fa-eye" ></i > <%= Post.visited %></a >
+        </div >
+        <div class = "mt-2" ><%- Post.content %></div >
+        <div class = "border-bottom w-100 mt-5 pb-3" >
+            <h5 class = "font-weight-bold mb-4" >Tags In</h5 >
+            <div class = "row ml-1" >
+                <% Post.tags.forEach(tag=>{ %>
+                    <a href = "/tags/<%= tag %>" class = "btn btn-outline-dark ml-2" >#<%= tag %></a >
+                <% }) %>
+            </div >
+        </div >
+        <div class = "Share row" >
+            <a href = "#" class = "btn btn-outline-dark my-4 ml-2" type = "button" data-toggle = "collapse"
+               data-target = "#Share"
+               aria-controls = "Share" aria-expanded = "false" aria-label = "Toggle navigation" ><i
+                        class = "fa fa-share" ></i >Share</a >
+            <div id = "Share" class = "collapse" >Facebook</div >
+        </div >
+    </div >
+</div >

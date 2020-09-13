@@ -1,9 +1,10 @@
-let router = require('express').Router(),
-    ApiManager= require('../Classes/ApiManager');
+const router = require('express').Router(),
+    ApiManager= require('../Classes/ApiManager'),
+    { isLoggedIn, hasPermission } = require("../middlewares/middleware");
 /*------------------------------Schema----------------------------*/
 router.route('/')
+    .all(isLoggedIn,hasPermission("admin_privillage"))
     .get((req, res) => {
-        console.log(req.body)
         if (req.body.Name !== undefined) ApiManager.Schemas.GetASchema(req.body.Name, (status, result) => {
             res.status(status).send(result);
         });
@@ -18,8 +19,8 @@ router.route('/')
                 res.status(status).send(result);
             });
             else res.status(406).send({Error: "there is no Schema parameter in the body. we can't create an empty Schema"});
-        } else
-            res.status(406).send({Error: "Can't Create a Schema without a Name"});
+        }
+        else res.status(406).send({Error: "Can't Create a Schema without a Name"});
     })
     .put((req,res)=> {
         if (req.body.Name !== undefined) {
@@ -28,7 +29,8 @@ router.route('/')
                 res.status(status).send(result);
             });
             else res.status(406).send({Error: "there is no Schema parameter in the body. we can't update with an empty Schema"});
-        } else res.status(406).send({Error: "Can't Update a Schema without a Name"});
+        }
+        else res.status(406).send({Error: "Can't Update a Schema without a Name"});
     })
     .delete((req,res)=>{
     if (req.body.Name !== undefined) ApiManager.Schemas.DeleteASchema(req.body.Name, (status, result) => {
