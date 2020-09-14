@@ -59,7 +59,7 @@
                                             <% if (currentUser.roles.some((role) => role["owner"]) ||currentUser.roles.some((role) => role["admin_privillage"])) { %>
                                                 <li><a class="dropdown-item" href="/admin">Admin Dashboard</a></li>
                                             <% } %>
-                                            <li><a class="dropdown-item" href="/user/profile/<%= currentUser._id %>">Profile</a></li>
+                                            <li><a data-id="<%= currentUser._id %>" data-username="<%= currentUser.username %>" data-image="<%= currentUser.profileImage %>" class="dropdown-item id" href="/user/profile/<%= currentUser._id %>">Profile</a></li>
                                             <li><a class="dropdown-item" href="/logout">Log Out</a></li>
                                             <% } %>
                                         </ul>

@@ -1,5 +1,4 @@
 const mongoose          = require( 'mongoose' ) ,
-      Console           = require('./LogsManager'),
       CategoriesManager = require( './CategoriesManager' );
 
 class PostManager {
