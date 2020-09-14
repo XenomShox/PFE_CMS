@@ -68,7 +68,7 @@
     <div class="comments-area">
         <% if(currentUser) { %>
         <form
-            action="/Categories/ass?post=<%= Post._id %>"
+            action="<%=Category.Slug%>?post=<%= Post._id %>"
             class="comment-form d-flex justify-content-between"
         >
             <input
