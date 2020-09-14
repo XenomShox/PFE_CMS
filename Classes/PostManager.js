@@ -10,7 +10,7 @@ class PostManager {
         author          : { type : mongoose.Schema.ObjectId , ref : 'Vinland_User' } ,
         date            : { type : Date , default : new Date() } ,
         category        : { type : mongoose.Schema.ObjectId , ref : 'Vinland_Category' } ,
-        comments        : { type : [ mongoose.Schema.ObjectId ] , ref : 'Vinland_Comments' } ,
+        comments        : [{ type :  mongoose.Schema.ObjectId  , ref : 'Vinland_Comments' }] ,
         comments_status : {
             type    : String ,
             enum    : [ 'ALLOW' , 'HOLD' , 'DISABLE' ] ,
@@ -159,6 +159,7 @@ class PostManager {
         let post;
         try {
             let query = this.Model.findById( id ).populate( 'author' )
+                .populate({path: "comments", populate: {path: "user"}})
             if ( this.#content.type !== String ) query.populate( 'content' );
             post = await query.exec()
             post.visited += 1;
