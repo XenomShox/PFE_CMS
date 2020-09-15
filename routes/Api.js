@@ -3,7 +3,7 @@ const router                         = require( 'express' ).Router() ,
       { isLoggedIn , hasPermission } = require( '../middlewares/middleware' );
 /*------------------------------Schema----------------------------*/
 router.route( '/' )
-    .all( isLoggedIn , hasPermission( 'admin_privillage' ) )
+    .all( isLoggedIn , hasPermission( ['admin'] ) )
     .get( ( req , res ) => {
         if ( req.body.Name !== undefined ) {
             ApiManager.Schemas.GetASchema( req.body.Name , ( status , result ) => {
@@ -82,17 +82,17 @@ router.route( '/:Api' )
             res.status( status ).send( result );
         } );
     } )
-    .post( isLoggedIn ,( req , res ) => {
+    .post( isLoggedIn , hasPermission(['add_api_data']) , ( req , res ) => {
         ApiManager.Models.AddData( req.params.Api , req.body , ( status , result ) => {
             res.status( status ).send( result );
         } );
     } )
-    .delete( isLoggedIn ,( req , res ) => {
+    .delete( isLoggedIn , hasPermission(['delete_api_data']) , ( req , res ) => {
         ApiManager.Models.DeleteData( req.params.Api , req.body[ "_id" ] , ( status , result ) => {
             res.status( status ).send( result );
         } );
     } )
-    .put( isLoggedIn ,( req , res ) => {
+    .put( isLoggedIn , hasPermission(['add_api_data']) , ( req , res ) => {
         let { "_id" : id , ...data } = req.body;
         ApiManager.Models.UpdateData( req.params.Api , id , data , ( status , result ) => {
             res.status( status ).send( result );

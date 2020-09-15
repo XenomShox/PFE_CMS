@@ -5,16 +5,16 @@ const userMethods = require("../handler/user");
 // Middlewares
 const { isLoggedIn, hasPermission } = require("../middlewares/middleware");
 
-router.get("/", isLoggedIn, hasPermission(["admin_privillage"]), userMethods.getUsers);
+router.get("/", isLoggedIn, hasPermission(["admin"]), userMethods.getUsers);
 
 router
     .route("/ban/:user_id")
-    .put(isLoggedIn, hasPermission(["admin_privillage"]), userMethods.banUser);
+    .put(isLoggedIn, hasPermission(["admin"]), userMethods.banUser);
 router
     .route("/unban/:user_id")
     .put(
         isLoggedIn,
-        hasPermission(["admin_privillage"]),
+        hasPermission(["admin"]),
         userMethods.unbanUser
     );
 
@@ -26,12 +26,12 @@ router
     .route("/role/:user_id/:role_id")
     .post(
         isLoggedIn,
-        hasPermission(["admin_privillage"]),
+        hasPermission(["admin"]),
         userMethods.asignRole
     )
     .delete(
         isLoggedIn,
-        hasPermission(["admin_privillage"]),
+        hasPermission(["admin"]),
         userMethods.revokeRole
     );
 
@@ -41,7 +41,7 @@ router.get("/profile/:user_id", userMethods.profile);
 router
     .route("/:user_id")
     .all(isLoggedIn)
-    .get(hasPermission(["admin_privillage"]), userMethods.getUser)
+    .get(hasPermission(["admin"]), userMethods.getUser)
     .post(userMethods.updateUser)
     .put(userMethods.updateUserTheme);
 

@@ -248,8 +248,8 @@ class WebSite {
             res.locals.DataBase = this.#Database.Data;
             res.locals.Email    = this.#EmailSettings.Data;
             next();
-        } , isLoggedIn , hasPermission( [ 'admin_privillage' ] ) , require( '../routes/Admin' ) );
-        app.use( '/role' , isLoggedIn , hasPermission( [ 'owner' , 'admin_privillage' ] ) ,
+        } , isLoggedIn , hasPermission( [ 'admin' ] ) , require( '../routes/Admin' ) );
+        app.use( '/role' , isLoggedIn , hasPermission( [ 'owner' , 'admin' ] ) ,
                  require( '../routes/roles' ) );
         app.use( '/message' , require( '../routes/message' ) );
         try {
