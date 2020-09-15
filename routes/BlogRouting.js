@@ -68,9 +68,9 @@ router.route('/Categories/*')
         catch (e) { ErrorHandler(req,res,e) }
     })
     .get(PostHandler,CreateHandler,CategoryHandler)
-    .post(CreatePost,AddComment)
+    .post(CreatePost,EditPost,AddComment)
     .delete(DeleteComment)
-    .put(UpdateComment)
+    .put(DeletePost,UpdateComment)
 /*----------------Tag System-----------------*/
 router.route("/tags/:tag")
     .get(async (req, res) => {
@@ -137,14 +137,32 @@ function CreateHandler(req,res,next){
     catch (e) { ErrorHandler(req,res,e) }
 }
 async function CreatePost(req,res,next){
-    if(req.query.post) return next();
-    req.body.tags=req.body.tags.split(" ")
+    if(req.query.post ) return next();
+    if(! Array.isArray( req.body.tags ) ) req.body.tags=req.body.tags.split(" ")
     if( !(req.body.covers instanceof Array) ) req.body.covers=[req.body.covers];
+    if(req.query.edit) return next();
     try{
         let post = await PostManager.CreatePost({...req.body,category:res.locals.Category["_id"],author:req.user["_id"]})
         res.redirect(res.locals.Category.Slug+"?post="+post._id);
     }
     catch (e) { ErrorHandler(req,res,e) }
+}
+async function EditPost(req,res,next){
+    if(req.query.post) next();
+    try{
+        let post = await PostManager.UpdatePost(req.query.edit ,{...req.body,category:res.locals.Category["_id"],author:req.user["_id"]})
+        res.redirect(res.locals.Category.Slug+"?post="+post._id);
+    }
+    catch (e) { ErrorHandler(req,res,e) }
+}
+async function DeletePost(req,res,next){
+    if (req.query.comment) return next();
+    try{
+        await PostManager.DeletePost(req.query.post ,{...req.body,category:res.locals.Category["_id"],author:req.user["_id"]})
+        res.redirect(res.locals.Category.Slug);
+    }
+    catch (e) { ErrorHandler(req,res,e) }
+
 }
 /*--------------Comments-----------------*/
 function AddComment(req,res) {

@@ -472,7 +472,6 @@ class WebSite {
 
     WriteJsonFile ( filename , json ) { return fs.writeFile( path.join( __dirname , filename ) , json , 'utf-8' )}
 
-
 }
 
 module.exports = new WebSite();

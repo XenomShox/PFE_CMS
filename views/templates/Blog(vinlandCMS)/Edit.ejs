@@ -28,7 +28,7 @@
     </div>
     <div class="container d-flex flex-column">
         <div class="Layout row mt-3">
-            <form action="<%=Category.Slug%>?post=<%=Post._id%>" method="POST" class="PageContent col-12 col-lg-9 mt-5  d-flex flex-column align-items-start">
+            <form action="<%=Category.Slug%>?edit=<%=Post._id%>" method="POST" class="PageContent col-12 col-lg-9 mt-5  d-flex flex-column align-items-start">
                 <div class="form-group w-100">
                     <label for="title">Title of the Post</label>
                     <input name="title" type="text" class="form-control w-75" id="title" aria-describedby="title" required value="<%=Post.title%>">
