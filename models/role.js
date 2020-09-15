@@ -10,9 +10,11 @@ roleSchema = new mongoose.Schema(
         } ,
         category         : { type : String , required : true } ,
         owner            : { type : Boolean , default : false } ,
-        admin_privillage : { type : Boolean , default : false } ,
+        admin            : { type : Boolean , default : false } ,
         create_post      : { type : Boolean , default : false } ,
         delete_post      : { type : Boolean , default : false } ,
+        add_api_data     : { type : Boolean , default : false } ,
+        delete_api_data  : { type : Boolean , default : false } ,
     } );
 
 roleSchema.pre( 'remove' , async ( next ) => {

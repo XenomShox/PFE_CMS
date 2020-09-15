@@ -29,7 +29,7 @@ router.route("/:UserId")
         else next();
     });
 router.route('/*')
-    .all(hasPermission("admin_privillage"))
+    .all(hasPermission("admin"))
     .get((req,res)=>{
         let callback=req.query.treeView==='true'?FilesManager.GetFilesTree:FilesManager.GetFolder;
         callback(req.URL==="/"?"":req.URL,(status,result)=>{

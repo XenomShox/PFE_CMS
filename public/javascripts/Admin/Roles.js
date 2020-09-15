@@ -81,10 +81,11 @@
                         let form = $(`<form></form>`).submit(function (e) {
                             e.preventDefault();
                             let permsKeys = [
-                                "owner",
-                                "admin_privillage",
+                                "admin",
                                 "create_post",
                                 "delete_post",
+                                "add_api_data",
+                                "delete_api_data",
                             ];
                             let values = {};
                             $.each($(this).serializeArray(), function (
@@ -185,7 +186,7 @@
                                     '<div class="d-flex justify-content-between"></div>'
                                 )
                                     .append(
-                                        $(`<h4>${key.replace("_", " ")}</h4>`)
+                                        $(`<h6>${key.replace("_", " ")}</h6>`)
                                     )
                                     .append(
                                         $(
