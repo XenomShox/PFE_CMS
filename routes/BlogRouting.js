@@ -206,7 +206,7 @@ function AddComment ( req , res, next ) {
 
 function UpdateComment ( req , res , next ) {
     if ( req.query.comment ) {
-        CommentManager.Modify( req.query.comment , req.body.text , req.user ,( status , result ) => {
+        CommentManager.Modify( req.query.comment , req.body.text , req.user._id ,( status , result ) => {
             res.status( status ).json( result );
         } );
     }
@@ -217,7 +217,7 @@ function UpdateComment ( req , res , next ) {
 function DeleteComment ( req , res , next ) {
     if(req.query.post) return next();
     if ( req.query.comment ) {
-        CommentManager.Delete( req.query.comment , req.user , ( status , result ) => {
+        CommentManager.Delete( req.query.comment , req.user._id , ( status , result ) => {
             res.status( status ).json( result );
         } );
     }

@@ -2,7 +2,7 @@ function deleteComment(e) {
     e.preventDefault();
     let comment = $(this).parent().parent().parent().parent().parent().parent();
     $.ajax({
-        url: `${$('.comments-area form').attr('action')}&comment=${$(comment).data("id")}`,
+        url: `${slug}?comment=${$(comment).data("id")}`,
         method: "DELETE",
         success: function (res) {
             comment.remove();
