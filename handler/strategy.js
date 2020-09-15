@@ -1,4 +1,5 @@
-const User = require("../models/user");
+const User  = require("../models/user"),
+    Console = require("../Classes/LogsManager");
 module.exports = async function (username, password, done) {
     try {
         let userDoc = await User.findOne({ username });
@@ -19,6 +20,7 @@ module.exports = async function (username, password, done) {
                 });
             }
         }
+        Console.log({name : "User" ,message : `${user.username} is logged in`});
         return done(null, user);
     } catch (err) {
         done(err);

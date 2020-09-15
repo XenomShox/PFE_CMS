@@ -6,27 +6,28 @@ class CommentsManager {
     model;
 
     constructor () {
-        let commentSchema = new mongoose.Schema( {
-                                                     text       : String ,
-                                                     user       : {
-                                                         type : mongoose.Schema.ObjectId ,
-                                                         ref  : 'Vinland_User' ,
-                                                     } ,
-                                                     post       : {
-                                                         type : mongoose.Schema.ObjectId ,
-                                                         ref  : 'Vinland_Post' ,
-                                                     } ,
-                                                     replied_to : {
-                                                         type : mongoose.Schema.ObjectId ,
-                                                         ref  : 'Vinland_Comments' ,
-                                                     } ,
-                                                     replies    : [
-                                                         {
-                                                             type : mongoose.Schema.ObjectId ,
-                                                             ref  : 'Vinland_Comments' ,
-                                                         } ,
-                                                     ] ,
-                                                 } );
+        let commentSchema = new mongoose.Schema(
+            {
+                text       : String ,
+                user       : {
+                    type : mongoose.Schema.ObjectId ,
+                    ref  : 'Vinland_User' ,
+                } ,
+                post       : {
+                    type : mongoose.Schema.ObjectId ,
+                    ref  : 'Vinland_Post' ,
+                } ,
+                replied_to : {
+                    type : mongoose.Schema.ObjectId ,
+                    ref  : 'Vinland_Comments' ,
+                } ,
+                replies    : [
+                    {
+                        type : mongoose.Schema.ObjectId ,
+                        ref  : 'Vinland_Comments' ,
+                    } ,
+                ] ,
+            } );
         this.model        = mongoose.model( 'Vinland_Comments' , commentSchema );
     }
 

@@ -68,6 +68,7 @@ class UserMethods {
     };
 
     logout = function ( req , res ) {
+        Console.log({ name : "User Logout", message : `${req.user.username} is logged out` })
         req.logout();
         req.flash( 'success' , 'Logged you out!' );
         res.redirect( req.header( 'Referer' ) || '/' );
@@ -79,6 +80,7 @@ class UserMethods {
             let user = await User.findById( req.params.user_id );
             user.setBan( Number( req.body.days ) );
             await user.save();
+            Console.log({name : "User" ,message : `${user.username} is banned by ${req.user}`});
             res.status( 200 ).json( user.banned );
         }
         catch ( err ) {
@@ -92,6 +94,7 @@ class UserMethods {
             let user = await User.findById( req.params.user_id );
             user.unbanUser();
             await user.save();
+            Console.log({name : "User" ,message : `${user.username} is unbanned by ${req.user}`});
             res.status( 200 ).json( user.banned );
         }
         catch ( err ) {
@@ -99,13 +102,14 @@ class UserMethods {
         }
     };
 
-    asignRole = async function ( req , res , next ) {
+    asignRole = async function ( req , res ) {
         try {
             let user                    = await User.findById( req.params.user_id ),
                 role                    = await Role.findById( req.params.role_id );
             if ( role.name === 'Owner' && role.owner ) throw new Error('You are not authorized to do that');
             if ( !user.roles.some( ( r ) => r.equals( role.id ) ) ) user.roles.push( role.id );
             await user.save();
+            Console.log({name : "User" ,message : `${user.username} is assigned role : ${role.name} by ${req.user}`});
             res.status( 200 ).json( user );
         }
         catch ( err ) {
@@ -120,6 +124,7 @@ class UserMethods {
             if ( role.name === 'Owner' && role.owner ) throw new Error('You are not authorized to do that');
             if ( user.roles.some( ( r ) => r.equals( role.id ) ) ) user.roles.remove( role.id );
             await user.save();
+            Console.log({name : "User" ,message : `${user.username} is revoked role : ${role.name} by ${req.user}`});
             res.status( 200 ).json( user );
         }
         catch ( err ) {

@@ -20,6 +20,10 @@ class PostManager {
         tags            : [ String ] ,
         excerpt         : String ,
         modified_date   : { type : Date , default : new Date() } ,
+        rating          : {
+            likes       : { type : Number , default : 0 },
+            dislikes    : { type : Number , default : 0}
+        },
         raters          : [{
             rater : { type: mongoose.Schema.ObjectId , ref : 'Vinland_User' },
             rate : { type : Boolean }
@@ -120,7 +124,7 @@ class PostManager {
             .sort( options.sort )
             .limit( options.limit )
             .populate( 'category' )
-        if(this.#content.type !== String) query.populate('content');
+        //if(this.#content.type !== String) query.populate('content');
         return query.exec();
     }
 
@@ -150,38 +154,43 @@ class PostManager {
     }
 
     async GetPost ( id ) {
-        let post;
         try {
-            let query = this.Model.findById( id ).populate( 'author' )
-                .populate({path: "comments", populate: {path: "user"}})
+            let post,
+                query = this.Model.findById( id ).populate( 'author' )
+                    .populate({path: "comments", populate: {path: "user"}})
             if ( this.#content.type !== String ) query.populate( 'content' );
             post = await query.exec()
             post.visited += 1;
             await post.save();
+            return post;
         }
         catch ( e ) {
             Console.error( e, "Getting Post")
             throw ( ( e instanceof mongoose.Error.CastError ) ? new Error( 'Post Not Found' ) : e );
         }
-        return post;
     }
 
     async RatePost ( id , userId , like ) {
+        console.log(id, userId ,like);
         let post = await this.Model.findById( id )
         if ( !post ) throw new Error( 'There is no Post' );
         for ( let i = 0 ; i < post.raters.length ; i++ ) {
             if ( post.raters[ i ].rater.equals( userId ) ) {
-                if ( like === post.raters[ i ].rater ) {
-                    post.raters.splice( i , 1 );
-                }
+                if ( post.raters[ i ].rate ) post.rating.likes -= 1;
+                else post.rating.dislikes -= 1;
+                if ( like === post.raters[ i ].rate ) post.raters.splice( i , 1 );
                 else {
                     post.raters[ i ].rate = like;
+                    if ( like ) post.rating.likes += 1;
+                    else post.rating.dislikes += 1;
                 }
                 await post.save();
                 return;
             }
         }
         post.raters.push( { rater : userId , rate : like } );
+        if ( like ) post.rating.likes += 1;
+        else post.rating.dislikes += 1;
         await post.save();
     }
 }

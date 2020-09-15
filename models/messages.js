@@ -3,35 +3,20 @@ const User = require("./user");
 
 messageSchema = new mongoose.Schema(
     {
-        text: {
-            type: String,
-            required: true,
-        },
-        sender: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Vinland_User",
-        },
-        receiver: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Vinland_User",
-        },
-    },
-    {
-        timestamps: true,
-    }
+        text: { type: String, required: true },
+        sender: { type: mongoose.Schema.ObjectId, ref: "Vinland_User" },
+        receiver: { type: mongoose.Schema.ObjectId, ref: "Vinland_User", },
+    }, { timestamps: true, }
 );
 
 messageSchema.pre("remove", async function (next) {
     try {
-        let sender = await User.findById(this.sender);
-        let receiver = await User.findById(this.receiver);
-
+        let [ sender , receiver ] = await Promise.all( [
+                                                           User.findById( this.sender ) , User.findById( this.receiver ),
+                                                       ] );
         sender.messages.remove(this.id);
         receiver.messages.remove(this.id);
-
-        await sender.save();
-        await receiver.save();
-
+        await Promise.all([sender.save(),receiver.save()] )
         return next();
     } catch (err) {
         return next(err);
