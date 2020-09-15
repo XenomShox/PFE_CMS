@@ -53,9 +53,10 @@ class CommentsManager {
         }
     }
 
-    async Delete ( commentId , callback ) {
+    async Delete ( commentId , user , callback ) {
         try {
             let commentToRemove = await this.model.findById( commentId );
+            if(!commentToRemove.user.equals(user)) throw new Error("Not authorized");
             if ( commentToRemove.replied_to ) {
                 let replied_toDoc = await this.model.findById( commentToRemove.replied_to );
                 replied_toDoc.replies.remove( commentToRemove.id );
@@ -78,9 +79,10 @@ class CommentsManager {
         }
     }
 
-    async Modify ( commentId , text , callback ) {
+    async Modify ( commentId , text , user , callback ) {
         try {
             let commentToUpdate  = await this.model.findById( commentId );
+            if(!commentToUpdate.user.equals(user)) throw new Error("Not authorized");
             commentToUpdate.text = text;
 
             await commentToUpdate.save();

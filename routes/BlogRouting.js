@@ -1,8 +1,9 @@
-const router            = require( 'express' ).Router() ,
-      CategoriesManager = require( '../Classes/CategoriesManager' ) ,
-      PostManager       = require( '../Classes/PostManager' ) ,
-      url               = require( 'url' ) ,
-      CommentManager    = require( '../Classes/CommentsManager' );
+const router                         = require( 'express' ).Router() ,
+      CategoriesManager              = require( '../Classes/CategoriesManager' ) ,
+      PostManager                    = require( '../Classes/PostManager' ) ,
+      url                            = require( 'url' ) ,
+      CommentManager                 = require( '../Classes/CommentsManager' ) ,
+      { isLoggedIn , hasPermission } = require( '../middlewares/middleware' );
 
 function renderFunction ( res ) {
     return ( err , html ) => {
@@ -21,20 +22,18 @@ router.get( '/' , async function ( req , res ) {
 } );
 /*---------------Categories------------------*/
 router.route( '/Categories' )
-    .get( ( req , res ) => {
-        if ( req.query.f ) {
-            CategoriesManager.GetCategories()
-                .then( data => { res.status( 200 ).send( data ) } )
-                .catch( reason => {
-                    console.error( reason );
-                    res.status( 500 ).send( reason );
-                } )
-        }
-        else {
-            res.redirect( '/' );
-        }
-    } )
-    .post( ( req , res ) => {
+    .get( ( req , res,next ) => {
+        if ( req.query.f ) return next();
+        else res.redirect( '/' );
+    } , isLoggedIn , (req,res)=>{
+        CategoriesManager.GetCategories()
+            .then( data => { res.status( 200 ).send( data ) } )
+            .catch( reason => {
+                console.error( reason );
+                res.status( 500 ).send( reason );
+            } )
+    })
+    .post( isLoggedIn , hasPermission(["admin"] ) ,( req , res ) => {
         //verify if he is an admin
         try {
             CategoriesManager.CreateCategory( req.body ).then( data => {
@@ -46,7 +45,7 @@ router.route( '/Categories' )
             res.status( 500 ).send( e.message );
         }
     } )
-    .put( ( req , res ) => {
+    .put( isLoggedIn , hasPermission(["admin"] ) ,( req , res ) => {
         try {
             if ( req.query.id ) {
                 CategoriesManager.UpdateCategory( req.query.id , req.body )
@@ -61,7 +60,7 @@ router.route( '/Categories' )
             res.status( 500 ).send( e.message )
         }
     } )
-    .delete( ( req , res ) => {
+    .delete( isLoggedIn , hasPermission(["admin"] ) ,( req , res ) => {
         try {
             if ( req.query.id ) {
                 CategoriesManager.DeleteCategory( req.query.id )
@@ -84,10 +83,10 @@ router.route( '/Categories/*' )
         }
         catch ( e ) { ErrorHandler( req , res , e ) }
     } )
-    .get( CategoryHandler , PostHandler , CreateHandler )
-    .post( CreatePost , EditPost , AddComment )
-    .delete( DeletePost , DeleteComment )
-    .put( UpdateComment , RatePost )
+    .get( CategoryHandler , PostHandler , isLoggedIn , hasPermission( [ 'create_post' ] ) , CreateHandler )
+    .post( isLoggedIn , AddComment , hasPermission( [ 'create_post' ] ) , EditPost , CreatePost )
+    .delete( isLoggedIn , DeleteComment , hasPermission( [ 'delete_post' ] ) , DeletePost )
+    .put( isLoggedIn , UpdateComment , RatePost )
 /*----------------Tag System-----------------*/
 router.route( '/tags/:tag' )
     .get( async ( req , res ) => {
@@ -123,7 +122,7 @@ router.route( '/search/' )
 
 /*---------------Categories------------------*/
 async function CategoryHandler ( req , res , next ) {
-    if ( req.query.post ) return next();
+    if ( req.query.post || req.query.create ) return next();
     res.locals.WebSite.Title += ' - ' + res.locals.Category.Name;
     try {
         res.locals.Posts = await PostManager.GetPosts( { category : res.locals.Category._id } )
@@ -163,11 +162,7 @@ async function RatePost ( req , res ) {
     catch ( e ) { ErrorHandler( req , res , e ) }
 }
 
-async function CreatePost ( req , res , next ) {
-    if ( req.query.post ) return next();
-    if ( !Array.isArray( req.body.tags ) ) req.body.tags = req.body.tags.split( ' ' )
-    if ( !( req.body.covers instanceof Array ) ) req.body.covers = [ req.body.covers ];
-    if ( req.query.edit ) return next();
+async function CreatePost ( req , res ) {
     try {
         let post = await PostManager.CreatePost( {
                                                      ...req.body ,
@@ -180,11 +175,12 @@ async function CreatePost ( req , res , next ) {
 }
 
 async function EditPost ( req , res , next ) {
-    if ( req.query.post ) return next();
+    if ( req.body.tags && !Array.isArray( req.body.tags ) ) req.body.tags = req.body.tags.split( ' ' )
+    if ( req.body.covers && !( req.body.covers instanceof Array ) ) req.body.covers = [ req.body.covers ];
+    if ( !req.query.edit ) return next();
     try {
         let post = await PostManager.UpdatePost( req.query.edit , {
             ...req.body ,
-            category : res.locals.Category[ '_id' ] ,
             author   : req.user[ '_id' ],
         } )
         res.redirect( res.locals.Category.Slug + '?post=' + post._id );
@@ -192,22 +188,17 @@ async function EditPost ( req , res , next ) {
     catch ( e ) { ErrorHandler( req , res , e ) }
 }
 
-async function DeletePost ( req , res , next ) {
-    if ( req.query.comment ) return next();
+async function DeletePost ( req , res ) {
     try {
-        await PostManager.DeletePost( req.query.post , {
-            ...req.body ,
-            category : res.locals.Category[ '_id' ] ,
-            author   : req.user[ '_id' ],
-        } )
+        await PostManager.DeletePost( req.query.post , req.user[ '_id' ] )
         res.redirect( res.locals.Category.Slug );
     }
     catch ( e ) { ErrorHandler( req , res , e ) }
-
 }
 
 /*--------------Comments-----------------*/
-function AddComment ( req , res ) {
+function AddComment ( req , res, next ) {
+    if ( !req.query.post ) return next();
     CommentManager.Create( req.query.post , req.body , ( status , result ) => {
         res.status( status ).send( result );
     } )
@@ -215,21 +206,18 @@ function AddComment ( req , res ) {
 
 function UpdateComment ( req , res , next ) {
     if ( req.query.comment ) {
-        CommentManager.Modify( req.query.comment , req.body.text , ( status , result ) => {
+        CommentManager.Modify( req.query.comment , req.body.text , req.user ,( status , result ) => {
             res.status( status ).json( result );
         } );
     }
-    else if ( req.body.rate !== undefined && req.query.post ) {
-        return next();
-    }
-    else {
-        res.status( 400 ).send( 'Bad request' );
-    }
+    else if ( req.body.rate !== undefined && req.query.post ) return next();
+    else res.status( 400 ).send( 'Bad request' );
 }
 
-function DeleteComment ( req , res ) {
+function DeleteComment ( req , res , next ) {
+    if(req.query.post) return next();
     if ( req.query.comment ) {
-        CommentManager.Delete( req.query.comment , ( status , result ) => {
+        CommentManager.Delete( req.query.comment , req.user , ( status , result ) => {
             res.status( status ).json( result );
         } );
     }

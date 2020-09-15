@@ -84,7 +84,8 @@ class PostManager {
     async UpdatePost ( _id , post ) {
         try {
             let Post                  = await this.Model.findById( _id ) ,
-                { content , ...rest } = post;
+                { content , author , ...rest } = post;
+            if(!Post.author.equals(author)) throw new Error("You can't edit other people posts");
             if ( this.#content.type !== String )
                 await mongoose.connection.models[ this.#content.ref ].updateOne( { _id : Post.content } , content )
             await Post.update( rest );
@@ -101,11 +102,13 @@ class PostManager {
         }
     }
 
-    async DeletePost ( _id ) {
+    async DeletePost ( _id ,author) {
         try {
             let post = await this.Model.findById( _id );
+            if(!Post.author.equals(author)) throw new Error("You can't edit other people posts");
             if ( this.#content.type !== String )
                 await mongoose.connection.models[ this.#content.ref ].remove( { _id : post.content } );
+
             await post.remove()
             Console.log( {
                              name    : 'Post Deleting' ,
