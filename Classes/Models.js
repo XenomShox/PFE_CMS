@@ -1,6 +1,8 @@
-const mongoose = require( 'mongoose' );
+const mongoose = require( 'mongoose' ),
+      Console  = require( '../Classes/LogsManager' );
 
 function ErrorHundle ( err , callback ) {
+    Console.error(err , "Api Data");
     if ( err.code === 11000 ) {
         callback( 409 , {
             Error      : 'Duplicated elements : ' + Object.keys( err[ 'keyValue' ] ) ,
@@ -59,7 +61,10 @@ module.exports = class Models {
                     ...Condition.skip !== undefined ? { skip : Condition.skip } : undefined,
                 } ,
                 ( err , result ) => {
-                    if ( err ) callback( 500 , { Error : err } );
+                    if ( err ) {
+                        Console.error(err ,"Getting Data");
+                        callback( 500 , { Error : err } );
+                    }
                     else {
                         callback( 200 , {
                             result : result , ...Condition.count !== undefined && Condition.count ?
@@ -73,65 +78,38 @@ module.exports = class Models {
     }
 
     static AddData ( Name , Data , callback ) {
-        if ( Models.#models[ Name ] === undefined ) {
-            callback( 404 ,
-                      { Error : `${ Name }: database collection doesn't Exist` } );
-        }
+        if ( Models.#models[ Name ] === undefined ) callback( 404 , { Error : `${ Name }: database collection doesn't Exist` } );
         else {
             Models.#models[ Name ].create( Data , ( err , res ) => {
-                if ( err ) {
-                    ErrorHundle( err , callback );
-                }
-                else {
-                    callback( 201 , { SUCCESS : `Successfully created` , '_id' : res[ '_id' ] } );
-                }
+                if ( err ) ErrorHundle( err , callback );
+                else callback( 201 , { SUCCESS : `Successfully created` , '_id' : res[ '_id' ] } );
             } );
         }
     }
 
     static DeleteData ( Name , id , callback ) {
-        if ( id === undefined ) {
-            callback( 406 , { Error : 'id doesn\'t exist' } );
-        }
-        else if ( Models.#models[ Name ] === undefined ) {
-            callback( 404 ,
-                      { Error : `${ Name }: database collection doesn't Exist` } );
-        }
+        if ( id === undefined ) callback( 406 , { Error : 'id doesn\'t exist' } );
+        else if ( Models.#models[ Name ] === undefined ) callback( 404 , { Error : `${ Name }: database collection doesn't Exist` } );
         else {
             Models.#models[ Name ].findByIdAndDelete( id , ( err ) => {
                 if ( err ) {
+                    Console.error( err );
                     callback( 500 , { Error : err } );
                 }
-                else {
-                    callback( 202 , { SUCCESS : `${ id } Successfully deleted` } );
-                }
+                else callback( 202 , { SUCCESS : `${ id } Successfully deleted` } );
             } );
         }
     }
 
     static UpdateData ( Name , id , Data , callback ) {
-        if ( id === undefined ) {
-            callback( 409 , { Error : 'we can\'t Update this data without id' } );
-        }
-        else if ( Models.#models[ Name ] === undefined ) {
-            callback( 404 ,
-                      { Error : `${ Name }: database collection doesn't Exist` } );
-        }
+        if ( id === undefined ) callback( 409 , { Error : 'we can\'t Update this data without id' } );
+        else if ( Models.#models[ Name ] === undefined ) callback( 404 , { Error : `${ Name }: database collection doesn't Exist` } );
         else {
             Models.#models[ Name ].updateOne( { '_id' : id } , Data , ( err , res ) => {
-                if ( err ) {
-                    ErrorHundle( err , callback );
-                }
-                else if ( res.n === 0 ) {
-                    callback( 404 , { Error : `Can't find this id ${ id }` } );
-                }
-                else if ( res.nModified === 0 ) {
-                    callback( 400 ,
-                              { Error : 'Data Types doesnt follow the Schema of this module' } );
-                }
-                else {
-                    callback( 201 , { SUCCESS : `Successfully Updated` } );
-                }
+                if ( err ) ErrorHundle( err , callback );
+                else if ( res.n === 0 ) callback( 404 , { Error : `Can't find this id ${ id }` } );
+                else if ( res.nModified === 0 ) callback( 400 , { Error : 'Data Types doesnt follow the Schema of this module' } );
+                else callback( 201 , { SUCCESS : `Successfully Updated` } );
             } );
         }
     }
