@@ -1,192 +1,166 @@
-const User = require("../models/user");
-const Role = require("../models/role");
-const Message = require("../models/messages");
-const passport = require("passport");
-
+const User     = require( '../models/user' ) ,
+      Role     = require( '../models/role' ) ,
+      Console  = require( '../Classes/LogsManager' )
+      passport = require( 'passport' );
+function ErrorHandler ( err , res ) {
+    Console.error( err , 'User' )
+    return res.status( 500 ).json( err.message );
+}
 class UserMethods {
-    renderLogin = function (req, res) {
-        res.render("LogIn", { to: req.header("Referer") || "/" });
+    renderLogin = function ( req , res ) {
+        res.render( 'LogIn' , { to : req.header( 'Referer' ) || '/' } );
     };
 
-    getUsers = async function (req, res, next) {
+    getUsers = async function ( req , res , next ) {
         try {
-            let users = await User.find({});
-
-            res.send(users);
-        } catch (err) {
-            next(err);
+            res.status(200).send( await User.find( {} ) );
+        }
+        catch ( err ) {
+            ErrorHandler(err,res);
         }
     };
 
-    getUser = async function (req, res, next) {
+    getUser = async function ( req , res , next ) {
         try {
-            let user = await User.findById(req.params.user_id);
-            res.status(200).json(user);
-        } catch (err) {
-            next(err);
+            res.status( 200 ).json( await User.findById( req.params.user_id ) );
+        }
+        catch ( err ) {
+            ErrorHandler(err,res);
         }
     };
 
-    createUser = function (req, res) {
-        let { password, ...body } = req.body;
+    createUser      = function ( req , res ) {
+        let { password , ...body } = req.body;
 
-        User.register(new User({ ...body }), password, (err, user) => {
-            if (err) {
-                console.error(err);
-                return res.redirect("/login");
+        User.register( new User( { ...body } ) , password , ( err , user ) => {
+            if ( err ) {
+                Console.error( err , 'User Creation' );
+                return res.redirect( '/login' );
             }
-            passport.authenticate("Vinland strategy")(req, res, () => {
-                res.redirect("/Admin");
-            });
-        });
+            Console.log({ name : 'User Creation' , message : `User Created ${user.username }` })
+            passport.authenticate( 'Vinland strategy' )( req , res , () => {
+                res.redirect( '/Admin' );
+            } );
+        } );
     };
-    updateUser = function (req, res) {
-        console.log(req.body, req.params);
-        User.updateOne({ _id: req.params.user_id }, req.body, (err, result) => {
-            if (err) return res.status(400).send(err.message);
-            res.redirect(req.header("Referer") || "/");
-        });
+    updateUser      = async function ( req , res ) {
+        try{
+            let user = await User.findById(  req.params.user_id  )
+            user.update( req.body );
+            Console.log({ name : 'User Update' , message : `User Updated ${user.username }` })
+            res.redirect( req.header( 'Referer' ) || '/' );
+        }
+        catch(err){
+            Console.error( err , 'User Update' )
+            return res.status( 500 ).json( err.message );
+        }
     };
-    updateUserTheme = function (req, res) {
-        console.log(req.body, req.params);
-        User.updateOne({ _id: req.params.user_id }, req.body, (err, result) => {
-            if (err) return res.status(400).send(err.message);
-            res.status(200).send("Success");
-        });
+    updateUserTheme = async function ( req , res ) {
+        try{
+            let user = await User.findById( req.params.user_id )
+            user.Admin = req.body.Admin;
+            user.save();
+            res.status( 200 ).send( 'Success' );
+        }
+        catch(err){
+            ErrorHandler(err,res)
+        }
     };
 
-    logout = function (req, res) {
+    logout = function ( req , res ) {
         req.logout();
-        req.flash("success", "Logged you out!");
-        res.redirect(req.header("Referer") || "/");
+        req.flash( 'success' , 'Logged you out!' );
+        res.redirect( req.header( 'Referer' ) || '/' );
     };
 
     // PUT - /user/ban/:user_id/:days
-    banUser = async function (req, res, next) {
+    banUser = async function ( req , res ) {
         try {
-            var days = Number(req.body.days);
-            let user = await User.findById(req.params.user_id);
-            user.setBan(days);
+            let user = await User.findById( req.params.user_id );
+            user.setBan( Number( req.body.days ) );
             await user.save();
-            res.status(200).json(user.banned);
-        } catch (err) {
-            res.status(500).json({ err });
+            res.status( 200 ).json( user.banned );
+        }
+        catch ( err ) {
+            ErrorHandler(err,res);
         }
     };
 
     // PUT - /user/unban/:user_id
-    unbanUser = async function (req, res, next) {
+    unbanUser = async function ( req , res  ) {
         try {
-            let user = await User.findById(req.params.user_id);
+            let user = await User.findById( req.params.user_id );
             user.unbanUser();
             await user.save();
-            res.status(200).json(user.banned);
-        } catch (err) {
-            res.status(500).json({ err });
+            res.status( 200 ).json( user.banned );
+        }
+        catch ( err ) {
+            ErrorHandler(err,res)
         }
     };
 
-    asignRole = async function (req, res, next) {
+    asignRole = async function ( req , res , next ) {
         try {
-            const { user_id, role_id } = req.params;
-            let user = await User.findById(user_id);
-            let role = await Role.findById(role_id);
-
-            if (role.name === "Owner" && role.owner)
-                return res.status(403).json({
-                    error: {
-                        message: "You are not authorized to do that",
-                        code: 403,
-                    },
-                });
-
-            if (!user.roles.some((r) => r.equals(role.id)))
-                user.roles.push(role.id);
-
+            let user                    = await User.findById( req.params.user_id ),
+                role                    = await Role.findById( req.params.role_id );
+            if ( role.name === 'Owner' && role.owner ) throw new Error('You are not authorized to do that');
+            if ( !user.roles.some( ( r ) => r.equals( role.id ) ) ) user.roles.push( role.id );
             await user.save();
-            res.status(200).json(user);
-        } catch (err) {
-            next(err);
+            res.status( 200 ).json( user );
+        }
+        catch ( err ) {
+            ErrorHandler(err,res)
         }
     };
 
-    revokeRole = async function (req, res, next) {
+    revokeRole = async function ( req , res  ) {
         try {
-            const { user_id, role_id } = req.params;
-            let user = await User.findById(user_id);
-            let role = await Role.findById(role_id);
-
-            if (role.name === "Owner" && role.owner)
-                return res.status(403).json({
-                    error: {
-                        message: "You are not authorized to do that",
-                        code: 403,
-                    },
-                });
-
-            if (user.roles.some((r) => r.equals(role.id)))
-                user.roles.remove(role.id);
-
+            let user = await User.findById( req.params.user_id ),
+                role = await Role.findById( req.params.role_id );
+            if ( role.name === 'Owner' && role.owner ) throw new Error('You are not authorized to do that');
+            if ( user.roles.some( ( r ) => r.equals( role.id ) ) ) user.roles.remove( role.id );
             await user.save();
-
-            res.status(200).json(user);
-        } catch (err) {
-            next(err);
+            res.status( 200 ).json( user );
+        }
+        catch ( err ) {
+            ErrorHandler(err,res)
         }
     };
 
-    renderContacts = async function (req, res, next) {
-        try {
-            let loggedUser = await User.findById(req.user._id).populate(
-                "contacts",
-                {
-                    username: true,
-                    profileImage: true,
-                }
-            );
-            console.log(loggedUser);
-            res.render("Blog(vinlandCMS)/Messenger.ejs", {
-                contacts: loggedUser.contacts,
-            });
-        } catch (err) {
-            next(err);
-        }
-    };
-
-    renderChat = async (req, res, next) => {
+    renderChat = async ( req , res , next ) => {
         try {
             const { partner_id } = req.params;
-            
-            let loggedUser = await User.findById(req.user._id).populate(
-                "messages",
-                {
-                    text: true,
-                    sender: true,
-                    receiver: true,
-                }
-            );
-            let partnerUser = await User.findById(partner_id);
+            let loggedUser  = await User.findById( req.user._id )
+                    .populate( 'messages' , { text : true , sender : true , receiver : true } ) ,
+                partnerUser = await User.findById( partner_id );
 
-            const messages = loggedUser.messages.filter(
-                (message) =>
-                    message.sender.equals(partner_id) ||
-                    message.receiver.equals(partner_id)
-            );
+            const messages = loggedUser.messages
+                .filter( message => message.sender.equals( partner_id ) || message.receiver.equals( partner_id ) );
 
-            console.log(loggedUser);
-            res.status(200).render(`templates/${req.Schema.name}/${req.Schema.Messenger}`, {
-                messages,
-                partnerUser,
+            res.render( `templates/${ req.Schema.name }/${ req.Schema.Messenger }` , { messages , partnerUser } ,( err , html )=>{
+                if(err) throw err;
+                res.status( 200 ).send( html );
             });
-        } catch (err) {
-            next(err);
+        }
+        catch ( err ) {
+            Console.error( err , 'WebSite Render' );
+            res.locals.WebSite.Title = ' Error';
+            res.status( 500 )
+                .render( `templates/${ req.Schema.name }/${ req.Schema.Error }` , { message : err.message } )
         }
     };
 
-    profile = async function (req, res) {
-        let user = await User.findById(req.params.user_id);
-        if (user) res.render(`templates/${req.Schema.name}/${req.Schema.Profile}`, { user });
-        else res.redirect("/");
+    profile = async function ( req , res ) {
+        try {
+            let user = await User.findById( req.params.user_id );
+            if ( user ) res.render( `templates/${ req.Schema.name }/${ req.Schema.Profile }` , { user } );
+            else res.redirect( "/" );
+        }catch ( err ) {
+            Console.error( err , 'WebSite Render' );
+            res.locals.WebSite.Title = ' Error';
+            res.status( 500 )
+                .render( `templates/${ req.Schema.name }/${ req.Schema.Error }` , { message : err.message } )
+        }
     };
 }
 

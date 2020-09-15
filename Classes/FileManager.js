@@ -346,13 +346,14 @@ module.exports = class FileManager {
             for ( let i = 0 ; i < files.length ; i++ ) {
                 All.push( FileManager.DeleteFile( files[ i ].Url , files[ i ].Type.type ) );
             }
-            Promise.all( All ).then( values => {
-                let count = 0;
-                values.forEach( el => {if ( el instanceof Error ) count++;} )
-                if ( count > 0 ) callback( 500 , count === values.length ?
-                                                 "Couldn't Delete any file" : "Couldn't Delete all the files" );
-                else callback( 200 , 'All files has been deleted' );
-            } )
+            Promise.all( All )
+                .then( values => {
+                    let count = 0;
+                    values.forEach( el => {if ( el instanceof Error ) count++;} )
+                    if ( count > 0 ) callback( 500 , count === values.length ?
+                                                     "Couldn't Delete any file" : "Couldn't Delete all the files" );
+                    else callback( 200 , 'All files has been deleted' );
+                } )
         }
     }
 

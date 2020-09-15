@@ -1,4 +1,5 @@
 const mongoose          = require( 'mongoose' ) ,
+      Console           = require( './LogsManager'),
       CategoriesManager = require( './CategoriesManager' );
 
 class PostManager {
@@ -19,16 +20,10 @@ class PostManager {
         tags            : [ String ] ,
         excerpt         : String ,
         modified_date   : { type : Date , default : new Date() } ,
-        rating          : {
-            likes    : {
-                type    : Number ,
-                default : 0 ,
-            } ,
-            dislikes : {
-                type    : Number ,
-                default : 0 ,
-            } ,
-        } ,
+        raters          : [{
+            rater : { type: mongoose.Schema.ObjectId , ref : 'Vinland_User' },
+            rate : { type : Boolean }
+        }],
         status          : {
             type    : String ,
             enum    : [ 'PRIVATE' , 'PUBLIC' , 'FUTURE' , 'DRAFT' , 'PENDING' , 'BLOCKED' ] ,
@@ -169,6 +164,25 @@ class PostManager {
             throw ( ( e instanceof mongoose.Error.CastError ) ? new Error( 'Post Not Found' ) : e );
         }
         return post;
+    }
+
+    async RatePost ( id , userId , like ) {
+        let post = await this.Model.findById( id )
+        if ( !post ) throw new Error( 'There is no Post' );
+        for ( let i = 0 ; i < post.raters.length ; i++ ) {
+            if ( post.raters[ i ].rater.equals( userId ) ) {
+                if ( like === post.raters[ i ].rater ) {
+                    post.raters.splice( i , 1 );
+                }
+                else {
+                    post.raters[ i ].rate = like;
+                }
+                await post.save();
+                return;
+            }
+        }
+        post.raters.push( { rater : userId , rate : like } );
+        await post.save();
     }
 }
 

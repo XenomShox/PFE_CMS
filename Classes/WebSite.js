@@ -7,6 +7,7 @@ const mongoose                       = require( 'mongoose' ) ,
       CategoriesManager              = require( './CategoriesManager' ) ,
       Validator                      = new ( require( 'jsonschema' ).Validator )() ,
       User                           = require( '../models/user' ) ,
+      Console                        = require( './LogsManager'),
       { isLoggedIn , hasPermission } = require( '../middlewares/middleware' ) ,
       Role                           = require( '../models/role' );
 function UnderConstruct ( req , res ) { res.status( 404 ).render( 'Construct' , { Title : process.env.Website } ) }
@@ -118,8 +119,8 @@ class WebSite {
                 await this.LoadApiSettings();
                 return this.StartUp( index );
             } )
-            .catch( reason => {
-                console.error( reason );
+            .catch( async reason => {
+                await Console.error( reason ,"Fatal Error");
                 process.exit( reason );
             } );
     }
@@ -131,24 +132,24 @@ class WebSite {
             try {
                 await this.CheckDataBase().catch( reason => {
                     this.Install.Step = 1;
-                    console.error( reason );
+                    Console.error( reason , "Installation Error");
                     return new Promise( resolve => {this.Install.DataBaseInstall = resolve;} )
                 } )
                 await this.CheckOwner().catch( reason => {
                     this.Install.Step = 2;
-                    console.error( reason );
+                    Console.error( reason , "Installation Error" );
                     return new Promise( resolve => {this.Install.OwnerInstall = resolve;} )
                 } );
                 await this.CheckWebSiteDetails().catch( reason => {
                     this.Install.Step = 3;
-                    console.error( reason );
+                    Console.error( reason , "Installation Error" );
                     return new Promise( resolve => {
                         this.Install.DetailsInstall = resolve;
                     } )
                 } )
                 await this.CheckEmail().catch( reason => {
                     this.Install.Step = 5;
-                    console.error( reason );
+                    Console.error( reason , "Installation Error" );
                     return new Promise( resolve => {this.Install.EmailInstall = resolve;} )
                 } )
                 this.Install.Step = 6;
@@ -157,7 +158,7 @@ class WebSite {
                 res( app._router.stack.length - 1 );
             }
             catch ( e ) {
-                console.error( e );
+                Console.error( e , "Installation Error");
                 rej( e );
             }
         } );
@@ -261,7 +262,8 @@ class WebSite {
             mongoose.set( 'debug' , true );
         }
         catch ( err ) {
-            console.error( err );
+            Console.error( err , "Blog Routing" );
+            process.exit( err );
         }
     }
 
@@ -283,10 +285,7 @@ class WebSite {
                 } )
                 app.use( '/user' , require( '../routes/user' ) )
                 app.use( require( '../routes/BlogRouting' ) );
-            } )
-            .catch( err => {
-                console.error( err );
-            } )
+            } );
 
     }
 
@@ -310,41 +309,39 @@ class WebSite {
     }
 
     LoadTemplate () {
-        TemplatesManager.getAppliedTemplate()
+        return TemplatesManager.getAppliedTemplate()
             .catch( reason => {
-                console.error( reason );
-                if ( !( reason instanceof mongoose.Error ) ) {
-                    return TemplatesManager.CreateTemplate( {
-                                                                'name'        : 'Blog(vinlandCMS)' ,
-                                                                'description' : 'the default template for vinland CMS' ,
-                                                                'type'        : 'Blog' ,
-                                                                'data'        : [
-                                                                    {
-                                                                        'name'  : 'latest' ,
-                                                                        'sort'  : '-date' ,
-                                                                        'limit' : 6 ,
-                                                                    } ,
-                                                                    {
-                                                                        'name'  : 'popular' ,
-                                                                        'sort'  : '-visited' ,
-                                                                        'limit' : 4 ,
-                                                                    } ,
-                                                                ] ,
-                                                                'structure'   : {
-                                                                    'Index'      : 'Index' ,
-                                                                    'Categories' : 'Categories' ,
-                                                                    'Post'       : 'Post' ,
-                                                                    'CreatePost' : 'Create' ,
-                                                                    'EditPost'   : 'Edit' ,
-                                                                    'Tags'       : 'Tags' ,
-                                                                    'Search'     : 'Search' ,
-                                                                    'Messenger'  : 'Messenger' ,
-                                                                    'Profile'    : 'Profile' ,
-                                                                    'Error'      : 'Error' ,
-                                                                } ,
-                                                                applied       : Date.now() ,
-                                                            } );
-                }
+                Console.error( reason ,"Template Retrieving");
+                return TemplatesManager.CreateTemplate( {
+                        'name'        : 'Blog(vinlandCMS)' ,
+                        'description' : 'the default template for vinland CMS' ,
+                        'type'        : 'Blog' ,
+                        'data'        : [
+                            {
+                                'name'  : 'latest' ,
+                                'sort'  : '-date' ,
+                                'limit' : 6 ,
+                            } ,
+                            {
+                                'name'  : 'popular' ,
+                                'sort'  : '-visited' ,
+                                'limit' : 4 ,
+                            } ,
+                        ] ,
+                        'structure'   : {
+                            'Index'      : 'Index' ,
+                            'Categories' : 'Categories' ,
+                            'Post'       : 'Post' ,
+                            'CreatePost' : 'Create' ,
+                            'EditPost'   : 'Edit' ,
+                            'Tags'       : 'Tags' ,
+                            'Search'     : 'Search' ,
+                            'Messenger'  : 'Messenger' ,
+                            'Profile'    : 'Profile' ,
+                            'Error'      : 'Error' ,
+                        } ,
+                        applied       : Date.now() ,
+                } );
             } )
             .then( async template => {
                 template            = template.toObject();
@@ -362,7 +359,7 @@ class WebSite {
             return Data;
         }
         catch ( e ) {
-            console.error( e );
+            Console.error( e , "Template Data" );
             return {};
         }
     }
