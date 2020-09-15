@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
-    <% include ./partials/header.ejs %>
+    <% include ./Partials/header.ejs %>
     <body class="Category">
-        <% include ./partials/navbar-light.ejs %>
+        <% include ./Partials/navbar-light.ejs %>
         <div class="slider_area">
             <div style="background-image:url(<%=Post.covers[0]?Post.covers[0]:Category.Cover%>);" class="single_slider d-flex align-items-center">
                 <div class="container">
@@ -49,12 +49,12 @@
             <section class="blog_area section-padding">
                     <div class="container">
                         <div class="row">
-                            <% include ./partials/postContent.ejs %> <%include ./partials/sideBar.ejs%>
+                            <% include ./Partials/postContent.ejs %> <%include ./Partials/sideBar.ejs%>
                         </div>
                     </div>
             </section>
         </div>
-        <% include ./partials/footer.ejs %>
+        <% include ./Partials/footer.ejs %>
         <script src="/files/javascript/tasty/comments.js"></script>
     </body>
 </html>
