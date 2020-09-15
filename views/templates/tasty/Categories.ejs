@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
-    <% include ./partials/header.ejs %>
+    <% include ./Partials/header.ejs %>
     <body class="Category">
-        <% include ./partials/navbar-light.ejs %>
+        <% include ./Partials/navbar-light.ejs %>
         <div class="slider_area">
             <div
                     style="background-image: url(<%=Category && Category.Cover?Category.Cover:"/files/images/tasty/banner/bradcam.png"%>);"
@@ -63,13 +63,13 @@
             <section class="blog_area section-padding p-0">
                     <div class="container">
                         <div class="row">
-                            <% include ./partials/posts.ejs %> <% include
-                            ./partials/sideBar.ejs %>
+                            <% include ./Partials/posts.ejs %> <% include
+                            ./Partials/sideBar.ejs %>
                         </div>
                     </div>
             </section>
         </div>
-        <% include ./partials/footer.ejs %>
+        <% include ./Partials/footer.ejs %>
 
     </body>
 </html>
