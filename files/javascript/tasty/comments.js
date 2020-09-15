@@ -2,7 +2,7 @@ function deleteComment(e) {
     e.preventDefault();
     let comment = $(this).parent().parent().parent().parent().parent().parent();
     $.ajax({
-        url: `/Categories/ass?comment=${$(comment).data("id")}`,
+        url: `${$('.comments-area form').attr('action')}&comment=${$(comment).data("id")}`,
         method: "DELETE",
         success: function (res) {
             comment.remove();
@@ -38,7 +38,7 @@ $(document).ready(function (e) {
                 };
                 let commentList = $("div.comments-area");
                 commentList.append(
-                    $(
+                    $(`<div class="comment-list mt-4" data-id="${res._id}"></div>`).append($(
                         '<div class="single-comment justify-content-between d-flex"></div>'
                     ).append(
                         $(
@@ -80,7 +80,7 @@ $(document).ready(function (e) {
                                             )
                                     )
                             )
-                    )
+                    ))
                 );
             },
             error: function (xhr, err) {

@@ -39,7 +39,27 @@
                 ><i class="fas fa-eye"></i> <%=Post.visited%></a
             >
         </div>
-        <div class="mt-2"><%-Post.content%></div>
+        <div class="mt-3">
+            <div class="ingredients">
+                <h1>Ingredients:</h1>
+                <ul class="pl-5">
+                    <% Post.content.ingredients.forEach(ingredient => { %>
+                        <li class="my-2" style="font-size: 1.1rem;list-style: disc;"><%= ingredient %></li>
+                    <% }) %>
+                </ul>
+            </div>
+            <div class="steps mt-2">
+                <h1>Steps:</h1>
+                <ul class="pl-5">
+                    <% Post.content.steps.forEach((ingredient, idx) => { %>
+                        <li class="mt-1">
+                            <div style="font-weight: bold;"><i class="fas fa-check-circle mr-2"></i>Step <%= idx+1 %>:</div>
+                            <div class="mt-2"><%= ingredient %></div>
+                        </li>
+                    <% }) %>
+                </ul>
+            </div>
+        </div>
         <div class="border-bottom w-100 mt-5 pb-3">
             <h5 class="font-weight-bold mb-4">Tags In</h5>
             <div class="row ml-1">
@@ -68,7 +88,7 @@
     <div class="comments-area">
         <% if(currentUser) { %>
         <form
-            action="/Categories/ass?post=<%= Post._id %>"
+            action="<%=Category.Slug%>?post=<%= Post._id %>"
             class="comment-form d-flex justify-content-between"
         >
             <input

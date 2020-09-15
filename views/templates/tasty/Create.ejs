@@ -30,7 +30,16 @@
                     </div>
                 </div>
             </div>
-
+            <style>
+                .trash-delete {
+                    transition: all 0.25s;
+                }
+                .trash-delete:hover {
+                    background-color: rgb(231, 36, 36);
+                    color: white;
+                    cursor: pointer;
+                }
+            </style>
             <section class="blog_area section-padding p-5">
                 <div class="container">
                     <div class="row">
@@ -38,26 +47,58 @@
                             <div class="blog_left_sidebar">
                                 <form action="<%=Category.Slug%>" method="post" class="d-flex flex-column align-items-end">
                                     <div class="form-group w-100">
-                                        <label for="title">Title of the Post</label>
+                                        <label for="title">Name of Recepe</label>
                                         <input name="title" type="text" class="form-control w-100" id="title" aria-describedby="title" required>
                                     </div>
                                     <div class="form-group w-100">
-                                        <label for="excerpt">Excerpt of the Post</label>
-                                        <textarea name="excerpt" class="form-control w-100" id="excerpt" aria-describedby="description" maxlength="150" required></textarea>
+                                        <label for="excerpt">Description of the Recepe</label>
+                                        <textarea name="excerpt" class="form-control w-100" id="excerpt" aria-describedby="description" maxlength="300" required></textarea>
                                         <small class="form-text text-muted">this description is gonna be used to help for search optimisation.</small>
                                     </div>
+                                    <div class="form-group row w-100">
+                                        <div class="col-6">
+                                            <div class="form-group w-100">
+                                                <label for="title">Prep</label>
+                                                <input name="content[prep]" type="text" class="form-control w-100" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="form-group w-100">
+                                                <label for="title">Servings</label>
+                                                <input name="content[servings]" type="text" class="form-control w-100" required>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="form-group w-100">
-                                        <label for="covers">Covers for the Post</label>
+                                        <label for="covers">Covers for the Recepe</label>
                                         <input name="covers" multiple type="text" class="form-control-file w-100" id="covers" aria-describedby="post covers">
                                         <small class="form-text text-muted">the selected images are gonna be used as cover for the post.</small>
                                     </div>
                                     <div class="form-group w-100">
-                                        <label for="tags">Tags of the Post</label>
+                                        <label for="tags">Tags of the Recepe</label>
                                         <input name="tags" type="text" class="form-control w-100" id="tags" aria-describedby="title">
                                     </div>
-                                    <div class="form-group w-100">
-                                        <label for="content">The content of the Post</label>
-                                        <textarea name="content" class="w-75" id="content" aria-describedby="description" required></textarea>
+                                    <div class="w-100">
+                                        <div class="ingredients">
+                                            <div class="input-group mb-3">
+                                                <div class="input-group-prepend ">
+                                                    <span class="input-group-text trash-delete"><i class="fas fa-trash"></i></span>
+                                                </div>
+                                                <input type="text" class="form-control" placeholder="Ingredient" name="content[ingredients][]">
+                                            </div>
+                                        </div>
+                                        <button id="add-ingredient" type="button" class="btn btn-outline-success"><i class="fas fa-plus"></i></button>
+                                    </div>
+                                    <div class="w-100 mt-4">
+                                        <div class="steps">
+                                            <div class="input-group mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text trash-delete" ><i class="fas fa-trash"></i></span>
+                                                </div>
+                                                <input type="text" class="form-control" placeholder="Step" name="content[steps][]">
+                                            </div>
+                                        </div>
+                                        <button id="add-step" type="button" class="btn btn-outline-success"><i class="fas fa-plus"></i></button>
                                     </div>
                                     <input type="submit" class="btn btn-primary" value="Post it">
                                 </form>
@@ -71,10 +112,27 @@
         <link href="/admin/files/javascripts/Assets/plugin/summernote/summernote-bs4.min.css" rel="stylesheet">
         <script src="/admin/files/javascripts/Assets/plugin/summernote/summernote-bs4.min.js"></script>
         <script>
-            $(document).ready(function() {
-                $('#content').summernote();
-            });
+            $(document).ready(function(e){
+                function deleteInput(e){
+                    e.preventDefault()
+                    $(this).parent().parent().remove()
+                }
+                function addInput(list, placeholder, name){
+                    return function(e){
+                        e.preventDefault()
+                        let ingredients = $(`div.${list}`);
 
+                        let inputGroup = $('<div class="input-group mb-3"></div>');
+                        inputGroup.append($('<div class="input-group-prepend"></div>').append($('<span class="input-group-text trash-delete"></span>').click(deleteInput).append($('<i class="fas fa-trash"></i>')))).append($(`<input type="text" class="form-control" placeholder="${placeholder}" name="${name}">`))
+                        ingredients.append(inputGroup)
+                    }
+                }
+                $('.trash-delete').click(deleteInput)
+
+                $('#add-ingredient').click(addInput("ingredients", "Ingredient", "content[ingredients][]"))
+                $('#add-step').click(addInput("steps", "Step", "content[steps][]"))
+                
+            })
         </script>
     </body>
 </html>
