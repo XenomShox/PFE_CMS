@@ -1,0 +1,88 @@
+<header>
+    <div class="header-area">
+        <div id="sticky-header" class="main-header-area">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-xl-3 col-lg-2">
+                        <div class="logo">
+                            <a href="index.html">
+                                <img
+                                    src="/files/images/tasty/logo.png"
+                                    alt=""
+                                />
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-lg-7">
+                        <div class="main-menu d-none d-lg-block">
+                            <nav>
+                                <ul id="navigation">
+                                    <li>
+                                        <a style="color: white;" href="/">home</a>
+                                    </li>
+                                    <li>
+                                        <a style="color: white;" href="#"
+                                            >Categories
+                                            <i class="fas fa-angle-down"></i
+                                        ></a>
+                                        <% function DropDown(elm) {%> <% elm.forEach( category => { %>
+                                            <%if(!category.SubClass){%>
+                                                <li><a href="<%= category.Slug %>"><%= category.Name %></a></li>
+                                            <%} else {%>
+                                                <li data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <%= category.Name %>
+                                                    <ul class="submenu" aria-labelledby="<%= category.Slug %>">
+                                                        <% DropDown(category.SubClass);%>
+                                                    </ul>
+                                                </li>
+                                                
+                                        <%}})%> <%}%> 
+                                        <ul class="submenu">
+                                            <% DropDown(WebSite.Categories) %>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a style="color: white;" href="#" role="button"><span class="fa fa-user mr-1"></span> <i class="fas fa-angle-down"></i></a>
+                                        <ul class="submenu pb-2">
+                                            <% if (!currentUser) { %>
+                                            <li><a href="/login">Login</a></li>
+                                            <% } else { %>
+                                            <li class="p-2">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <img class="profile-pic mr-2" src="<%= currentUser.profileImage %>" alt=""/>
+                                                    <div>
+                                                        <p class="m-0 p-0"><%= currentUser.username %></p>
+                                                        <p style="font-size: 0.8rem;" class="m-0 p-0"><%= currentUser.email %></p>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <% if (currentUser.roles.some((role) => role["owner"]) ||currentUser.roles.some((role) => role["admin_privillage"])) { %>
+                                                <li><a class="dropdown-item" href="/admin">Admin Dashboard</a></li>
+                                            <% } %>
+                                            <li><a data-id="<%= currentUser._id %>" data-username="<%= currentUser.username %>" data-image="<%= currentUser.profileImage %>" class="dropdown-item id" href="/user/profile/<%= currentUser._id %>">Profile</a></li>
+                                            <li><a class="dropdown-item" href="/logout">Log Out</a></li>
+                                            <% } %>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-3 d-none d-lg-block">
+                        <div class="search_icon">
+                            <a href="#">
+                                <i class="fas fa-search"></i>
+                            </a>
+                        </div>
+                        
+                    </div>
+                    <div class="col-12">
+                        <div
+                            class="mobile_menu d-block d-lg-none"
+                        ></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>

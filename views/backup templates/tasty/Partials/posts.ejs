@@ -1,0 +1,44 @@
+<div class="col-lg-8 mb-5 mb-lg-0">
+    <div class="blog_left_sidebar">
+        <% Posts.forEach(post => { %>
+        <article class="blog_item">
+            <div class="blog_item_img">
+                <img
+                    class="card-img rounded-0"
+                    src="<%= post.covers[0] %>"
+                    alt=""
+                />
+                <a href="#" class="blog_item_date">
+                    <h3><%= post.date.getDate() %></h3>
+                    <p>
+                        <%=["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][post.date.getMonth()]%>
+                    </p>
+                </a>
+            </div>
+
+            <div class="blog_details">
+                <a href="<%=post.category.Slug%>?post=<%=post["_id"]%>" class="d-inline-block">
+                    <h2><%= post.title %></h2>
+                </a>
+                <p><%=post.excerpt %></p>
+                <ul class="blog-info-link">
+                    <!-- <li><a href="#"><i class="fa fa-user"></i> Travel, Lifestyle</a></li> -->
+                    <li>
+                        <a href="#" class="mr-2"
+                            ><i class="far fa-thumbs-up"></i> <%=post.rating.likes%></a
+                        ><a href="#"
+                            ><i class="far fa-thumbs-down"></i> <%=post.rating.dislikes%></a
+                        >
+                    </li>
+                    <!-- <li></li> -->
+                    <li>
+                        <a href="#"
+                            ><i class="fa fa-comments"></i> <%=post.comments.length%></a
+                        >
+                    </li>
+                </ul>
+            </div>
+        </article>
+        <% }) %>
+    </div>
+</div>

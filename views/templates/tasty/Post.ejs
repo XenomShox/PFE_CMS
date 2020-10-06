@@ -40,7 +40,7 @@
                             </li>
                         </ol>
                         <% if(currentUser && currentUser._id.equals(Post.author._id)) { %>
-                            <a class="btn btn-warning ml-auto my-auto" href="<%= Category.Slug%>?post=<%=Post._id%>&edit=true"> <i class="far fa-edit"></i><span class="ml-1">Edit</span></a>
+                            <a class="btn btn-warning ml-auto my-auto" href="<%= Category.Slug%>?edit=<%=Post._id%>"> <i class="far fa-edit"></i><span class="ml-1">Edit</span></a>
                         <% } %>
                     </div>
                 </div>

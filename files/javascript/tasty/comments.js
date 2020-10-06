@@ -82,10 +82,12 @@ $(document).ready(function (e) {
                             )
                     ))
                 );
+                $('.comments-area form input').val('');
             },
             error: function (xhr, err) {
                 console.log(xhr, err);
             },
         });
+
     });
 });

@@ -1,198 +1,236 @@
-const mongoose          = require( 'mongoose' ) ,
-      Console           = require( './LogsManager'),
-      CategoriesManager = require( './CategoriesManager' );
+const mongoose = require("mongoose"),
+    Console = require("./LogsManager"),
+    CategoriesManager = require("./CategoriesManager");
 
 class PostManager {
     /*----------------Attributes------------*/
     Model;
-    #content = { type : String , required:true };
+    #content = { type: String, required: true };
     #Schema = {
-        author          : { type : mongoose.Schema.ObjectId , ref : 'Vinland_User' } ,
-        date            : { type : Date , default : new Date() } ,
-        category        : { type : mongoose.Schema.ObjectId , ref : 'Vinland_Category' } ,
-        comments        : [{ type :  mongoose.Schema.ObjectId  , ref : 'Vinland_Comments' }] ,
-        comments_status : {
-            type    : String ,
-            enum    : [ 'ALLOW' , 'HOLD' , 'DISABLE' ] ,
-            default : 'ALLOW' ,
-        } ,
-        covers          : { type : [ String ] } ,
-        tags            : [ String ] ,
-        excerpt         : String ,
-        modified_date   : { type : Date , default : new Date() } ,
-        rating          : {
-            likes       : { type : Number , default : 0 },
-            dislikes    : { type : Number , default : 0}
+        author: { type: mongoose.Schema.ObjectId, ref: "Vinland_User" },
+        date: { type: Date, default: new Date() },
+        category: { type: mongoose.Schema.ObjectId, ref: "Vinland_Category" },
+        comments: [{ type: mongoose.Schema.ObjectId, ref: "Vinland_Comments" }],
+        comments_status: {
+            type: String,
+            enum: ["ALLOW", "HOLD", "DISABLE"],
+            default: "ALLOW",
         },
-        raters          : [{
-            rater : { type: mongoose.Schema.ObjectId , ref : 'Vinland_User' },
-            rate : { type : Boolean }
-        }],
-        status          : {
-            type    : String ,
-            enum    : [ 'PRIVATE' , 'PUBLIC' , 'FUTURE' , 'DRAFT' , 'PENDING' , 'BLOCKED' ] ,
-            default : 'PUBLIC' ,
-        } ,
-        title           : String ,
-        visited         : {
-            type    : Number ,
-            default : 0 ,
-        } ,
+        covers: { type: [String] },
+        tags: [String],
+        excerpt: String,
+        modified_date: { type: Date, default: new Date() },
+        rating: {
+            likes: { type: Number, default: 0 },
+            dislikes: { type: Number, default: 0 },
+        },
+        raters: [
+            {
+                rater: { type: mongoose.Schema.ObjectId, ref: "Vinland_User" },
+                rate: { type: Boolean },
+            },
+        ],
+        status: {
+            type: String,
+            enum: [
+                "PRIVATE",
+                "PUBLIC",
+                "FUTURE",
+                "DRAFT",
+                "PENDING",
+                "BLOCKED",
+            ],
+            default: "PUBLIC",
+        },
+        title: String,
+        visited: {
+            type: Number,
+            default: 0,
+        },
     };
 
     /*------------------Methods-------------*/
-    constructor () {
+    constructor() {
         this.UpdateModel();
     }
 
-    UpdateModel (api) {
-        let Api = api ? api : require( './WebSite' ).getApiSettings();
-        if ( Api.Enabled ) this.#content = { type : mongoose.Schema.ObjectId , ref : Api.reference , required:true };
-        else this.#content={ type : String , required:true };
-        delete mongoose.connection.models['Vinland_Post'];
-        this.Model = mongoose.model( 'Vinland_Post' , { ...this.#Schema , content:this.#content } );
-        Console.log( {
-                         name    : 'Api Post updated' ,
-                         message : 'post content has been changed into ' + Api.Enabled ? Api.reference : 'string' ,
-                         code    : 'CMS_LOG',
-                     } )
+    UpdateModel(api) {
+        let Api = api ? api : require("./WebSite").getApiSettings();
+        if (Api.Enabled)
+            this.#content = {
+                type: mongoose.Schema.ObjectId,
+                ref: Api.reference,
+                required: true,
+            };
+        else this.#content = { type: String, required: true };
+        delete mongoose.connection.models["Vinland_Post"];
+        this.Model = mongoose.model("Vinland_Post", {
+            ...this.#Schema,
+            content: this.#content,
+        });
+        Console.log({
+            name: "Api Post updated",
+            message:
+                "post content has been changed into " + Api.Enabled
+                    ? Api.reference
+                    : "string",
+            code: "CMS_LOG",
+        });
     }
 
-    async CreatePost ( post ) {
+    async CreatePost(post) {
         let Post;
         try {
-            Post = await this.Model.create( {
-                ...post ,
-                content : this.#content.type === String ? post.content :
-                      ( await mongoose.connection.models[ this.#content.ref ].create( post.content ) )._id,
-            } );
-            CategoriesManager.AddPost( Post.category , Post[ '_id' ] )
-            Console.log( {
-                             name    : 'Post Creation' ,
-                             message : `post ${Post._id} is created by ${Post.author}`,
-                             code    : 'CMS_LOG',
-                         } )
+            Post = await this.Model.create({
+                ...post,
+                content:
+                    this.#content.type === String
+                        ? post.content
+                        : (
+                              await mongoose.connection.models[
+                                  this.#content.ref
+                              ].create(post.content)
+                          )._id,
+            });
+            CategoriesManager.AddPost(Post.category, Post["_id"]);
+            Console.log({
+                name: "Post Creation",
+                message: `post ${Post._id} is created by ${Post.author}`,
+                code: "CMS_LOG",
+            });
             return Post;
-        }
-        catch ( err ) {
-            Console.error( err , "Post Creation" );
-            if ( Post ) Post.remove();
+        } catch (err) {
+            Console.error(err, "Post Creation");
+            if (Post) Post.remove();
             throw err;
         }
     }
 
-    async UpdatePost ( _id , post ) {
+    async UpdatePost(_id, post) {
         try {
-            let Post                  = await this.Model.findById( _id ) ,
-                { content , author , ...rest } = post;
-            if(!Post.author.equals(author)) throw new Error("You can't edit other people posts");
-            if ( this.#content.type !== String )
-                await mongoose.connection.models[ this.#content.ref ].updateOne( { _id : Post.content } , content )
-            await Post.update( rest );
-            Console.log( {
-                             name    : 'Post Updating' ,
-                             message : `post ${ Post._id } is Updated` ,
-                             code    : 'CMS_LOG' ,
-                         } );
+            let Post = await this.Model.findById(_id),
+                { content, author, ...rest } = post;
+            if (!Post.author.equals(author))
+                throw new Error("You can't edit other people posts");
+            if (this.#content.type !== String)
+                await mongoose.connection.models[this.#content.ref].updateOne(
+                    { _id: Post.content },
+                    content
+                );
+            await Post.update(rest);
+            Console.log({
+                name: "Post Updating",
+                message: `post ${Post._id} is Updated`,
+                code: "CMS_LOG",
+            });
             return Post;
-        }
-        catch ( e ) {
-            Console.error( e , 'Post Updating' );
+        } catch (e) {
+            Console.error(e, "Post Updating");
             throw e;
         }
     }
 
-    async DeletePost ( _id ,author) {
+    async DeletePost(_id, author) {
         try {
-            let post = await this.Model.findById( _id );
-            if(!Post.author.equals(author)) throw new Error("You can't edit other people posts");
-            if ( this.#content.type !== String )
-                await mongoose.connection.models[ this.#content.ref ].remove( { _id : post.content } );
+            let post = await this.Model.findById(_id);
+            if (!Post.author.equals(author))
+                throw new Error("You can't edit other people posts");
+            if (this.#content.type !== String)
+                await mongoose.connection.models[this.#content.ref].remove({
+                    _id: post.content,
+                });
 
-            await post.remove()
-            Console.log( {
-                             name    : 'Post Deleting' ,
-                             message : `post ${ post._id } is deleted` ,
-                             code    : 'CMS_LOG' ,
-                         } );
-        }
-        catch ( e ) {
-            Console.error( e , 'Post Deleting' );
+            await post.remove();
+            Console.log({
+                name: "Post Deleting",
+                message: `post ${post._id} is deleted`,
+                code: "CMS_LOG",
+            });
+        } catch (e) {
+            Console.error(e, "Post Deleting");
             throw e;
         }
     }
 
-    GetData ( options ) {
-        let query= this.Model.find( {} )
-            .sort( options.sort )
-            .limit( options.limit )
-            .populate( 'category' )
+    GetData(options) {
+        let query = this.Model.find({})
+            .sort(options.sort)
+            .limit(options.limit)
+            .populate("category");
         //if(this.#content.type !== String) query.populate('content');
         return query.exec();
     }
 
-    GetPosts ( options ) {
+    GetPosts(options) {
         let query;
-        if ( options ) {
-            if ( options.title ) query = this.Model.find( { title : { '$regex' : options.title , '$options' : 'i' } } );
-            else if ( options.category ) query = this.Model.find( { category : options.category._id } )
-            else if ( options.tag ) query = this.Model.find( { tags : options.tag } );
-            else if( options.date ) query = this.Model.find( { date : new Date( options.date ) } )
+        if (options) {
+            if (options.title)
+                query = this.Model.find({
+                    title: { $regex: options.title, $options: "i" },
+                });
+            else if (options.category)
+                query = this.Model.find({ category: options.category._id });
+            else if (options.tag)
+                query = this.Model.find({ tags: options.tag });
+            else if (options.date)
+                query = this.Model.find({ date: new Date(options.date) });
             else {
-                query = this.Model.find( {} )
+                query = this.Model.find({});
             }
-            if ( options.sort ) {
-                query.sort( options.sort );
+            if (options.sort) {
+                query.sort(options.sort);
+            } else {
+                query.sort("-date");
             }
-            else {
-                query.sort( '-date' );
-            }
-            if ( options.limit ) query.limit( options.limit );
-            if ( options.skip ) query.skip( options.skip );
+            if (options.limit) query.limit(options.limit);
+            if (options.skip) query.skip(options.skip);
         }
-        if(this.#content.type !== String) query.populate('content');
-        return query.populate( 'category' )
-            .populate( 'author' , { username : 1 } )
+        if (this.#content.type !== String) query.populate("content");
+        return query
+            .populate("category")
+            .populate("author", { username: 1 })
             .exec();
     }
 
-    async GetPost ( id ) {
+    async GetPost(id) {
         try {
             let post,
-                query = this.Model.findById( id ).populate( 'author' )
-                    .populate({path: "comments", populate: {path: "user"}})
-            if ( this.#content.type !== String ) query.populate( 'content' );
-            post = await query.exec()
+                query = this.Model.findById(id)
+                    .populate("author")
+                    .populate({ path: "comments", populate: { path: "user" } });
+            if (this.#content.type !== String) query.populate("content");
+            post = await query.exec();
             post.visited += 1;
             await post.save();
             return post;
-        }
-        catch ( e ) {
-            Console.error( e, "Getting Post")
-            throw ( ( e instanceof mongoose.Error.CastError ) ? new Error( 'Post Not Found' ) : e );
+        } catch (e) {
+            Console.error(e, "Getting Post");
+            throw e instanceof mongoose.Error.CastError
+                ? new Error("Post Not Found")
+                : e;
         }
     }
 
-    async RatePost ( id , userId , like ) {
-        console.log(id, userId ,like);
-        let post = await this.Model.findById( id )
-        if ( !post ) throw new Error( 'There is no Post' );
-        for ( let i = 0 ; i < post.raters.length ; i++ ) {
-            if ( post.raters[ i ].rater.equals( userId ) ) {
-                if ( post.raters[ i ].rate ) post.rating.likes -= 1;
+    async RatePost(id, userId, like) {
+        console.log(id, userId, like);
+        let post = await this.Model.findById(id);
+        if (!post) throw new Error("There is no Post");
+        for (let i = 0; i < post.raters.length; i++) {
+            if (post.raters[i].rater.equals(userId)) {
+                if (post.raters[i].rate) post.rating.likes -= 1;
                 else post.rating.dislikes -= 1;
-                if ( like === post.raters[ i ].rate ) post.raters.splice( i , 1 );
+                if (like === post.raters[i].rate) post.raters.splice(i, 1);
                 else {
-                    post.raters[ i ].rate = like;
-                    if ( like ) post.rating.likes += 1;
+                    post.raters[i].rate = like;
+                    if (like) post.rating.likes += 1;
                     else post.rating.dislikes += 1;
                 }
                 await post.save();
                 return;
             }
         }
-        post.raters.push( { rater : userId , rate : like } );
-        if ( like ) post.rating.likes += 1;
+        post.raters.push({ rater: userId, rate: like });
+        if (like) post.rating.likes += 1;
         else post.rating.dislikes += 1;
         await post.save();
     }
