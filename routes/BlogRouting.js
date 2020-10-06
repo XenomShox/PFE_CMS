@@ -108,6 +108,7 @@ router
         PostHandler,
         isLoggedIn,
         hasPermission(["create_post"]),
+        EditHandler,
         CreateHandler
     )
     .post(
@@ -186,24 +187,34 @@ async function CategoryHandler(req, res, next) {
 
 /*--------------Post-----------------*/
 async function PostHandler(req, res, next) {
-    if (req.query.create) return next();
+    if (req.query.create || req.query.edit) return next();
     res.locals.WebSite.Title += " - " + res.locals.Category.Name;
     try {
         let Post = await PostManager.GetPost(req.query.post);
+        console.log(Post);
         res.locals.WebSite.Title += " - " + Post.title;
-        if (req.query.edit) {
-            res.render(
-                `templates/${req.Schema.name}/${req.Schema.Edit}`,
-                { Post },
-                renderFunction(res)
-            );
-        } else {
-            res.render(
-                `templates/${req.Schema.name}/${req.Schema.Post}`,
-                { Post },
-                renderFunction(res)
-            );
-        }
+        res.render(
+            `templates/${req.Schema.name}/${req.Schema.Post}`,
+            { Post: Post.toObject() },
+            renderFunction(res)
+        );
+    } catch (e) {
+        ErrorHandler(req, res, e);
+    }
+}
+async function EditHandler(req, res) {
+    if (req.query.create) return next();
+    res.locals.WebSite.Title += " - " + res.locals.Category.Name;
+    try {
+        let Post = await PostManager.GetPost(req.query.edit);
+        if (!Post.author.equals(req.user))
+            res.redirect(res.locals.Category.Slug + "?post=" + Post._id);
+        res.locals.WebSite.Title += " - Edit - " + Post.title;
+        res.render(
+            `templates/${req.Schema.name}/${req.Schema.EditPost}`,
+            { Post },
+            renderFunction(res)
+        );
     } catch (e) {
         ErrorHandler(req, res, e);
     }
