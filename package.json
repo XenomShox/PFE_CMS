@@ -13,7 +13,7 @@
         "decompress": "^4.2.1",
         "dotenv": "^8.2.0",
         "ejs": "~2.6.1",
-        "express": "~4.16.1",
+        "express": "~4.17.3",
         "express-session": "^1.17.1",
         "express-subdomain": "^1.0.5",
         "formidable": "^1.2.2",
